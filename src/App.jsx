@@ -33,8 +33,6 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import InfoHub from "./pages/InfoHub";
 import CreatorCampaignFlow from "./pages/CreatorCampaignFlow";
 
-import Invoices from "./pages/Invoices";
-
 // Brand Specific Pages
 import BrandCampaigns from "./pages/BrandCampaigns";
 import BrandCampaignCreate from "./pages/BrandCampaignCreate";
@@ -42,6 +40,15 @@ import BrandCampaignApplicants from "./pages/BrandCampaignApplicants";
 import BrandInbox from "./pages/BrandInbox";
 import BrandPayments from "./pages/BrandPayments";
 import BrandKyc from "./pages/BrandKyc";
+
+import PublicUGC from "./pages/PublicUGC";
+import BrandUGCBriefs from "./pages/BrandUGCBriefs";
+import BrandUGCPost from "./pages/BrandUGCPost";
+import BrandUGCOrders from "./pages/BrandUGCOrders";
+import BrandUGCPayments from "./pages/BrandUGCPayments";
+import CreatorUGCBrowse from "./pages/CreatorUGCBrowse";
+import CreatorUGCOrders from "./pages/CreatorUGCOrders";
+import CreatorUGCEarnings from "./pages/CreatorUGCEarnings";
 
 const BrandConstructionScene = () => (
   <div className="relative w-64 h-64 mx-auto my-6 select-none pointer-events-none drop-shadow-2xl">
@@ -179,7 +186,6 @@ function AnimatedRoutes() {
         <Route path="/deals/:id" element={<ProtectedRoute><Layout><Page><DealDetail /></Page></Layout></ProtectedRoute>} />
         <Route path="/deals/:id/add-collab" element={<ProtectedRoute><Layout><Page><AddCollab /></Page></Layout></ProtectedRoute>} />
         <Route path="/deals/:id/uploaded-collab" element={<ProtectedRoute><Layout><Page><UploadedCollab /></Page></Layout></ProtectedRoute>} />
-        <Route path="/invoices" element={<ProtectedRoute><Layout><Page><Invoices /></Page></Layout></ProtectedRoute>} />
         <Route path="/chat" element={<ProtectedRoute><Layout><Page><Chat /></Page></Layout></ProtectedRoute>} />
         <Route path="/chat/:userId" element={<ProtectedRoute><Layout><Page><Chat /></Page></Layout></ProtectedRoute>} />
 
@@ -190,6 +196,19 @@ function AnimatedRoutes() {
         <Route path="/brand/inbox" element={<ProtectedRoute><Layout><Page><BrandInbox /></Page></Layout></ProtectedRoute>} />
         <Route path="/brand/payments" element={<ProtectedRoute><Layout><Page><BrandPayments /></Page></Layout></ProtectedRoute>} />
         <Route path="/brand/kyc" element={<ProtectedRoute><Layout><Page><BrandKyc /></Page></Layout></ProtectedRoute>} />
+        
+        {/* Brand UGC */}
+        <Route path="/brand/ugc/briefs" element={<ProtectedRoute><Layout><Page><BrandUGCBriefs /></Page></Layout></ProtectedRoute>} />
+        <Route path="/brand/ugc/post" element={<ProtectedRoute><Layout><Page><BrandUGCPost /></Page></Layout></ProtectedRoute>} />
+        <Route path="/brand/ugc/orders" element={<ProtectedRoute><Layout><Page><BrandUGCOrders /></Page></Layout></ProtectedRoute>} />
+        <Route path="/brand/ugc/payments" element={<ProtectedRoute><Layout><Page><BrandUGCPayments /></Page></Layout></ProtectedRoute>} />
+        
+        {/* Creator UGC */}
+        <Route path="/creator/ugc/browse" element={<ProtectedRoute><Layout><Page><CreatorUGCBrowse /></Page></Layout></ProtectedRoute>} />
+        <Route path="/creator/ugc/orders" element={<ProtectedRoute><Layout><Page><CreatorUGCOrders /></Page></Layout></ProtectedRoute>} />
+        <Route path="/creator/ugc/earnings" element={<ProtectedRoute><Layout><Page><CreatorUGCEarnings /></Page></Layout></ProtectedRoute>} />
+
+        <Route path="/ugc" element={<Layout><Page><PublicUGC /></Page></Layout>} />
         <Route path="/leaderboard" element={<Layout><Page><Leaderboard /></Page></Layout>} />
         <Route path="/notifications" element={<ProtectedRoute><Layout><Page><Notifications /></Page></Layout></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Layout><Page><Settings /></Page></Layout></ProtectedRoute>} />

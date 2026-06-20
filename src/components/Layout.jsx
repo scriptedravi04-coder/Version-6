@@ -104,6 +104,7 @@ export default function Layout({ children }) {
                    <SidebarNavItemInner to="/admin?tab=chat" icon={<MessageCircle size={18} />}>Chat Moderation</SidebarNavItemInner>
                    <SidebarNavItemInner to="/admin?tab=reports" icon={<AlertTriangle size={18} />}>System Reports</SidebarNavItemInner>
                    <SidebarNavItemInner to="/admin?tab=escrow" icon={<Wallet size={18} />}>Escrow & Payables</SidebarNavItemInner>
+                   <SidebarNavItemInner to="/admin?tab=ugc-orders" icon={<Film size={18} />}>UGC Orders <span className="text-red-400 font-bold ml-auto text-[10px] animate-pulse">AT RISK</span></SidebarNavItemInner>
                    <div className="pt-6 pb-2"><div className="h-px bg-[var(--border-default)] w-full"></div></div>
                    <SidebarNavItemInner to="/admin?tab=settings" icon={<SettingsIcon size={18} />}>Platform Settings</SidebarNavItemInner>
                  </>
@@ -115,6 +116,11 @@ export default function Layout({ children }) {
                    <SidebarNavItemInner to="/brand/inbox" icon={<MessageCircle size={18} />}>Inbox</SidebarNavItemInner>
                    <SidebarNavItemInner to="/brand/payments" icon={<Wallet size={18} />}>Payments & Escrow</SidebarNavItemInner>
                    <div className="pt-6 pb-2"><div className="h-px bg-[var(--border-default)] w-full"></div></div>
+                   <div className="px-4 py-2 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">🎬 UGC</div>
+                   <SidebarNavItemInner to="/brand/ugc/briefs" icon={<FileText size={18} />}>My Briefs</SidebarNavItemInner>
+                   <SidebarNavItemInner to="/brand/ugc/post" icon={<Megaphone size={18} />}>Post New Brief</SidebarNavItemInner>
+                   <SidebarNavItemInner to="/brand/ugc/orders" icon={<LayoutGrid size={18} />}>Orders & Tracking</SidebarNavItemInner>
+                   <div className="pt-6 pb-2"><div className="h-px bg-[var(--border-default)] w-full"></div></div>
                    <SidebarNavItemInner to="/settings" icon={<SettingsIcon size={18} />}>Settings</SidebarNavItemInner>
                  </>
                ) : (
@@ -124,6 +130,10 @@ export default function Layout({ children }) {
                    <SidebarNavItemInner to="/collabs" icon={<FileText size={18} />}>My Applications</SidebarNavItemInner>
                    <SidebarNavItemInner to="/chat" icon={<MessageCircle size={18} />}>Inbox</SidebarNavItemInner>
                    <SidebarNavItemInner to="/earnings" icon={<Wallet size={18} />}>Earnings</SidebarNavItemInner>
+                   <div className="pt-6 pb-2"><div className="h-px bg-[var(--border-default)] w-full"></div></div>
+                   <div className="px-4 py-2 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">🎬 UGC</div>
+                   <SidebarNavItemInner to="/creator/ugc/browse" icon={<Search size={18} />}>Browse Briefs</SidebarNavItemInner>
+                   <SidebarNavItemInner to="/creator/ugc/orders" icon={<FileText size={18} />}>My Orders</SidebarNavItemInner>
                    <div className="pt-6 pb-2"><div className="h-px bg-[var(--border-default)] w-full"></div></div>
                    <SidebarNavItemInner to="/settings" icon={<SettingsIcon size={18} />}>Settings</SidebarNavItemInner>
                  </>

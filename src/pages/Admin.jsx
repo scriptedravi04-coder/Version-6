@@ -21,6 +21,7 @@ import SystemReports from "../components/admin/SystemReports";
 import EscrowDashboard from "../components/admin/EscrowDashboard";
 import AdminAnalytics from "../components/admin/AdminAnalytics";
 import PlatformTools from "../components/admin/PlatformTools";
+import AdminUgcManager from "../components/admin/AdminUgcManager";
 
 const fmtINR = (n) => "₹" + (Number(n) || 0).toLocaleString("en-IN");
 
@@ -274,6 +275,10 @@ export default function Admin() {
               </div>
             )}
          </div>
+      )}
+
+      {tab === "ugc-orders" && (
+         <AdminUgcManager />
       )}
     </div>
   );

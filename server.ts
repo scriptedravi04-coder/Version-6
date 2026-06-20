@@ -7,6 +7,8 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
 import axios from "axios";
+import cron from "node-cron";
+import { Resend } from "resend";
 
 dotenv.config();
 
@@ -100,7 +102,6 @@ async function startServer() {
     chat_messages: any[];
     campaign_performance: any[];
     files: any[];
-    ugc_orders?: any[];
     team_activity_logs?: any[];
     creator_payment_methods?: any[];
     transactions?: any[];
@@ -119,6 +120,12 @@ async function startServer() {
     invoice_billing_profile?: any[];
     creator_reviews?: any[];
     invoices?: any[];
+    ugc_briefs?: any[];
+    ugc_orders?: any[];
+    ugc_deliveries?: any[];
+    ugc_showcase?: any[];
+    ugc_reviews?: any[];
+    earnings?: any[];
   }
 
   function getInitialDbState(): DbState {
@@ -385,6 +392,11 @@ async function startServer() {
       if (!parsed.invoice_billing_profile) parsed.invoice_billing_profile = [];
       if (!parsed.creator_reviews) parsed.creator_reviews = [];
       if (!parsed.invoices) parsed.invoices = [];
+      if (!parsed.ugc_briefs) parsed.ugc_briefs = [];
+      if (!parsed.ugc_orders) parsed.ugc_orders = [];
+      if (!parsed.ugc_deliveries) parsed.ugc_deliveries = [];
+      if (!parsed.ugc_showcase) parsed.ugc_showcase = [];
+      if (!parsed.ugc_reviews) parsed.ugc_reviews = [];
       return parsed;
     } catch (e) {
       const dbState = getInitialDbState();
@@ -844,6 +856,160 @@ async function startServer() {
     if (!user) {
       return res.status(401).json({ detail: "Not authenticated" });
     }
+
+    if (user.role === "creator") {
+      const db = getDb();
+      db.collabs = db.collabs || [];
+      db.chat_threads = db.chat_threads || [];
+      db.chat_messages = db.chat_messages || [];
+      db.invoices = db.invoices || [];
+      db.ugc_briefs = db.ugc_briefs || [];
+      db.ugc_orders = db.ugc_orders || [];
+      db.earnings = db.earnings || [];
+
+      const hasCollabs = db.collabs.some(c => c.creator_id === user.user_id || c.to_user_id === user.user_id || c.from_user_id === user.user_id);
+      if (!hasCollabs) {
+        const c1_id = `collab_demo_1`;
+        const c2_id = `collab_demo_2`;
+        const brand_id = "demo_brand";
+        const thread1_id = "thread_demo_1";
+        
+        if (!db.users.find(u => u.user_id === brand_id)) {
+           db.users.push({ user_id: brand_id, name: "Nexus Brands", email: "nexus@example.com", role: "brand" });
+        }
+        if (!db.brand_profiles) db.brand_profiles = [];
+        if (!db.brand_profiles.find(b => b.user_id === brand_id)) {
+           db.brand_profiles.push({ user_id: brand_id, company_name: "Nexus Brands Inc.", industry: "Lifestyle" });
+        }
+        
+        const d = new Date();
+        db.collabs.push({
+          collab_id: c1_id, to_user_id: user.user_id, from_user_id: brand_id, campaign_id: "c1", status: "active",
+          rate: 15000, message: "Looking forward to this!", created_at: new Date(d.getTime() - 86400000*3).toISOString(),
+          brand_name: "Nexus Brands Inc."
+        });
+        db.collabs.push({
+          collab_id: c2_id, to_user_id: brand_id, from_user_id: user.user_id, campaign_id: "c2", status: "completed",
+          rate: 25000, message: "Loved working on this.", created_at: new Date(d.getTime() - 86400000*10).toISOString(),
+          brand_name: "Nexus Brands Inc."
+        });
+
+        if (db.campaigns && db.campaigns[0]) {
+           db.campaigns[0].applicants = db.campaigns[0].applicants || [];
+           db.campaigns[0].applicants.push({
+               application_id: "app_seed_1", creator_user_id: user.user_id, 
+               pitch: "I'd love to work with you!", proposed_amount: 15000, status: "pending", applied_at: new Date().toISOString()
+           });
+        }
+        if (db.campaigns && db.campaigns[1]) {
+           db.campaigns[1].applicants = db.campaigns[1].applicants || [];
+           db.campaigns[1].applicants.push({
+               application_id: "app_seed_2", creator_user_id: user.user_id, 
+               pitch: "Here's my pitch for this campaign.", proposed_amount: 20000, status: "accepted", applied_at: new Date().toISOString()
+           });
+        }
+
+        db.chat_threads.push({
+          id: thread1_id, collab_id: c1_id, creator_id: user.user_id, brand_id,
+          status: "active", created_at: new Date(d.getTime() - 86400000*3).toISOString(), updated_at: new Date().toISOString()
+        });
+        db.chat_messages.push({
+          id: "m_d_1", thread_id: thread1_id, sender_id: brand_id, content: "Hey! We accepted your application. Please send the draft link.", created_at: new Date(d.getTime() - 86400000).toISOString()
+        });
+        db.chat_messages.push({
+          id: "m_d_2", thread_id: thread1_id, sender_id: user.user_id, content: "Great! Working on it now.", created_at: new Date().toISOString()
+        });
+
+        db.invoices.push({
+          id: "inv1", invoice_number: "INV-8001", creator_id: user.user_id, client_id: brand_id,
+          client_name: "Nexus Brands Inc.", total_amount: 25000, status: "PAID",
+          issue_date: new Date(d.getTime() - 86400000*10).toISOString(), due_date: new Date(d.getTime() + 86400000*10).toISOString(),
+          items: [{description: "Instagram Reel", amount: 25000}]
+        });
+        db.invoices.push({
+          id: "inv2", invoice_number: "INV-8002", creator_id: user.user_id, client_id: brand_id,
+          client_name: "Nexus Brands Inc.", total_amount: 15000, status: "PENDING",
+          issue_date: new Date().toISOString(), due_date: new Date(d.getTime() + 86400000*30).toISOString(),
+          items: [{description: "YouTube Integration", amount: 15000}]
+        });
+
+        const brief_id = "brief_demo_1";
+        const order_id = "ugc_ord_demo_1";
+        if(!db.ugc_briefs.find(b => b.id === brief_id)) {
+            db.ugc_briefs.push({
+            id: brief_id, brand_id, title: "Quick Unboxing for Activewear", product_name: "Aura Leggings",
+            product_description: "Premium high-waisted seamless leggings with side pockets.",
+            detailed_requirements: "We are looking for a highly engaging, well-lit unboxing video showing the premium packaging and the stretchability of the leggings. Please highlight the side pockets and the seamless design.",
+            sample_content_url: "https://example.com/sample-ugc-unboxing",
+            budget: 3500, deliverable_type: "instagram_reel", dos: ["Show fabric stretch", "Mention 24h shipping"], donts: ["Mention price", "Show other brands"], status: "IN_PROGRESS",
+            claimed_count: 1, max_creators: 1
+            });
+        }
+        db.ugc_orders.push({
+          id: order_id, brief_id, creator_id: user.user_id, brief: db.ugc_briefs.find(b => b.id === brief_id),
+          brand_status: "IN_PROGRESS", creator_status: "CLAIMED", creator_payout: 3300, agreed_amount: 3500,
+          internal_deadline: new Date(d.getTime() + 86400000).toISOString(), created_at: new Date().toISOString()
+        });
+        db.earnings.push({
+          id: "earn_1", creator_id: user.user_id, brief: db.ugc_briefs.find(b => b.id === brief_id),
+          creator_payout: 4200, created_at: new Date(d.getTime() - 86400000*5).toISOString()
+        });
+
+        // Add some available brief
+        if(!db.ugc_briefs.find(b=>b.id==="brief_open_1")){
+          db.ugc_briefs.push({
+            id: "brief_open_1", brand_id, title: "Protein Powder review", product_name: "Pro Whey",
+            product_description: "High-quality whey protein powder for muscle recovery.",
+            detailed_requirements: "Show yourself mixing the powder with water or milk in a shaker. Take a sip and talk about the taste and how it helps you recover after a workout.",
+            sample_content_url: "https://example.com/sample-ugc-review",
+            budget: 5000, deliverable_type: "youtube_short", dos: ["Show mixing"], donts: [], status: "OPEN",
+            claimed_count: 0, max_creators: 3
+          });
+        }
+
+        saveDb(db);
+      }
+    } else if (user.role === "brand") {
+      const db = getDb();
+      db.ugc_briefs = db.ugc_briefs || [];
+      db.ugc_orders = db.ugc_orders || [];
+      db.collabs = db.collabs || [];
+
+      const hasBrandData = db.ugc_briefs.some(b => b.brand_id === user.user_id);
+      if (!hasBrandData) {
+        const creator_id = "creator_demo_1";
+        if (!db.users.find(u => u.user_id === creator_id)) {
+           db.users.push({ user_id: creator_id, name: "Alice Creator", email: "alice@example.com", role: "creator" });
+        }
+
+        const brief_id = "brief_demo_brand_1";
+        const order_id = "ugc_ord_demo_brand_1";
+        db.ugc_briefs.push({
+          id: brief_id, brand_id: user.user_id, title: "Quick Unboxing for Activewear", product_name: "Aura Leggings",
+          detailed_requirements: "We are looking for a highly engaging, well-lit unboxing video showing the premium packaging and the stretchability of the leggings. Please highlight the side pockets and the seamless design.",
+          sample_content_url: "https://example.com/sample-ugc-unboxing",
+          product_description: "Premium high-waisted seamless leggings with side pockets.",
+          budget: 3500, deliverable_type: "instagram_reel", dos: ["Show fabric stretch", "Mention 24h shipping"], donts: ["Mention price", "Show other brands"], status: "IN_PROGRESS",
+          claimed_count: 1, max_creators: 1
+        });
+        
+        const d = new Date();
+        db.ugc_orders.push({
+          id: order_id, brief_id, creator_id: creator_id, brief: db.ugc_briefs.find(b => b.id === brief_id),
+          brand_status: "IN_PROGRESS", creator_status: "CLAIMED", creator_payout: 3300, agreed_amount: 3500,
+          internal_deadline: new Date(d.getTime() + 86400000).toISOString(), created_at: new Date().toISOString()
+        });
+
+        db.collabs.push({
+          collab_id: "collab_brand_1", to_user_id: creator_id, from_user_id: user.user_id, campaign_id: "c1", status: "active",
+          rate: 15000, message: "Let's do this!", created_at: new Date(d.getTime() - 86400000*3).toISOString(),
+          brand_name: "Nexus Brands Inc.", creator_name: "Alice Creator"
+        });
+
+        saveDb(db);
+      }
+    }
+
     res.json(user);
   });
 
@@ -3615,6 +3781,19 @@ async function startServer() {
     if (thread) {
        thread.status = 'COMPLETED';
        thread.updated_at = new Date().toISOString();
+       
+       if (!db.transactions) db.transactions = [];
+       const amt = thread.agreed_amount || 5000;
+       db.transactions.push({
+          id: "TXN_" + Math.random().toString(36).substr(2, 9),
+          userId: thread.creator_id,
+          amount: amt,
+          fee_amount: amt * 0.1,
+          net_amount: amt * 0.9,
+          status: "paid",
+          created_at: new Date().toISOString(),
+          campaign_title: thread.campaigns?.title || "UGC / Direct Deal"
+       });
     }
 
     db.chat_messages.push({
@@ -4241,19 +4420,19 @@ async function startServer() {
   });
 
   // Deal endpoints alias & ext
-  router.post("/deals/:id/submit-content", (req, res) => {
+  router.post("/deals/:id/submit-content", (req, res, next) => {
     req.url = `/deals/${req.params.id}/submit-draft`;
-    router.handle(req, res);
+    (router as any)(req, res, next);
   });
 
-  router.post("/deals/:id/submit-proof", (req, res) => {
+  router.post("/deals/:id/submit-proof", (req, res, next) => {
     req.url = `/deals/${req.params.id}/proof`;
-    router.handle(req, res);
+    (router as any)(req, res, next);
   });
   
-  router.post("/deals/:id/verify-proof", (req, res) => {
+  router.post("/deals/:id/verify-proof", (req, res, next) => {
     req.url = `/deals/${req.params.id}/proof/verify`;
-    router.handle(req, res);
+    (router as any)(req, res, next);
   });
 
   // Fetch Instagram Insights manually for proof
@@ -4319,13 +4498,14 @@ async function startServer() {
     if (!user) return res.status(401).json({ detail: "Not authenticated" });
     const db = getDb();
     const invoices = (db.invoices || []).filter(i => i.creator_id === user.user_id);
-    let totalInvoiced = 0, paidCount = 0, pendingCount = 0, draftCount = 0;
+    let total_volume = 0, paid = 0, pending = 0;
     for (const inv of invoices) {
-      if (inv.status === 'PAID') { paidCount++; totalInvoiced += inv.totalAmount; }
-      else if (inv.status === 'DRAFT') draftCount++;
-      else pendingCount++;
+      const amt = inv.total_amount || inv.totalAmount || 0;
+      if (inv.status === 'PAID') { paid += amt; total_volume += amt; }
+      else if (inv.status === 'PENDING') { pending += amt; total_volume += amt; }
+      else { total_volume += amt; }
     }
-    res.json({ totalInvoiced, paidCount, pendingCount, draftCount });
+    res.json({ total_volume, paid, pending });
   });
 
   router.get("/invoices/:id", (req, res) => {
@@ -4440,6 +4620,329 @@ async function startServer() {
     saveDb(db);
     res.json({ ok: true });
   });
+
+  // UGC Routes
+  const resend = new Resend(process.env.RESEND_API_KEY || "mock-key");
+
+  router.get("/ugc/showcase", (req, res) => {
+    const db = getDb();
+    res.json(db.ugc_showcase || []);
+  });
+
+  router.get("/ugc/briefs/my", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const db = getDb();
+    const briefs = (db.ugc_briefs || []).filter(b => b.brand_id === user.user_id);
+    res.json(briefs);
+  });
+
+  router.post("/ugc/briefs", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const db = getDb();
+    if (!db.ugc_briefs) db.ugc_briefs = [];
+    
+    // Simplification for Zaakpay step (automatically posting) 
+    const brief = {
+      id: `brief_${Math.random().toString(36).substring(2, 11)}`,
+      brand_id: user.user_id,
+      ...req.body,
+      claimed_count: 0,
+      status: "OPEN",
+      created_at: getIsoNow()
+    };
+    db.ugc_briefs.push(brief);
+    saveDb(db);
+    res.json(brief);
+  });
+
+  router.get("/ugc/orders/brand", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const db = getDb();
+    const orders = (db.ugc_orders || []).filter(o => o.brand_id === user.user_id).map(o => {
+      // populate brief
+      const brief = (db.ugc_briefs || []).find(b => b.id === o.brief_id);
+      return { ...o, brief };
+    });
+    res.json(orders);
+  });
+
+  // Creator routes
+  router.get("/ugc/briefs/available", (req, res) => {
+    const db = getDb();
+    const briefs = (db.ugc_briefs || []).filter(b => b.status === "OPEN" && b.claimed_count < b.max_creators);
+    res.json(briefs);
+  });
+
+  router.post("/ugc/orders/claim", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const { brief_id } = req.body;
+    const db = getDb();
+    const brief = (db.ugc_briefs || []).find(b => b.id === brief_id);
+    if (!brief || brief.status !== 'OPEN' || brief.claimed_count >= brief.max_creators) {
+      return res.status(400).json({ error: 'Brief not available' });
+    }
+    
+    brief.claimed_count += 1;
+    let feePercent = brief.budget <= 20000 ? 5 : 2;
+    let feeAmount = (brief.budget * feePercent) / 100;
+    let creatorPayout = brief.budget - feeAmount;
+
+    const now = new Date();
+    const internalDeadline = new Date(now.getTime() + 22 * 60 * 60 * 1000);
+
+    if (!db.ugc_orders) db.ugc_orders = [];
+    const order = {
+      id: `ugcorder_${Math.random().toString(36).substring(2, 11)}`,
+      brief_id,
+      creator_id: user.user_id,
+      brand_id: brief.brand_id,
+      claimed_at: now.toISOString(),
+      internal_deadline: internalDeadline.toISOString(),
+      creator_status: 'CLAIMED',
+      brand_status: 'CREATOR_BRIEFED',
+      agreed_amount: brief.budget,
+      platform_fee_percent: feePercent,
+      platform_fee_amount: feeAmount,
+      creator_payout: creatorPayout,
+      payment_status: 'HELD',
+      created_at: now.toISOString()
+    };
+    db.ugc_orders.push(order);
+    
+    // Also create a chat thread so the brand and creator can communicate
+    if (!db.chat_threads) db.chat_threads = [];
+    const threadId = `thread_${Math.random().toString(36).substr(2, 9)}`;
+    const newThread = {
+      id: threadId,
+      collab_id: order.id, 
+      creator_id: user.user_id,
+      brand_id: brief.brand_id,
+      status: "active",
+      created_at: now.toISOString(),
+      updated_at: now.toISOString()
+    };
+    db.chat_threads.push(newThread);
+
+    if (!db.chat_messages) db.chat_messages = [];
+    db.chat_messages.push({
+      id: `m_${Math.random().toString(36).substr(2, 9)}`,
+      thread_id: threadId,
+      sender_id: "system",
+      content: `Creator has successfully claimed the UGC brief "${brief.title}". You can now discuss any specific requirements or drop files here.`,
+      created_at: now.toISOString()
+    });
+
+    sendNotification(db, brief.brand_id, 'UGC_CREATOR_BRIEFED', `Great news! A creator has claimed your brief "${brief.title}" and is getting started.`).catch(() => {});
+    saveDb(db);
+    res.json({ order, internal_deadline: internalDeadline });
+  });
+
+  router.get("/ugc/orders/creator", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const db = getDb();
+    const orders = (db.ugc_orders || []).filter(o => o.creator_id === user.user_id).map(o => {
+      // populate brief
+      const brief = (db.ugc_briefs || []).find(b => b.id === o.brief_id);
+      return { ...o, brief };
+    });
+    // Creator only sees internal representations anyway
+    res.json(orders);
+  });
+
+  router.post("/ugc/orders/:id/deliver", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const { id } = req.params;
+    const { video_url, thumbnail_url, creator_notes } = req.body;
+    const db = getDb();
+    
+    const order = (db.ugc_orders || []).find(o => o.id === id);
+    if (!order || order.creator_id !== user.user_id) return res.status(403).json({ error: 'Unauthorized' });
+
+    const now = new Date();
+    const qualityReviewEndsAt = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+
+    if (!db.ugc_deliveries) db.ugc_deliveries = [];
+    db.ugc_deliveries.push({
+      id: `dev_${Math.random().toString(36).substring(2, 11)}`,
+      order_id: id,
+      creator_id: user.user_id,
+      video_url,
+      thumbnail_url,
+      creator_notes,
+      submitted_by: 'creator',
+      submitted_at: now.toISOString()
+    });
+
+    order.creator_status = 'DELIVERED';
+    order.brand_status = 'QUALITY_REVIEW';
+    order.delivered_at = now.toISOString();
+    order.quality_review_ends_at = qualityReviewEndsAt.toISOString();
+
+    sendNotification(db, order.brand_id, 'UGC_QUALITY_REVIEW', `Your UGC video is under quality review. It'll be ready for your approval within 2 hours.`).catch(() => {});
+    saveDb(db);
+    res.json({ success: true, quality_review_ends_at: qualityReviewEndsAt });
+  });
+
+  router.post("/ugc/orders/:id/approve", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const { id } = req.params;
+    const db = getDb();
+    
+    const order = (db.ugc_orders || []).find(o => o.id === id);
+    if (!order || order.brand_id !== user.user_id) return res.status(403).json({ error: 'Unauthorized' });
+    if (order.brand_status !== 'DELIVERED') return res.status(400).json({ error: 'Video not ready for approval yet' });
+
+    order.brand_status = 'COMPLETED';
+    order.creator_status = 'DELIVERED';
+    order.payment_status = 'RELEASED';
+    order.approved_at = new Date().toISOString();
+
+    sendNotification(db, order.creator_id, 'UGC_PAYMENT_RELEASED', `🎉 ₹${order.creator_payout} credited! Your UGC was approved.`).catch(() => {});
+    saveDb(db);
+    res.json({ success: true });
+  });
+
+  router.post("/ugc/orders/:id/revision", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const { id } = req.params;
+    const { revision_note } = req.body;
+    const db = getDb();
+
+    const order = (db.ugc_orders || []).find(o => o.id === id);
+    if (!order) return res.status(404).json({ error: "Order not found" });
+    if ((order.revision_count || 0) >= (order.max_revisions || 1)) return res.status(400).json({ error: 'Max revisions reached' });
+
+    const newDeadline = new Date(Date.now() + 12 * 60 * 60 * 1000);
+
+    order.creator_status = 'REVISION_REQUESTED';
+    order.brand_status = 'CONTENT_CREATION';
+    order.revision_count = (order.revision_count || 0) + 1;
+    order.revision_note = revision_note;
+    order.internal_deadline = newDeadline.toISOString();
+
+    sendNotification(db, order.creator_id, 'UGC_REVISION', `Revision requested: "${revision_note}". You have 12 hours.`).catch(() => {});
+    saveDb(db);
+    res.json({ success: true });
+  });
+
+  router.get("/ugc/earnings", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) return res.status(401).json({ detail: "Not authenticated" });
+    const db = getDb();
+    const earnings = (db.ugc_orders || []).filter(o => o.creator_id === user.user_id && o.payment_status === "RELEASED");
+    res.json(earnings);
+  });
+
+  router.get("/admin/ugc/orders", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user || user.role !== "admin") return res.status(403).json({ detail: "Forbidden" });
+    const db = getDb();
+    res.json(db.ugc_orders || []);
+  });
+
+  router.post("/admin/ugc/orders/:id/team-upload", (req, res) => {
+    // Admin mock
+    const { id } = req.params;
+    const { video_url, thumbnail_url } = req.body;
+    const db = getDb();
+    const order = (db.ugc_orders || []).find(o => o.id === id);
+    if (!order) return res.status(404).json({ error: "Order not found "});
+
+    const now = new Date();
+    const qualityReviewEndsAt = new Date(now.getTime() + 30 * 60 * 1000);
+
+    if (!db.ugc_deliveries) db.ugc_deliveries = [];
+    db.ugc_deliveries.push({
+      id: `dev_${Math.random().toString(36).substring(2, 11)}`,
+      order_id: id,
+      creator_id: order.creator_id,
+      video_url,
+      thumbnail_url,
+      creator_notes: 'Quality checked by YBEX team',
+      submitted_by: 'team'
+    });
+
+    order.creator_status = 'DELIVERED';
+    order.brand_status = 'QUALITY_REVIEW';
+    order.delivered_at = now.toISOString();
+    order.quality_review_ends_at = qualityReviewEndsAt.toISOString();
+    order.team_intervened = true;
+
+    sendNotification(db, order.brand_id, 'UGC_QUALITY_REVIEW', 'Your UGC video is under quality review. Ready for approval soon!').catch(() => {});
+    saveDb(db);
+    res.json({ success: true });
+  });
+
+  // UGC Crons
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const db = getDb();
+      const now = new Date().toISOString();
+      let changed = false;
+
+      // CRON 1: QUALITY_REVIEW -> DELIVERED
+      const reviewsDone = (db.ugc_orders || []).filter(o => o.brand_status === 'QUALITY_REVIEW' && o.quality_review_ends_at && o.quality_review_ends_at < now);
+      for (const order of reviewsDone) {
+        order.brand_status = 'DELIVERED';
+        sendNotification(db, order.brand_id, 'UGC_READY', '✅ Quality check complete! Your UGC video is ready for review.').catch(() => {});
+        changed = true;
+      }
+
+      // CRON 2: 22hr alert
+      const atRisk = (db.ugc_orders || []).filter(o => o.creator_status === 'CLAIMED' && !o.alert_22hr_sent && new Date(o.internal_deadline) < new Date(new Date(now).getTime() + 30 * 60 * 1000));
+      for (const order of atRisk) {
+        order.alert_22hr_sent = true;
+        changed = true;
+        const brief = (db.ugc_briefs || []).find(b => b.id === order.brief_id);
+        
+        try {
+          await resend.emails.send({
+            from: 'alerts@ybex.in',
+            to: ['team@ybex.in'],
+            subject: `🚨 UGC ALERT — Order #${order.id.slice(0,8)} deadline in <30 minutes!`,
+            html: `UGC Alert for Order ID: ${order.id}. Brief: ${brief?.title}. Deliverable: ${brief?.deliverable_type}. Creator ID: ${order.creator_id}. Needs manual intervention.`
+          });
+        } catch(e) {
+          console.error("Resend error:", e);
+        }
+      }
+
+      // CRON 3: Auto-cancel 
+      const expired = (db.ugc_orders || []).filter(o => o.creator_status === 'CLAIMED' && new Date(o.internal_deadline) < new Date(new Date(now).getTime() - 2 * 60 * 60 * 1000));
+      for (const order of expired) {
+        order.creator_status = 'CANCELLED';
+        order.brand_status = 'CANCELLED';
+        order.payment_status = 'REFUNDED';
+        const brief = (db.ugc_briefs || []).find(b => b.id === order.brief_id);
+        if (brief) {
+          brief.claimed_count = Math.max(0, (brief.claimed_count || 1) - 1);
+        }
+        sendNotification(db, order.brand_id, 'UGC_CANCELLED_REFUND', 'Unfortunately your UGC order could not be fulfilled in time. Full refund initiated.').catch(() => {});
+        changed = true;
+      }
+
+      // CRON 4: MATCHING -> CONTENT_CREATION (30 min ago)
+      const thirtyMinAgo = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+      const needsPulsing = (db.ugc_orders || []).filter(o => o.brand_status === 'CREATOR_BRIEFED' && o.claimed_at < thirtyMinAgo);
+      for (const order of needsPulsing) {
+        order.brand_status = 'CONTENT_CREATION';
+        changed = true;
+      }
+
+      if (changed) saveDb(db);
+    } catch(e) {
+      console.error("Cron error:", e);
+    }
+  });
+
 
   // Mount API Router on parent app
   app.use("/api", router);

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { DollarSign, Wallet, CheckCircle, Clock, Building2, ChevronRight, ChevronLeft, Plus, Edit2, ShieldCheck, X, ShieldAlert, Sparkles, Loader2 } from "lucide-react";
+import { DollarSign, Wallet, CheckCircle, Clock, Building2, ChevronRight, ChevronLeft, Plus, Edit2, ShieldCheck, X, ShieldAlert, Sparkles, Loader2, FileText, Download } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from "recharts";
-import { motion, useSpring, useTransform } from "framer-motion";
+import { motion, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../lib/api";
 import AddPaymentMethod from "../components/AddPaymentMethod";
 import PaymentMethodCard from "../components/PaymentMethodCard";
 import KycVerificationModal from "../components/KycVerificationModal";
+import InvoiceModal from "../components/InvoiceModal";
 
 // --- HELPER COMPONENT: COUNT UP ---
 function CountUp({ value, prefix = "", suffix = "" }) {
@@ -53,6 +54,7 @@ export default function Earnings() {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [showAddMethod, setShowAddMethod] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [loadingTxns, setLoadingTxns] = useState(true);
   const [kycObj, setKycObj] = useState(null);
   const [showKycModal, setShowKycModal] = useState(false);
@@ -326,53 +328,46 @@ export default function Earnings() {
           </div>
         </div>
 
-        {/* PAYOUT DETAILS SECTION (RIGHT) */}
+        {/* INVOICES SECTION (RIGHT) */}
         <div className="xl:col-span-1 flex flex-col gap-4">
           <div className="bg-[#1A1A24]/40 backdrop-blur-md border border-white/5 rounded-3xl p-6 flex flex-col h-full">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <Building2 className="text-[#7C3AED]" size={20} />
-                Payout Details
+                <FileText className="text-[#10B981]" size={20} />
+                Recent Invoices
               </h2>
-              {paymentMethods.length > 0 && !showAddMethod && (
-                <button onClick={() => setShowAddMethod(true)} className="text-[#7C3AED] hover:text-white transition-colors p-1 bg-white/5 hover:bg-white/10 rounded-md">
-                  <Plus size={16} />
-                </button>
-              )}
             </div>
 
-            <div className="flex-grow flex flex-col">
-              {showAddMethod ? (
-                <AddPaymentMethod onAdded={() => { setShowAddMethod(false); fetchPaymentMethods(); }} onCancel={() => setShowAddMethod(false)} />
-              ) : paymentMethods.length === 0 ? (
-                <div className="text-center py-6 my-auto">
-                  <div className="w-16 h-16 rounded-full bg-[#7C3AED]/10 flex items-center justify-center mx-auto mb-4 border border-[#7C3AED]/20">
-                    <ShieldCheck size={28} className="text-[#7C3AED]" />
-                  </div>
-                  <h3 className="text-white font-medium mb-2">No Payment Method</h3>
-                  <p className="text-xs text-white/50 mb-6 max-w-[200px] mx-auto leading-relaxed">
-                    Add your bank or UPI details securely to receive your collaboration payouts.
-                  </p>
-                  <button 
-                    onClick={() => setShowAddMethod(true)}
-                    className="bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 mx-auto shadow-lg shadow-[#7C3AED]/20"
-                  >
-                    <Plus size={16} /> Add Method
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {paymentMethods.map((method) => (
-                    <PaymentMethodCard key={method.id} method={method} onDelete={() => {
-                        toast('Are you sure you want to delete this method?', { action: { label: 'Delete', onClick: () => { /* Delete logic */ } }});
-                    }}/>
-                  ))}
-                </div>
-              )}
+            <div className="flex-grow flex flex-col space-y-4">
+               {transactions.length > 0 && transactions.filter(t => t.status==='paid' || t.status==='SUCCESS').slice(0,3).map(t => (
+                 <div key={t.id} className="bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition-colors">
+                   <div>
+                     <p className="text-sm font-bold text-white truncate max-w-[150px]">{t.campaign_title || 'Collab Payment'}</p>
+                     <p className="text-xs text-gray-500">{(t.net_amount||t.amount).toLocaleString('en-IN')} INR</p>
+                   </div>
+                   <button onClick={() => setSelectedInvoice(t)} className="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center hover:bg-emerald-500/20">
+                     <FileText size={14} />
+                   </button>
+                 </div>
+               ))}
+               
+               {(!transactions.length || transactions.filter(t => t.status==='paid' || t.status==='SUCCESS').length === 0) && (
+                 <div className="text-center py-6 my-auto text-gray-500 text-sm">
+                   <p>No paid invoices found.</p>
+                 </div>
+               )}
             </div>
+            
+            <button onClick={() => toast("Full invoice history coming soon")} className="mt-4 w-full border border-white/10 text-white/70 hover:text-white py-3 rounded-xl font-bold text-sm bg-white/5">
+               View All Invoices
+            </button>
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedInvoice && <InvoiceModal transaction={selectedInvoice} onClose={() => setSelectedInvoice(null)} />}
+      </AnimatePresence>
 
       {/* TRANSACTIONS TABLE */}
       <div className="bg-[#1A1A24]/40 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden">
@@ -431,10 +426,10 @@ export default function Earnings() {
                       <td className="p-4 pr-6 text-right whitespace-nowrap">
                         {statusLabel === 'PAID' && (
                           <button 
-                            onClick={() => toast.success('Downloading invoice generated internally...')} 
-                            className="text-xs text-[#7C3AED] hover:text-white bg-[#7C3AED]/20 px-3 py-1.5 rounded-lg transition-colors border border-[#7C3AED]/30"
+                            onClick={() => setSelectedInvoice(item)} 
+                            className="text-xs text-[#7C3AED] hover:text-white bg-[#7C3AED]/20 px-3 py-1.5 rounded-lg transition-colors border border-[#7C3AED]/30 flex items-center gap-1.5 ml-auto"
                           >
-                            Invoice
+                            <FileText size={12} /> Invoice
                           </button>
                         )}
                       </td>

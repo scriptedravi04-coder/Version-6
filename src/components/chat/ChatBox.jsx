@@ -27,6 +27,8 @@ export default function ChatBox({ thread, user }) {
   // Custom fetch to update thread object locally if we don't have socket updates
   const [localThread, setLocalThread] = useState(thread);
 
+  const currentThread = localThread || thread;
+
   useEffect(() => {
     setLocalThread(thread);
     if (!thread) return;
@@ -132,7 +134,7 @@ export default function ChatBox({ thread, user }) {
           <div className="hidden sm:flex flex-col items-end">
             <div className="text-xs text-white/40 uppercase font-bold tracking-wider mb-0.5">Agreed Amount</div>
             <div className={`font-display font-bold text-lg leading-none ${isBrand ? 'text-[#7C3AED]' : 'text-[#D9F111]'}`}>
-              ₹{localThread.agreed_amount?.toLocaleString() || '0'}
+              ₹{currentThread.agreed_amount?.toLocaleString() || '0'}
             </div>
           </div>
           <button 
@@ -152,6 +154,7 @@ export default function ChatBox({ thread, user }) {
               key={msg.id} 
               message={msg} 
               isMine={msg.sender_id === user.user_id} 
+              isUserBrand={isBrand}
               threadId={thread.id} 
               onActionComplete={handleOfferComplete}
             />
@@ -164,22 +167,22 @@ export default function ChatBox({ thread, user }) {
         
         {/* Deal Actions row above input */}
         <div className="flex gap-2 mb-3 overflow-x-auto pb-1 no-scrollbar justify-center sm:justify-start">
-          {isBrand && localThread.status === 'NEGOTIATING' && (
+          {isBrand && currentThread.status === 'NEGOTIATING' && (
             <button onClick={() => setShowBriefModal(true)} className="whitespace-nowrap px-4 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-xs font-bold flex items-center gap-2 transition-colors border border-white/5">
               <FileText size={14} /> Send Brief & Offer
             </button>
           )}
-          {isBrand && localThread.status === 'ACTIVE' && !localThread.agreement_signed_brand && (
+          {isBrand && currentThread.status === 'ACTIVE' && !currentThread.agreement_signed_brand && (
             <button onClick={() => setShowBrandAgreeModal(true)} className="whitespace-nowrap px-4 py-1.5 bg-[#7C3AED]/20 hover:bg-[#7C3AED]/30 text-[#7C3AED] rounded-full text-xs font-bold flex items-center gap-2 transition-colors border border-[#7C3AED]/30">
               <FileSignature size={14} /> Sign Agreement
             </button>
           )}
-          {!isBrand && localThread.status === 'ACTIVE' && !localThread.agreement_signed_creator && (
+          {!isBrand && currentThread.status === 'ACTIVE' && !currentThread.agreement_signed_creator && (
             <button onClick={() => setShowCreatorAgreeModal(true)} className="whitespace-nowrap px-4 py-1.5 bg-[#D9F111]/20 hover:bg-[#D9F111]/30 text-[#D9F111] rounded-full text-xs font-bold flex items-center gap-2 transition-colors border border-[#D9F111]/30">
               <FileSignature size={14} /> Sign Agreement
             </button>
           )}
-          {!isBrand && localThread.status === 'ACTIVE' && localThread.agreement_signed_creator && localThread.agreement_signed_brand && (
+          {!isBrand && currentThread.status === 'ACTIVE' && currentThread.agreement_signed_creator && currentThread.agreement_signed_brand && (
             <button onClick={async () => {
               await api.post(`/chat/v2/threads/${thread.id}/submit-content`, { content_url: "example.com" });
               loadMessages();
@@ -187,12 +190,20 @@ export default function ChatBox({ thread, user }) {
               <Upload size={14} /> Submit Content
             </button>
           )}
-          {isBrand && localThread.status === 'CONTENT_SUBMITTED' && (
+          {isBrand && currentThread.status === 'CONTENT_SUBMITTED' && (
             <button onClick={async () => {
               await api.post(`/chat/v2/threads/${thread.id}/approve-content`);
               loadMessages();
             }} className="whitespace-nowrap px-4 py-1.5 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-full text-xs font-bold flex items-center gap-2 transition-colors border border-green-500/30">
               <CheckCircle size={14} /> Approve Content
+            </button>
+          )}
+          {isBrand && currentThread.status === 'APPROVED' && (
+            <button onClick={async () => {
+              await api.post(`/chat/v2/threads/${thread.id}/mark-complete`);
+              loadMessages();
+            }} className="whitespace-nowrap px-4 py-1.5 bg-[#7C3AED]/20 text-[#7C3AED] hover:bg-[#7C3AED]/30 rounded-full text-xs font-bold flex items-center gap-2 transition-colors border border-[#7C3AED]/30">
+              <CheckCircle size={14} /> Release Payment & Complete
             </button>
           )}
         </div>
@@ -222,10 +233,10 @@ export default function ChatBox({ thread, user }) {
 
       {/* Modals */}
       <AnimatePresence>
-        {showBriefModal && <SendBrief threadId={thread.id} onClose={() => setShowBriefModal(false)} onSent={() => loadMessages()} />}
-        {showBrandAgreeModal && <BrandAgreement thread={localThread} onClose={() => setShowBrandAgreeModal(false)} onSigned={() => loadMessages()} />}
-        {showCreatorAgreeModal && <AgreementSign thread={localThread} onClose={() => setShowCreatorAgreeModal(false)} onSigned={() => loadMessages()} />}
-        {showInfoPanel && <DealInfoPanel thread={localThread} role={isBrand ? 'brand' : 'creator'} onClose={() => setShowInfoPanel(false)} />}
+        {showBriefModal && <SendBrief threadId={currentThread.id} onClose={() => setShowBriefModal(false)} onSent={() => loadMessages()} />}
+        {showBrandAgreeModal && <BrandAgreement thread={currentThread} onClose={() => setShowBrandAgreeModal(false)} onSigned={() => loadMessages()} />}
+        {showCreatorAgreeModal && <AgreementSign thread={currentThread} onClose={() => setShowCreatorAgreeModal(false)} onSigned={() => loadMessages()} />}
+        {showInfoPanel && <DealInfoPanel thread={currentThread} role={isBrand ? 'brand' : 'creator'} onClose={() => setShowInfoPanel(false)} />}
       </AnimatePresence>
     </div>
   );

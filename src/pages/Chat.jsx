@@ -19,8 +19,29 @@ export default function Chat() {
   const isBrand = user?.role === 'brand' || user?.user_type === 'brand';
 
   useEffect(() => {
-    loadThreads();
-  }, [user]);
+    if (threads.length === 0) {
+      loadThreads();
+    } else if (urlThreadId) {
+      let t = threads.find((x) => x.id === urlThreadId);
+      if (!t) {
+        t = threads.find(x => x.creator_id === urlThreadId || x.brand_id === urlThreadId);
+      }
+      if (t) {
+        setActiveThread(t);
+      } else if (urlThreadId.length > 0) {
+        setActiveThread({
+          id: `new_${urlThreadId}`,
+          creator_id: isBrand ? urlThreadId : user.user_id,
+          brand_id: isBrand ? user.user_id : urlThreadId,
+          status: 'NEGOTIATING',
+          isNew: true
+        });
+      }
+    } else if (threads.length > 0 && !activeThread) {
+      // Auto-select first thread if none provided
+      setActiveThread(threads[0]);
+    }
+  }, [user, urlThreadId, threads]);
 
   const loadThreads = async () => {
     if (!user) return;
@@ -38,7 +59,7 @@ export default function Chat() {
 
         if (t) {
           setActiveThread(t);
-        } else if (urlThreadId.length > 10) {
+        } else if (urlThreadId.length > 0) {
            // Provide a mechanism to create a new thread if it doesn't exist
            // Since we don't have a direct /create endpoint in v2, we'll try sending an empty message 
            // but wait, if it's a user, we can create a thread object on the fly to let the user start chatting
