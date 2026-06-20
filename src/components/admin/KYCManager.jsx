@@ -1,0 +1,491 @@
+import React, { useState, useEffect } from 'react';
+import { ShieldCheck, CheckCircle2, XCircle, RefreshCw, Fingerprint, CreditCard, Building2, AlertTriangle, Check, ArrowLeft, FileText, PauseCircle, Clock } from 'lucide-react';
+import CreatorKYCReview from './CreatorKYCReview';
+import { api } from '../../lib/api';
+
+export default function KYCManager() {
+  const [activeId, setActiveId] = useState(null);
+  const [verifications, setVerifications] = useState([]);
+  const [tab, setTab] = useState("Creator"); // 'Creator' or 'Brand'
+
+  useEffect(() => {
+    fetchVerifications();
+  }, [activeId]);
+
+  const fetchVerifications = async () => {
+    try {
+      const res = await api.get("/admin/verifications");
+      setVerifications(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const activeUser = verifications.find(v => v.verification_id === activeId);
+
+  const handleApprove = async (id) => {
+    try {
+      await api.post(`/admin/verifications/${id}/approve`);
+      setVerifications(prev => prev.map(v => v.verification_id === id ? { ...v, status: 'approved' } : v));
+      setActiveId(null);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleReject = async (id, rejectReason) => {
+    try {
+      if (rejectReason === "Escalated to Fraud Team") {
+        await api.post(`/admin/verifications/${id}/escalate`, { note: rejectReason });
+        setVerifications(prev => prev.map(v => v.verification_id === id ? { ...v, status: 'escalated' } : v));
+      } else {
+        await api.post(`/admin/verifications/${id}/reject`, { reason: rejectReason });
+        setVerifications(prev => prev.map(v => v.verification_id === id ? { ...v, status: 'rejected' } : v));
+      }
+      setActiveId(null);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (activeUser) {
+    if (activeUser.type === "Brand") {
+       return <BrandKYCDetail user={activeUser} onBack={() => setActiveId(null)} onApprove={handleApprove} onReject={handleReject} />;
+    }
+    return <CreatorKYCReview creator={activeUser} onBack={() => setActiveId(null)} onApprove={handleApprove} onReject={handleReject} />;
+  }
+
+  const displayedList = verifications.filter(v => v.type === tab);
+
+  return (
+    <div className="space-y-6">
+       <div className="flex bg-black/40 p-1 rounded-xl w-max border border-foreground/10">
+          {["Creator", "Brand"].map(t => (
+             <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${tab === t ? 'bg-[#9D7CFF] text-white shadow-md' : 'text-foreground/60 hover:text-foreground'}`}
+             >
+                {t} Verifications
+             </button>
+          ))}
+       </div>
+
+       <div className="bg-card rounded-2xl border border-foreground/10 overflow-hidden">
+          <div className="overflow-x-auto">
+             <table className="w-full text-sm text-left">
+                <thead className="text-xs uppercase text-foreground/50 border-b border-foreground/10 bg-foreground/5">
+                   <tr>
+                      <th className="px-6 py-4 font-medium tracking-wider">User</th>
+                      <th className="px-6 py-4 font-medium tracking-wider">Status</th>
+                      <th className="px-6 py-4 font-medium tracking-wider">Submitted On</th>
+                      <th className="px-6 py-4 font-medium tracking-wider text-right">Actions</th>
+                   </tr>
+                </thead>
+                <tbody className="divide-y divide-foreground/10">
+                   {displayedList.length === 0 && (
+                     <tr><td colSpan="4" className="px-6 py-8 text-center text-foreground/50 italic">No {tab.toLowerCase()} verifications found.</td></tr>
+                   )}
+                   {displayedList.map(v => (
+                      <tr key={v.verification_id} className="hover:bg-foreground/5 transition-colors group">
+                         <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-3">
+                               <img src={v.photo} alt={v.name} className="w-10 h-10 rounded-full object-cover" />
+                               <div>
+                                  <div className="font-semibold">{v.name}</div>
+                                  <div className="text-xs text-foreground/50">{v.type}</div>
+                               </div>
+                            </div>
+                         </td>
+                         <td className="px-6 py-4 whitespace-nowrap">
+                            {v.status === 'approved' && <span className="bg-green-500/10 text-green-500 border border-green-500/20 px-2 py-1 rounded-md text-xs font-medium">Approved</span>}
+                            {v.status === 'rejected' && <span className="bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-1 rounded-md text-xs font-medium">Rejected</span>}
+                            {v.status === 'escalated' && <span className="bg-orange-500/15 text-orange-400 border border-orange-500/30 px-2 py-1 rounded-md text-xs font-medium flex items-center w-max gap-1">🚨 Escalated (Fraud)</span>}
+                            {v.status === 'pending' && <span className="bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2 py-1 rounded-md text-xs font-medium flex items-center w-max gap-1"><Clock size={12}/> Pending</span>}
+                         </td>
+                         <td className="px-6 py-4 whitespace-nowrap text-foreground/70">
+                            {new Date(v.created_at).toLocaleDateString()}
+                         </td>
+                         <td className="px-6 py-4 whitespace-nowrap text-right">
+                            <button onClick={() => setActiveId(v.verification_id)} className="px-4 py-2 bg-foreground/10 hover:bg-foreground/20 rounded-lg font-medium text-xs transition-colors">
+                               Review Documents
+                            </button>
+                         </td>
+                      </tr>
+                   ))}
+                </tbody>
+             </table>
+          </div>
+       </div>
+    </div>
+  );
+}
+
+function BrandKYCDetail({ user, onBack, onApprove, onReject }) {
+  const [suspendModal, setSuspendModal] = useState(false);
+  const [suspendReason, setSuspendReason] = useState("");
+  const [status, setStatus] = useState(user.status === 'approved' ? 'Verified' : user.status === 'rejected' ? 'Suspended' : 'Pending Review');
+  const [checks, setChecks] = useState({
+     gstin: false,
+     panMatch: false,
+     addressProof: false
+  });
+
+  const toggleCheck = (k) => setChecks(p => ({...p, [k]: !p[k]}));
+
+  return (
+    <div className="w-full max-w-5xl space-y-6">
+       <div className="flex items-center justify-between">
+          <button onClick={onBack} className="flex items-center gap-2 p-2 hover:bg-foreground/5 rounded-lg transition-colors">
+             <ArrowLeft size={18} /> <span className="text-sm font-medium">Back to Verifications</span>
+          </button>
+       </div>
+
+       {/* Banner */}
+       <div className={`p-4 rounded-xl border flex items-center justify-between ${status === 'Pending Review' ? 'bg-amber-500/10 border-amber-500/30' : status === 'Verified' ? 'bg-green-500/10 border-green-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+          <div className="flex items-center gap-3">
+             {status === 'Pending Review' && <Clock className="text-amber-500" />}
+             {status === 'Verified' && <CheckCircle2 className="text-green-500" />}
+             {status === 'Suspended' && <AlertTriangle className="text-red-500" />}
+             <div>
+                <div className={`font-bold ${status === 'Pending Review' ? 'text-amber-500' : status === 'Verified' ? 'text-green-500' : 'text-red-500'}`}>
+                   {status}
+                </div>
+                <div className="text-xs text-foreground/50">Current Brand Verification Status</div>
+             </div>
+          </div>
+          <div className="text-right flex flex-col gap-1 items-end">
+             <div className="text-xs text-foreground/50 border border-foreground/10 px-2 py-1 rounded bg-black/40">Status updated today by Admin</div>
+          </div>
+       </div>
+
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+             <div className="bg-card border border-foreground/10 rounded-2xl p-6">
+                <div className="flex items-center gap-4 mb-6">
+                   <img src={user.photo} alt={user.name} className="w-16 h-16 rounded-xl border border-foreground/10" />
+                   <div>
+                      <h2 className="font-display font-semibold text-2xl">{user.name}</h2>
+                      <div className="text-sm text-foreground/50">Company Profile</div>
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                   <div>
+                      <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">GSTIN</label>
+                      <div className="font-mono text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.gst_cert || user.gstin || "27AAACN1234E1Z5"}</div>
+                   </div>
+                   <div>
+                      <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Company PAN</label>
+                      <div className="font-mono text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.brand_pan || "AAACN1234E"}</div>
+                   </div>
+                   <div className="col-span-2">
+                      <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Registered Address</label>
+                      <div className="text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.website || "123 Business Park, Tower B, Level 4, Andheri East, Mumbai, Maharashtra 400059"}</div>
+                   </div>
+                   <div className="col-span-2">
+                      <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Authorized Signatory Name</label>
+                      <div className="text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.poc_name || user.name || "Vikram Desai"}</div>
+                   </div>
+                </div>
+             </div>
+
+             <div className="bg-card border border-foreground/10 rounded-2xl p-6">
+                <h3 className="font-semibold flex items-center gap-2 mb-4"><FileText size={18} className="text-[#9D7CFF]"/> Uploaded Documents</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   {user.documents?.uploaded_files && user.documents.uploaded_files.length > 0 ? (
+                      user.documents.uploaded_files.map((file, idx) => {
+                         const url = file.url || file;
+                         const name = file.name || `Document ${idx + 1}`;
+                         return (
+                            <a 
+                               href={url} 
+                               target="_blank" 
+                               rel="noreferrer" 
+                               key={idx} 
+                               className="border border-foreground/10 rounded-xl p-4 flex items-start gap-4 hover:bg-foreground/5 transition-colors cursor-pointer min-h-[72px]"
+                            >
+                               <div className="w-10 h-10 rounded-lg bg-foreground/10 flex items-center justify-center shrink-0">
+                                  <FileText size={20} className="text-foreground/70" />
+                               </div>
+                               <div className="min-w-0 flex-1">
+                                  <div className="font-medium text-sm truncate" title={name}>{name}</div>
+                                  <div className="text-xs text-[#9D7CFF] mt-1 font-semibold">View Attachment ↗</div>
+                                </div>
+                            </a>
+                         );
+                      })
+                   ) : (
+                      <>
+                         <div className="border border-foreground/10 rounded-xl p-4 flex items-start gap-4 hover:bg-foreground/5 transition-colors cursor-pointer">
+                            <div className="w-10 h-10 rounded-lg bg-foreground/10 flex items-center justify-center shrink-0">
+                               <FileText size={20} className="text-foreground/70" />
+                            </div>
+                            <div>
+                               <div className="font-medium text-sm">Incorporation Certificate</div>
+                               <div className="text-xs text-foreground/50 mt-1">PDF • 2.4 MB</div>
+                            </div>
+                         </div>
+                         <div className="border border-foreground/10 rounded-xl p-4 flex items-start gap-4 hover:bg-foreground/5 transition-colors cursor-pointer">
+                            <div className="w-10 h-10 rounded-lg bg-foreground/10 flex items-center justify-center shrink-0">
+                               <FileText size={20} className="text-foreground/70" />
+                            </div>
+                            <div>
+                               <div className="font-medium text-sm">Utility Bill / Address Proof</div>
+                               <div className="text-xs text-foreground/50 mt-1">JPG • 1.1 MB</div>
+                            </div>
+                         </div>
+                      </>
+                   )}
+                </div>
+             </div>
+          </div>
+
+          <div className="space-y-6">
+             <div className="bg-card border border-foreground/10 rounded-2xl p-6">
+                <h3 className="font-semibold text-lg mb-4">Verification Checklist</h3>
+                <div className="space-y-3">
+                   <label className="flex items-center justify-between p-3 border border-foreground/10 rounded-xl hover:bg-foreground/5 cursor-pointer">
+                      <span className="text-sm font-medium">Valid GSTIN</span>
+                      <input type="checkbox" checked={checks.gstin} onChange={() => toggleCheck('gstin')} className="w-5 h-5 accent-[#9D7CFF]" />
+                   </label>
+                   <label className="flex items-center justify-between p-3 border border-foreground/10 rounded-xl hover:bg-foreground/5 cursor-pointer">
+                      <span className="text-sm font-medium">PAN Name Match</span>
+                      <input type="checkbox" checked={checks.panMatch} onChange={() => toggleCheck('panMatch')} className="w-5 h-5 accent-[#9D7CFF]" />
+                     </label>
+                   <label className="flex items-center justify-between p-3 border border-foreground/10 rounded-xl hover:bg-foreground/5 cursor-pointer">
+                      <span className="text-sm font-medium">Valid Address Proof</span>
+                      <input type="checkbox" checked={checks.addressProof} onChange={() => toggleCheck('addressProof')} className="w-5 h-5 accent-[#9D7CFF]" />
+                   </label>
+                </div>
+
+                <div className="mt-8 space-y-3">
+                   <button 
+                     onClick={async () => {
+                        await onApprove(user.verification_id);
+                        setStatus("Verified");
+                     }}
+                     className="w-full flex items-center justify-center gap-2 py-3 bg-green-500 hover:bg-green-600 text-black font-semibold rounded-xl transition-colors"
+                   >
+                      <CheckCircle2 size={18} /> Approve Brand
+                   </button>
+                   <button 
+                     onClick={() => setSuspendModal(true)}
+                     className="w-full flex items-center justify-center gap-2 py-3 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-500 font-semibold rounded-xl transition-colors"
+                   >
+                      <PauseCircle size={18} /> Suspend Brand
+                   </button>
+                </div>
+             </div>
+          </div>
+       </div>
+
+       {suspendModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setSuspendModal(false)}>
+             <div className="bg-[#12121A] border border-foreground/10 rounded-2xl p-6 w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
+                <h3 className="font-display text-xl font-bold text-red-500 mb-4 flex items-center gap-2"><AlertTriangle size={20}/> Suspend Brand Account</h3>
+                <p className="text-sm text-foreground/70 mb-4">Please provide a reason for suspension. The brand will be notified.</p>
+                
+                <select 
+                   value={suspendReason} 
+                   onChange={e => setSuspendReason(e.target.value)}
+                   className="w-full bg-black/40 border border-foreground/10 rounded-xl p-3 mb-4 text-sm focus:outline-none focus:border-red-500"
+                >
+                   <option value="" disabled>Select reason...</option>
+                   <option value="Incomplete Documents">Incomplete Documents</option>
+                   <option value="Suspicious GSTIN / PAN">Suspicious GSTIN / PAN</option>
+                   <option value="Blacklisted Entity">Blacklisted Entity</option>
+                   <option value="Other">Other</option>
+                </select>
+
+                <div className="flex gap-3 justify-end mt-6">
+                   <button onClick={() => setSuspendModal(false)} className="px-4 py-2 text-sm font-medium hover:text-white text-foreground/60">Cancel</button>
+                   <button 
+                     disabled={!suspendReason}
+                     onClick={async () => {
+                        await onReject(user.verification_id, suspendReason);
+                        setStatus("Suspended");
+                        setSuspendModal(false);
+                     }}
+                     className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl text-sm disabled:opacity-50"
+                   >
+                      Confirm Suspension
+                   </button>
+                </div>
+             </div>
+          </div>
+       )}
+    </div>
+  );
+}
+
+function CreatorKYCDetail({ user, onBack }) {
+  const [panStatus, setPanStatus] = useState('verified'); // verified, pending, failed
+  const [aadhaarStatus, setAadhaarStatus] = useState('verified');
+  const [bankStatus, setBankStatus] = useState('failed');
+  const [loading, setLoading] = useState(null);
+
+  const overallStatus = (panStatus === 'verified' && aadhaarStatus === 'verified' && bankStatus === 'verified') 
+    ? "Verified" 
+    : (panStatus === 'failed' || aadhaarStatus === 'failed' || bankStatus === 'failed') ? "Failed" : "Partial";
+
+  const reverify = (type) => {
+    setLoading(type);
+    setTimeout(() => {
+      if (type === 'pan') setPanStatus('verified');
+      if (type === 'aadhaar') setAadhaarStatus('verified');
+      if (type === 'bank') setBankStatus('verified');
+      setLoading(null);
+    }, 1500);
+  };
+
+  return (
+    <div className="w-full max-w-5xl space-y-6">
+      <div className="flex items-center justify-between mb-6">
+        <button onClick={onBack} className="text-foreground/60 hover:text-foreground text-sm font-medium flex items-center gap-2">
+          &larr; Back to List
+        </button>
+        <div className="flex items-center gap-2">
+           <span className="text-sm font-medium text-foreground/60">Overall Status:</span>
+           {overallStatus === 'Verified' && <span className="px-3 py-1 bg-green-500/10 text-green-500 border border-green-500/20 rounded-full text-xs font-bold uppercase">Verified</span>}
+           {overallStatus === 'Partial' && <span className="px-3 py-1 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-full text-xs font-bold uppercase">Partial</span>}
+           {overallStatus === 'Failed' && <span className="px-3 py-1 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full text-xs font-bold uppercase">Failed</span>}
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        {/* PAN Card */}
+        <VerificationCard 
+          icon={<CreditCard />}
+          title="PAN Verification"
+          status={panStatus}
+          loading={loading === 'pan'}
+          onReverify={() => reverify('pan')}
+          lastChecked="Today, 10:45 AM"
+        >
+          <div className="grid grid-cols-2 gap-4 text-sm mt-4">
+             <div>
+               <div className="text-foreground/50 text-xs mb-1">PAN Number</div>
+               <div className="font-mono">ABCDE1234F</div>
+             </div>
+             <div>
+               <div className="text-foreground/50 text-xs mb-1">Name Match</div>
+               <div className="flex items-center gap-1 text-green-400 font-medium"><CheckCircle2 size={16}/> 98% Match</div>
+             </div>
+             <div className="col-span-2">
+               <div className="text-foreground/50 text-xs mb-1">API Status</div>
+               <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-foreground/10 text-xs text-foreground/70 font-mono">
+                  <ShieldCheck size={14} className="text-[#9D7CFF]"/> NSDL Verified
+               </div>
+             </div>
+          </div>
+        </VerificationCard>
+
+        {/* Aadhaar */}
+        <VerificationCard 
+          icon={<Fingerprint />}
+          title="Aadhaar Verification"
+          status={aadhaarStatus}
+          loading={loading === 'aadhaar'}
+          onReverify={() => reverify('aadhaar')}
+          lastChecked="Today, 10:46 AM"
+        >
+          <div className="grid grid-cols-2 gap-4 text-sm mt-4">
+             <div>
+               <div className="text-foreground/50 text-xs mb-1">Aadhaar Number</div>
+               <div className="font-mono">XXXX-XXXX-1234</div>
+             </div>
+             <div>
+               <div className="text-foreground/50 text-xs mb-1">Consent</div>
+               <div className="flex items-center gap-1 text-green-400 font-medium"><CheckCircle2 size={16}/> Provided</div>
+             </div>
+             <div className="col-span-2">
+               <div className="text-foreground/50 text-xs mb-1">Method</div>
+               <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-green-500/10 text-green-500 border border-green-500/20 text-xs font-semibold">
+                  <Check size={14} /> OTP Verified
+               </div>
+             </div>
+          </div>
+        </VerificationCard>
+
+        {/* Bank */}
+        <VerificationCard 
+          icon={<Building2 />}
+          title="Bank Account Verification"
+          status={bankStatus}
+          loading={loading === 'bank'}
+          onReverify={() => reverify('bank')}
+          lastChecked="Today, 10:47 AM"
+        >
+          <div className="grid grid-cols-2 gap-4 text-sm mt-4">
+             <div>
+               <div className="text-foreground/50 text-xs mb-1">Account Number</div>
+               <div className="font-mono">9876543210123</div>
+             </div>
+             <div>
+               <div className="text-foreground/50 text-xs mb-1">IFSC</div>
+               <div className="font-mono text-foreground/80">SBIN0001234</div>
+             </div>
+             <div>
+               <div className="text-foreground/50 text-xs mb-1">Beneficiary Name</div>
+               {bankStatus === 'failed' ? (
+                 <div className="flex items-center gap-1 text-red-400 font-medium"><XCircle size={16}/> Mismatch Alert</div>
+               ) : (
+                 <div className="flex items-center gap-1 text-green-400 font-medium"><CheckCircle2 size={16}/> Rahul V.</div>
+               )}
+             </div>
+             <div>
+               <div className="text-foreground/50 text-xs mb-1">Penny Drop</div>
+               {bankStatus === 'failed' ? (
+                 <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-red-500/10 text-red-500 border border-red-500/20 text-xs font-semibold">
+                    <AlertTriangle size={14}/> Failed
+                 </div>
+               ) : (
+                 <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-green-500/10 text-green-500 border border-green-500/20 text-xs font-semibold">
+                    <Check size={14}/> Successful (₹1.00)
+                 </div>
+               )}
+             </div>
+          </div>
+        </VerificationCard>
+      </div>
+
+      <div className="mt-8 flex justify-end pt-6 border-t border-foreground/10">
+         <button 
+           disabled={overallStatus !== 'Verified'}
+           className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${overallStatus === 'Verified' ? 'bg-green-500 hover:bg-green-600 text-black shadow-lg shadow-green-500/20' : 'bg-foreground/5 text-foreground/40 cursor-not-allowed'}`}
+         >
+           <CheckCircle2 size={20} /> Mark as Fully Verified
+         </button>
+      </div>
+    </div>
+  );
+}
+
+function VerificationCard({ icon, title, status, loading, onReverify, lastChecked, children }) {
+  return (
+    <div className={`bg-card/50 border rounded-2xl p-5 relative overflow-hidden transition-colors ${status === 'verified' ? 'border-green-500/30' : status === 'failed' ? 'border-red-500/30' : 'border-foreground/10'}`}>
+       <div className="flex items-start justify-between mb-2">
+          <div className="flex items-center gap-3">
+             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${status === 'verified' ? 'bg-green-500/10 text-green-500' : status === 'failed' ? 'bg-red-500/10 text-red-500' : 'bg-foreground/10 text-foreground/60'}`}>
+                {icon}
+             </div>
+             <h3 className="font-semibold font-display text-lg tracking-tight">{title}</h3>
+          </div>
+          <button 
+             onClick={onReverify} 
+             disabled={loading}
+             className="flex items-center gap-1.5 px-3 py-1.5 bg-black/40 hover:bg-black/60 border border-foreground/10 rounded-lg text-xs font-medium transition-colors"
+          >
+             <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> {loading ? "Checking..." : "Re-verify"}
+          </button>
+       </div>
+       
+       {children}
+
+       <div className="mt-4 pt-3 border-t border-foreground/5 flex items-center justify-between text-xs">
+          <span className="text-foreground/40">Last check: {lastChecked}</span>
+       </div>
+    </div>
+  );
+}
