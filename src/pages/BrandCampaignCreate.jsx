@@ -4,6 +4,8 @@ import { api } from "../lib/api";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Check, Sparkles, UploadCloud, FileText, Calendar, Compass, ListTodo, Layers, ArrowLeft } from "lucide-react";
+import { CustomDatePicker } from "../components/ui/custom-date-picker";
+import { CategoryAutocomplete } from "../components/ui/autocomplete";
 
 export default function BrandCampaignCreate() {
   const navigate = useNavigate();
@@ -265,18 +267,12 @@ export default function BrandCampaignCreate() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Niche / Category Category</label>
-                  <select
+                  <CategoryAutocomplete
+                    label="Niche / Category"
+                    placeholder="Search category (e.g., Tech & Gadgets)"
                     value={campaignForm.category}
-                    onChange={(e) => setCampaignForm(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none cursor-pointer"
-                  >
-                    <option value="Tech">Technology & Gadgets</option>
-                    <option value="Beauty">Skincare & Fashion</option>
-                    <option value="Fitness">Sports & Fitness</option>
-                    <option value="Food">Food, Travel & Lifestyle</option>
-                    <option value="Business">Finance & Business</option>
-                  </select>
+                    onChange={(val) => setCampaignForm((prev) => ({ ...prev, category: val }))}
+                  />
                 </div>
               </div>
             )}
@@ -351,12 +347,10 @@ export default function BrandCampaignCreate() {
 
                 <div>
                   <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Application submission deadline *</label>
-                  <input
-                    value={campaignForm.deadline}
-                    required
-                    onChange={(e) => setCampaignForm(prev => ({ ...prev, deadline: e.target.value }))}
-                    className="w-full px-4 py-3 border border-white/5 rounded-xl text-xs sm:text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none font-mono"
-                    type="date"
+                  <CustomDatePicker
+                    date={campaignForm.deadline}
+                    setDate={(d) => setCampaignForm(prev => ({ ...prev, deadline: d }))}
+                    placeholder="dd / mm / yyyy"
                   />
                 </div>
               </div>

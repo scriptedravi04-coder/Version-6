@@ -171,22 +171,30 @@ function BrandKYCDetail({ user, onBack, onApprove, onReject }) {
                 </div>
 
                 <div className="grid grid-cols-2 gap-y-6 gap-x-4">
-                   <div>
-                      <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">GSTIN</label>
-                      <div className="font-mono text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.gst_cert || user.gstin || "27AAACN1234E1Z5"}</div>
-                   </div>
-                   <div>
-                      <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Company PAN</label>
-                      <div className="font-mono text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.brand_pan || "AAACN1234E"}</div>
-                   </div>
-                   <div className="col-span-2">
-                      <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Registered Address</label>
-                      <div className="text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.website || "123 Business Park, Tower B, Level 4, Andheri East, Mumbai, Maharashtra 400059"}</div>
-                   </div>
-                   <div className="col-span-2">
-                      <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Authorized Signatory Name</label>
-                      <div className="text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.poc_name || user.name || "Vikram Desai"}</div>
-                   </div>
+                   {(user.documents?.gst_cert || user.gstin) && (
+                     <div>
+                        <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">GSTIN</label>
+                        <div className="font-mono text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.gst_cert || user.gstin}</div>
+                     </div>
+                   )}
+                   {user.documents?.brand_pan && (
+                     <div>
+                        <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Company PAN</label>
+                        <div className="font-mono text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.brand_pan}</div>
+                     </div>
+                   )}
+                   {user.documents?.website && (
+                     <div className="col-span-2">
+                        <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Website / Address</label>
+                        <div className="text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.website}</div>
+                     </div>
+                   )}
+                   {(user.documents?.poc_name || user.name) && (
+                     <div className="col-span-2">
+                        <label className="text-xs text-foreground/50 font-medium uppercase tracking-wider mb-1 block">Authorized Signatory Name</label>
+                        <div className="text-sm bg-black/40 px-3 py-2 rounded-lg border border-foreground/5">{user.documents?.poc_name || user.name}</div>
+                     </div>
+                   )}
                 </div>
              </div>
 
@@ -216,65 +224,59 @@ function BrandKYCDetail({ user, onBack, onApprove, onReject }) {
                          );
                       })
                    ) : (
-                      <>
-                         <div className="border border-foreground/10 rounded-xl p-4 flex items-start gap-4 hover:bg-foreground/5 transition-colors cursor-pointer">
-                            <div className="w-10 h-10 rounded-lg bg-foreground/10 flex items-center justify-center shrink-0">
-                               <FileText size={20} className="text-foreground/70" />
-                            </div>
-                            <div>
-                               <div className="font-medium text-sm">Incorporation Certificate</div>
-                               <div className="text-xs text-foreground/50 mt-1">PDF • 2.4 MB</div>
-                            </div>
-                         </div>
-                         <div className="border border-foreground/10 rounded-xl p-4 flex items-start gap-4 hover:bg-foreground/5 transition-colors cursor-pointer">
-                            <div className="w-10 h-10 rounded-lg bg-foreground/10 flex items-center justify-center shrink-0">
-                               <FileText size={20} className="text-foreground/70" />
-                            </div>
-                            <div>
-                               <div className="font-medium text-sm">Utility Bill / Address Proof</div>
-                               <div className="text-xs text-foreground/50 mt-1">JPG • 1.1 MB</div>
-                            </div>
-                         </div>
-                      </>
+                      <div className="col-span-2 py-4 text-center text-foreground/50 text-sm">
+                         No additional documents uploaded.
+                      </div>
                    )}
                 </div>
              </div>
           </div>
 
           <div className="space-y-6">
-             <div className="bg-card border border-foreground/10 rounded-2xl p-6">
-                <h3 className="font-semibold text-lg mb-4">Verification Checklist</h3>
-                <div className="space-y-3">
-                   <label className="flex items-center justify-between p-3 border border-foreground/10 rounded-xl hover:bg-foreground/5 cursor-pointer">
-                      <span className="text-sm font-medium">Valid GSTIN</span>
-                      <input type="checkbox" checked={checks.gstin} onChange={() => toggleCheck('gstin')} className="w-5 h-5 accent-[#9D7CFF]" />
-                   </label>
-                   <label className="flex items-center justify-between p-3 border border-foreground/10 rounded-xl hover:bg-foreground/5 cursor-pointer">
-                      <span className="text-sm font-medium">PAN Name Match</span>
-                      <input type="checkbox" checked={checks.panMatch} onChange={() => toggleCheck('panMatch')} className="w-5 h-5 accent-[#9D7CFF]" />
-                     </label>
-                   <label className="flex items-center justify-between p-3 border border-foreground/10 rounded-xl hover:bg-foreground/5 cursor-pointer">
-                      <span className="text-sm font-medium">Valid Address Proof</span>
-                      <input type="checkbox" checked={checks.addressProof} onChange={() => toggleCheck('addressProof')} className="w-5 h-5 accent-[#9D7CFF]" />
-                   </label>
+             <div className="bg-card border border-foreground/10 rounded-2xl p-6 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#9D7CFF]/5 blur-3xl rounded-full"></div>
+                <h3 className="font-semibold text-lg mb-6 flex items-center gap-2"><ShieldCheck className="text-[#9D7CFF]" size={20}/> Verification Protocol</h3>
+                
+                <div className="space-y-4 mb-8">
+                   {[
+                      { id: 'gstin', label: 'GSTIN Registration Validated' },
+                      { id: 'panMatch', label: 'PAN Identity Match' },
+                      { id: 'addressProof', label: 'Address & Locality Verified' }
+                   ].map(item => (
+                      <div 
+                        key={item.id} 
+                        onClick={() => toggleCheck(item.id)}
+                        className={`group relative overflow-hidden cursor-pointer rounded-xl border flex items-center gap-4 p-4 transition-all duration-300 ${checks[item.id] ? 'bg-[#9D7CFF]/10 border-[#9D7CFF]/40 text-foreground' : 'bg-foreground/5 border-transparent text-foreground/60 hover:bg-foreground/10'}`}
+                      >
+                         <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${checks[item.id] ? 'bg-[#9D7CFF] text-white' : 'bg-foreground/10 text-transparent group-hover:bg-foreground/20'}`}>
+                            <Check size={14} className="stroke-[3]" />
+                         </div>
+                         <div className="text-sm font-semibold">{item.label}</div>
+                         {checks[item.id] && <div className="ml-auto text-[10px] uppercase tracking-wider text-[#9D7CFF] font-bold">Passed</div>}
+                      </div>
+                   ))}
                 </div>
 
-                <div className="mt-8 space-y-3">
-                   <button 
-                     onClick={async () => {
-                        await onApprove(user.verification_id);
-                        setStatus("Verified");
-                     }}
-                     className="w-full flex items-center justify-center gap-2 py-3 bg-green-500 hover:bg-green-600 text-black font-semibold rounded-xl transition-colors"
-                   >
-                      <CheckCircle2 size={18} /> Approve Brand
-                   </button>
-                   <button 
-                     onClick={() => setSuspendModal(true)}
-                     className="w-full flex items-center justify-center gap-2 py-3 bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-500 font-semibold rounded-xl transition-colors"
-                   >
-                      <PauseCircle size={18} /> Suspend Brand
-                   </button>
+                <div className="pt-6 border-t border-foreground/10">
+                   <p className="text-xs text-foreground/50 mb-4 text-center">Ensure all protocol steps are verified before approval.</p>
+                   <div className="grid grid-cols-2 gap-3">
+                      <button 
+                        onClick={() => setSuspendModal(true)}
+                        className="w-full flex justify-center items-center gap-2 py-3.5 bg-foreground/5 hover:bg-red-500/10 border border-transparent hover:border-red-500/30 hover:text-red-500 font-semibold rounded-xl transition-all duration-300"
+                      >
+                         <XCircle size={18} /> Reject
+                      </button>
+                      <button 
+                        onClick={async () => {
+                           await onApprove(user.verification_id);
+                           setStatus("Verified");
+                        }}
+                        className={`w-full flex justify-center items-center gap-2 py-3.5 font-bold rounded-xl transition-all duration-300 ${checks.gstin && checks.panMatch && checks.addressProof ? 'bg-gradient-to-r from-emerald-400 to-green-500 text-black shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:opacity-90' : 'bg-foreground/10 text-foreground/40 cursor-not-allowed'}`}
+                        disabled={!(checks.gstin && checks.panMatch && checks.addressProof)}
+                      >
+                         <CheckCircle2 size={18} /> Approve
+                      </button>
+                   </div>
                 </div>
              </div>
           </div>

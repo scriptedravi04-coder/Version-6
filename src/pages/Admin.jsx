@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useSearchParams, Navigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, Users, Megaphone, ShieldCheck, MessageCircle, Hand, Briefcase, Ban, Trash2, CheckCircle2, XCircle, Percent, AlertTriangle, Save, Eye, Banknote, Image as ImageIcon, Wrench } from "lucide-react";
+import { Bell, Users, Megaphone, ShieldCheck, MessageCircle, Hand, Briefcase, Ban, Trash2, CheckCircle2, XCircle, Percent, AlertTriangle, Save, Eye, Banknote, Image as ImageIcon, Wrench, X } from "lucide-react";
 import FeeConfigPanel from "../components/FeeConfigPanel";
 import PendingApprovalsTable from "../components/PendingApprovalsTable";
 import AdminChatDashboard from "../components/chat/AdminChatDashboard";
@@ -117,26 +117,36 @@ export default function Admin() {
           <AnimatePresence>
             {showAdminNotif && (
               <>
-                <div className="fixed inset-0 z-30" onClick={() => setShowAdminNotif(false)} />
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setShowAdminNotif(false)}
+                  className="fixed inset-0 bg-black/60 z-[200] backdrop-blur-sm"
+                />
                 <motion.div 
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-3 w-80 bg-card border border-foreground/10 rounded-2xl shadow-2xl p-4 z-40 text-left"
+                  initial={{ x: "100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "100%" }}
+                  transition={{ type: "spring", damping: 30, stiffness: 250 }}
+                  className="fixed top-0 right-0 w-full max-w-sm sm:max-w-md h-full bg-white/95 dark:bg-[#0c0c12]/95 backdrop-blur-2xl border-l border-foreground/10 shadow-2xl z-[250] flex flex-col overflow-hidden select-none text-left"
                 >
-                  <div className="flex items-center justify-between pb-3 border-b border-foreground/10 mb-3">
-                    <span className="text-xs font-bold uppercase tracking-wider text-foreground/40">Moderator Action Center</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#7C5CFF]/10 text-[#9D7CFF] font-mono font-bold">LIVE</span>
+                  <div className="flex items-center justify-between p-6 border-b border-foreground/5 bg-foreground/[0.02]">
+                    <div className="flex items-center gap-2">
+                       <Bell className="w-5 h-5 text-[#9D7CFF]" />
+                       <span className="font-bold text-lg tracking-wide text-foreground">Moderator Notifications</span>
+                    </div>
+                    <button onClick={() => setShowAdminNotif(false)} className="p-2 hover:bg-foreground/5 rounded-full"><X size={20}/></button>
                   </div>
                   
+                  <div className="flex-1 overflow-y-auto w-full scrollbar-hidden p-4 space-y-4">
                   {pendingVer + openReports === 0 ? (
-                    <div className="py-6 text-center text-xs text-foreground/45 flex flex-col items-center gap-2">
-                      <span>🎉</span>
+                    <div className="py-12 text-center text-sm text-foreground/45 flex flex-col items-center gap-3">
+                      <span className="text-3xl">🎉</span>
                       <span>No outstanding compliance reviews required. All quiet.</span>
                     </div>
                   ) : (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       {pendingVer > 0 && (
                         <button 
                           onClick={() => { setSearchParams({ tab: "verifications" }); setShowAdminNotif(false); }}
@@ -164,6 +174,7 @@ export default function Admin() {
                       )}
                     </div>
                   )}
+                  </div>
                 </motion.div>
               </>
             )}

@@ -58,7 +58,7 @@ export default function Signup() {
   // Auto-redirect if already logged in
   useEffect(() => {
     if (user && !authLoading) {
-      navigate(user.onboarded ? "/dashboard" : "/onboarding");
+      navigate(user.onboarded || user.onboarding_completed ? "/dashboard" : "/onboarding");
     }
   }, [user, authLoading, navigate]);
 

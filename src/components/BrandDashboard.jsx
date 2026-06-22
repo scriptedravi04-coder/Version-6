@@ -238,7 +238,7 @@ export default function BrandDashboard({ user }) {
               animate={{ x: 0 }} 
               exit={{ x: 400 }} 
               transition={{ type: "spring", damping: 25, stiffness: 200 }} 
-              className="fixed top-0 right-0 w-full max-w-sm h-full bg-[#131224]/95 backdrop-blur-md z-[60] border-l border-white/10 shadow-2xl flex flex-col"
+              className="fixed top-0 right-0 w-full max-w-sm h-full bg-card z-50 border-l border-border shadow-2xl flex flex-col"
             >
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">

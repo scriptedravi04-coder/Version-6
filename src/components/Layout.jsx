@@ -118,7 +118,7 @@ export default function Layout({ children }) {
                    <div className="pt-6 pb-2"><div className="h-px bg-[var(--border-default)] w-full"></div></div>
                    <div className="px-4 py-2 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">🎬 UGC</div>
                    <SidebarNavItemInner to="/brand/ugc/briefs" icon={<FileText size={18} />}>My Briefs</SidebarNavItemInner>
-                   <SidebarNavItemInner to="/brand/ugc/post" icon={<Megaphone size={18} />}>Post New Brief</SidebarNavItemInner>
+                   {/*Removed*/}
                    <SidebarNavItemInner to="/brand/ugc/orders" icon={<LayoutGrid size={18} />}>Orders & Tracking</SidebarNavItemInner>
                    <div className="pt-6 pb-2"><div className="h-px bg-[var(--border-default)] w-full"></div></div>
                    <SidebarNavItemInner to="/settings" icon={<SettingsIcon size={18} />}>Settings</SidebarNavItemInner>

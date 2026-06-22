@@ -1029,6 +1029,41 @@ async function startServer() {
     res.json({ ok: true });
   });
 
+  router.post("/auth/onboard", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user) {
+      return res.status(401).json({ detail: "Not authenticated" });
+    }
+    const db = getDb();
+    const dbUser = db.users.find(u => u.user_id === user.user_id);
+    if (dbUser) {
+      dbUser.onboarded = true;
+      dbUser.onboarding_completed = true;
+
+      const { role, data } = req.body || {};
+      if (role === "creator") {
+        if (!db.creator_profiles) db.creator_profiles = [];
+        let profile = db.creator_profiles.find(p => p.user_id === user.user_id);
+        if (!profile) {
+          profile = { user_id: user.user_id };
+          db.creator_profiles.push(profile);
+        }
+        Object.assign(profile, data || {});
+      } else if (role === "brand") {
+        if (!db.brand_profiles) db.brand_profiles = [];
+        let profile = db.brand_profiles.find(p => p.user_id === user.user_id);
+        if (!profile) {
+          profile = { user_id: user.user_id };
+          db.brand_profiles.push(profile);
+        }
+        Object.assign(profile, data || {});
+      }
+
+      saveDb(db);
+    }
+    res.json({ ok: true, user: dbUser });
+  });
+
   router.post("/auth/role", (req, res) => {
     const user = parseAuthUser(req);
     if (!user) {

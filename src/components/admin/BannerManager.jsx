@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Settings, Shield, Edit3, Image as ImageIcon, Link as LinkIcon, Search, GripVertical, Plus, X } from 'lucide-react';
+import { CustomDatePicker } from '../ui/custom-date-picker';
 
 const mockBanners = [
   { id: 'b1', type: 'Influencer', placement: 'Home Top', imgUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80', status: 'Live', clicks: 1240 },
@@ -104,11 +105,11 @@ export default function BannerManager() {
                    <div className="grid grid-cols-2 gap-4">
                       <div>
                          <label className="text-xs font-medium text-foreground/50 mb-1 block">Start Date</label>
-                         <input type="date" className="w-full bg-black/40 border border-foreground/10 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#9D7CFF]" />
+                         <CustomDatePicker className="w-full bg-black/40 border-foreground/10 px-3 py-2 h-auto" />
                       </div>
                       <div>
                          <label className="text-xs font-medium text-foreground/50 mb-1 block">End Date</label>
-                         <input type="date" className="w-full bg-black/40 border border-foreground/10 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-[#9D7CFF]" />
+                         <CustomDatePicker className="w-full bg-black/40 border-foreground/10 px-3 py-2 h-auto" />
                       </div>
                    </div>
                 </div>

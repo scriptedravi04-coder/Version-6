@@ -41,12 +41,23 @@ export default function CreatorKYCReview({ creator, onBack, onApprove, onReject 
     return n.includes("bank") || n.includes("check") || n.includes("passbook") || n.includes("cheque") || n.includes("upi");
   });
 
+  const isAadhaar = cDocs.identity_type === "Aadhaar";
+
+  const extractedData = {
+    name: creator.name || cDocs.poc_name,
+    pan: cDocs.pan_number || (!isAadhaar ? cDocs.identity_num : null),
+    aadhaar: isAadhaar ? cDocs.identity_num : null,
+    gstin: creator.gstin || cDocs.gst_cert || cDocs.gstin,
+    bankAccount: cDocs.bank_account,
+    ifsc: cDocs.bank_ifsc
+  };
+
   const allVerified = [
-    verificationFields.name,
-    showPan ? verificationFields.pan : true,
-    showAadhaar ? verificationFields.aadhaar : true,
-    showGstin ? verificationFields.gstin : true,
-    showBank ? verificationFields.bank : true
+    extractedData.name ? verificationFields.name : true,
+    (showPan && extractedData.pan) ? verificationFields.pan : true,
+    (showAadhaar && extractedData.aadhaar) ? verificationFields.aadhaar : true,
+    (showGstin && extractedData.gstin) ? verificationFields.gstin : true,
+    (showBank && extractedData.bankAccount) ? verificationFields.bank : true
   ].every(v => v);
 
   const mockDocs = {
@@ -55,17 +66,6 @@ export default function CreatorKYCReview({ creator, onBack, onApprove, onReject 
     aadhaarBack: "https://images.unsplash.com/photo-1621360841013-c76831f1e360?w=400&q=80",
     gstin: "https://images.unsplash.com/photo-1621360841013-c76831f1e360?w=400&q=80",
     bank: "https://images.unsplash.com/photo-1544396821-4dd40b938ad3?w=400&q=80"
-  };
-
-  const isAadhaar = cDocs.identity_type === "Aadhaar";
-
-  const extractedData = {
-    name: creator.name,
-    pan: isAadhaar ? "ABCDE1234F" : (cDocs.identity_num || "ABCDE1234F"),
-    aadhaar: isAadhaar ? (cDocs.identity_num || "XXXX XXXX 1234") : "XXXX XXXX 1234",
-    gstin: creator.gstin || cDocs.gst_cert || cDocs.gstin || "27AAACN1234E1Z5",
-    bankAccount: cDocs.bank_account || "9876543210123",
-    ifsc: cDocs.bank_ifsc || "SBIN0001234"
   };
 
   const getFileUrl = (f) => {
@@ -144,76 +144,11 @@ export default function CreatorKYCReview({ creator, onBack, onApprove, onReject 
                 );
               })
             ) : (
-              <>
-                <div className="space-y-2">
-                  <span className="text-xs text-foreground/50 font-medium uppercase">PAN Card</span>
-                  <div 
-                    className="relative bg-black/40 rounded-xl overflow-hidden cursor-pointer group aspect-video border border-foreground/10"
-                    onClick={() => setZoomedImage(mockDocs.pan)}
-                  >
-                    <img src={mockDocs.pan} alt="PAN Card" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-60 mix-blend-luminosity hover:mix-blend-normal" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition-opacity">
-                      <ZoomIn size={24} className="text-white" />
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <span className="text-xs text-foreground/50 font-medium uppercase">Bank Passbook / Cheque</span>
-                  <div 
-                    className="relative bg-black/40 rounded-xl overflow-hidden cursor-pointer group aspect-video border border-foreground/10"
-                    onClick={() => setZoomedImage(mockDocs.bank)}
-                  >
-                    <img src={mockDocs.bank} alt="Bank Document" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-60 mix-blend-luminosity hover:mix-blend-normal" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition-opacity">
-                      <ZoomIn size={24} className="text-white" />
-                    </div>
-                  </div>
-                </div>
-
-                {!isBrand ? (
-                  <>
-                    <div className="space-y-2">
-                      <span className="text-xs text-foreground/50 font-medium uppercase">Aadhaar (Front)</span>
-                      <div 
-                        className="relative bg-black/40 rounded-xl overflow-hidden cursor-pointer group aspect-video border border-foreground/10"
-                        onClick={() => setZoomedImage(mockDocs.aadhaarFront)}
-                      >
-                        <img src={mockDocs.aadhaarFront} alt="Aadhaar Front" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-60 mix-blend-luminosity hover:mix-blend-normal" />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition-opacity">
-                          <ZoomIn size={24} className="text-white" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <span className="text-xs text-foreground/50 font-medium uppercase">Aadhaar (Back)</span>
-                      <div 
-                        className="relative bg-black/40 rounded-xl overflow-hidden cursor-pointer group aspect-video border border-foreground/10"
-                        onClick={() => setZoomedImage(mockDocs.aadhaarBack)}
-                      >
-                        <img src={mockDocs.aadhaarBack} alt="Aadhaar Back" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-60 mix-blend-luminosity hover:mix-blend-normal" />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition-opacity">
-                          <ZoomIn size={24} className="text-white" />
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                    <div className="space-y-2 col-span-2">
-                      <span className="text-xs text-foreground/50 font-medium uppercase">Brand Registration / GSTIN</span>
-                      <div 
-                        className="relative bg-black/40 rounded-xl overflow-hidden cursor-pointer group aspect-video border border-foreground/10 max-w-sm"
-                        onClick={() => setZoomedImage(mockDocs.gstin)}
-                      >
-                        <img src={mockDocs.gstin} alt="GSTIN" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-60 mix-blend-luminosity hover:mix-blend-normal" />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition-opacity">
-                          <ZoomIn size={24} className="text-white" />
-                        </div>
-                      </div>
-                    </div>
-                )}
-              </>
+              <div className="col-span-2 py-8 text-center text-foreground/50 flex flex-col items-center">
+                 <AlertTriangle size={32} className="mb-2 text-foreground/30" />
+                 <p className="text-sm font-semibold">No documents uploaded.</p>
+                 <p className="text-xs">This user hasn't provided KYC documents yet.</p>
+              </div>
             )}
           </div>
         </div>
@@ -224,18 +159,20 @@ export default function CreatorKYCReview({ creator, onBack, onApprove, onReject 
             <h3 className="font-semibold text-lg mb-6 flex items-center gap-2"><Check size={18} className="text-green-500" /> Extracted Data Verification</h3>
             
             <div className="space-y-1 bg-foreground/5 rounded-xl border border-foreground/10 overflow-hidden">
-               <VerificationRow label="Full Name" value={extractedData.name} verified={verificationFields.name} onToggle={() => toggleVerify('name')} />
-               {showPan && (
+               {extractedData.name && (
+                  <VerificationRow label="Full Name" value={extractedData.name} verified={verificationFields.name} onToggle={() => toggleVerify('name')} />
+               )}
+               {showPan && extractedData.pan && (
                   <VerificationRow label="PAN Number" value={extractedData.pan} verified={verificationFields.pan} onToggle={() => toggleVerify('pan')} />
                )}
-               {showGstin && (
+               {showGstin && extractedData.gstin && (
                   <VerificationRow label="GSTIN" value={extractedData.gstin} verified={verificationFields.gstin} onToggle={() => toggleVerify('gstin')} />
                )}
-               {showAadhaar && (
+               {showAadhaar && extractedData.aadhaar && (
                   <VerificationRow label="Aadhaar Number" value={extractedData.aadhaar} verified={verificationFields.aadhaar} onToggle={() => toggleVerify('aadhaar')} />
                )}
-               {showBank && (
-                  <VerificationRow label="Bank A/C" value={extractedData.bankAccount} subValue={`IFSC: ${extractedData.ifsc}`} verified={verificationFields.bank} onToggle={() => toggleVerify('bank')} />
+               {showBank && extractedData.bankAccount && (
+                  <VerificationRow label="Bank A/C" value={extractedData.bankAccount} subValue={extractedData.ifsc ? `IFSC: ${extractedData.ifsc}` : null} verified={verificationFields.bank} onToggle={() => toggleVerify('bank')} />
                )}
             </div>
 
@@ -341,17 +278,23 @@ export default function CreatorKYCReview({ creator, onBack, onApprove, onReject 
 
 function VerificationRow({ label, value, subValue, verified, onToggle }) {
    return (
-      <div className="px-5 py-4 border-b border-foreground/10 last:border-0 flex items-center justify-between hover:bg-foreground/5 transition-colors">
+      <div className={`px-5 py-4 border-b border-foreground/10 last:border-0 flex items-center justify-between transition-colors ${verified ? 'bg-green-500/5' : 'hover:bg-foreground/5'}`}>
          <div>
-            <div className="text-xs text-foreground/50 uppercase font-medium">{label}</div>
-            <div className="font-semibold mt-0.5">{value}</div>
-            {subValue && <div className="text-xs text-foreground/60">{subValue}</div>}
+            <div className="text-[10px] tracking-widest text-foreground/50 uppercase font-bold mb-1">{label}</div>
+            <div className={`font-medium ${verified ? 'text-green-400' : 'text-foreground'}`}>{value}</div>
+            {subValue && <div className="text-xs text-foreground/60 mt-0.5">{subValue}</div>}
          </div>
          <button 
             onClick={onToggle}
-            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-colors ${verified ? 'bg-green-500 border-green-500 text-black' : 'border-foreground/20 hover:border-foreground/40 text-transparent'}`}
+            className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${verified ? 'bg-green-500/10 text-green-400 border border-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.15)] ring-1 ring-green-500/20' : 'bg-foreground/5 text-foreground/40 border border-foreground/10 hover:bg-foreground/10 hover:text-foreground'}`}
          >
-            <Check size={16} className={verified ? "text-black" : "text-transparent"} />
+            {verified ? (
+               <>
+                  <Check size={14} /> Approved
+               </>
+            ) : (
+               'Verify Data'
+            )}
          </button>
       </div>
    );

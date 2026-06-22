@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   X, ArrowLeft, Shield, CheckCircle, AlertCircle, 
@@ -90,7 +91,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
     }
   }, [isOpen, user]);
 
-  if (!isOpen) return null;
+  if (typeof document === "undefined") return null;
 
   const isApproved = kycObj?.status === "approved" || user?.verified;
   const isPending = kycObj?.status === "pending";
@@ -429,12 +430,19 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
     setHasStarted(true);
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-hidden">
-        
-        {/* Background Click Shield */}
-        <div className="absolute inset-0 z-0" onClick={onClose} />
+      {isOpen && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-hidden"
+        >
+          
+          {/* Background Click Shield */}
+          <div className="absolute inset-0 z-0" onClick={onClose} />
 
         {/* STATE 0: WELCOME CARD INDEX SCREEN (Beautiful white/frosted glassmorphic premium container) */}
         {!hasStarted ? (
@@ -461,48 +469,48 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
               <div className="w-full flex justify-center mb-6 py-2 select-none pointer-events-none">
                 <svg viewBox="0 0 340 250" className="w-[300px] h-[220px]" fill="none" xmlns="http://www.w3.org/2000/svg">
                   {/* Tablet Device Frame */}
-                  <rect x="110" y="25" width="125" height="180" rx="16" fill="#F8FAFC" stroke="#7C5CFF" strokeWidth="2.5" />
-                  <circle cx="172.5" cy="35" r="2.5" fill="#7C5CFF" />
+                  <rect x="110" y="25" width="125" height="180" rx="16" fill="#F8FAFC" stroke="#3B82F6" strokeWidth="2.5" />
+                  <circle cx="172.5" cy="35" r="2.5" fill="#3B82F6" />
                   
                   {/* Tablet Interface Mock */}
                   <rect x="125" y="55" width="95" height="135" rx="10" fill="white" stroke="#E2E8F0" strokeWidth="1.5" />
                   {/* User Photo Placeholder inside Tablet */}
-                  <circle cx="172.5" cy="90" r="18" fill="#F3E8FF" stroke="#7C5CFF" strokeWidth="2" />
-                  <path d="M162 105C162 97.8203 166.7 92 172.5 92C178.3 92 183 97.8203 183 105" stroke="#7C5CFF" strokeWidth="2" strokeLinecap="round" />
-                  <circle cx="172.5" cy="85" r="5" fill="#7C5CFF" />
+                  <circle cx="172.5" cy="90" r="18" fill="#dbeafe" stroke="#3B82F6" strokeWidth="2" />
+                  <path d="M162 105C162 97.8203 166.7 92 172.5 92C178.3 92 183 97.8203 183 105" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" />
+                  <circle cx="172.5" cy="85" r="5" fill="#3B82F6" />
                   {/* Inputs placeholder in Tablet */}
                   <rect x="142" y="118" width="60" height="8" rx="4" fill="#F1F5F9" />
                   <rect x="142" y="132" width="60" height="8" rx="4" fill="#F1F5F9" />
-                  <circle cx="134" cy="122" r="2" fill="#7C5CFF" />
-                  <circle cx="134" cy="136" r="2" fill="#7C5CFF" />
-                  <rect x="142" y="150" width="60" height="12" rx="4" fill="#7C5CFF" />
+                  <circle cx="134" cy="122" r="2" fill="#3B82F6" />
+                  <circle cx="134" cy="136" r="2" fill="#3B82F6" />
+                  <rect x="142" y="150" width="60" height="12" rx="4" fill="#3B82F6" />
 
                   {/* Shield with Padlock (Safety) */}
-                  <path d="M45 55C45 42 85 32 85 32C85 32 125 42 125 55C125 102 85 128 85 128C85 128 45 102 45 55Z" fill="#F8FAFC" stroke="#7C5CFF" strokeWidth="2.5" strokeLinejoin="round" />
+                  <path d="M45 55C45 42 85 32 85 32C85 32 125 42 125 55C125 102 85 128 85 128C85 128 45 102 45 55Z" fill="#F8FAFC" stroke="#3B82F6" strokeWidth="2.5" strokeLinejoin="round" />
                   {/* Lock Inside Shield */}
-                  <rect x="73" y="75" width="24" height="20" rx="4" fill="#7C5CFF" stroke="#7C5CFF" strokeWidth="1" />
-                  <path d="M78 75V69C78 64.5 92 64.5 92 69V75" stroke="#7C5CFF" strokeWidth="2" strokeLinecap="round" />
+                  <rect x="73" y="75" width="24" height="20" rx="4" fill="#3B82F6" stroke="#3B82F6" strokeWidth="1" />
+                  <path d="M78 75V69C78 64.5 92 64.5 92 69V75" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" />
                   <circle cx="85" cy="83" r="1.5" fill="white" />
                   <path d="M85 85V89" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
 
                   {/* Sparkle Star decoration */}
-                  <path d="M35 20L38 26L44 29L38 32 L35 38L32 32L26 29L32 26Z" fill="#A78BFA" />
+                  <path d="M35 20L38 26L44 29L38 32 L35 38L32 32L26 29L32 26Z" fill="#60a5fa" />
 
                   {/* pointing hand/arm holding checklist */}
-                  <path d="M52 215C56 182 82 172 95 170L85 215Z" fill="#C084FC" />
-                  <path d="M12 240L145 240L125 215L52 215Z" fill="#7C5CFF" />
+                  <path d="M52 215C56 182 82 172 95 170L85 215Z" fill="#93c5fd" />
+                  <path d="M12 240L145 240L125 215L52 215Z" fill="#3B82F6" />
                   
                   {/* Clipboard/Drawn Hand */}
-                  <path d="M72 201C76 191 85 179 94 171L125 142C128 139 132 143 130 146L115 162C113 164 114 167 116 168H122C125 168 126 171 124 173L105 195L85 215" stroke="#7C5CFF" strokeWidth="2.5" strokeLinecap="round" fill="white" />
-                  <path d="M125 142L135 132C137 130 141 133 139 136L130 146" stroke="#7C5CFF" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d="M72 201C76 191 85 179 94 171L125 142C128 139 132 143 130 146L115 162C113 164 114 167 116 168H122C125 168 126 171 124 173L105 195L85 215" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" fill="white" />
+                  <path d="M125 142L135 132C137 130 141 133 139 136L130 146" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" />
 
                   {/* Checklist Green completion badge on right */}
-                  <circle cx="265" cy="180" r="18" fill="white" stroke="#7C5CFF" strokeWidth="2.5" />
+                  <circle cx="265" cy="180" r="18" fill="white" stroke="#3B82F6" strokeWidth="2.5" />
                   <path d="M259 180L263 184L271 176" stroke="#10b981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
 
                   {/* Bubble heart with cute pink coloring */}
-                  <path d="M185 200H210C213 200 215 202 215 205V220C215 223 213 225 210 225H202L195 233V225H185C182 225 180 223 180 220V205C180 202 182 200 185 200Z" fill="white" stroke="#7C5CFF" strokeWidth="2" strokeLinejoin="round" />
-                  <path d="M197.5 210.5C196.2 208.5 193.3 209.2 197.5 215C201.7 209.2 198.8 208.5 197.5 210.5Z" fill="#EE46BC" stroke="#7C5CFF" strokeWidth="1" strokeLinejoin="round" />
+                  <path d="M185 200H210C213 200 215 202 215 205V220C215 223 213 225 210 225H202L195 233V225H185C182 225 180 223 180 220V205C180 202 182 200 185 200Z" fill="white" stroke="#3B82F6" strokeWidth="2" strokeLinejoin="round" />
+                  <path d="M197.5 210.5C196.2 208.5 193.3 209.2 197.5 215C201.7 209.2 198.8 208.5 197.5 210.5Z" fill="#EC4899" stroke="#3B82F6" strokeWidth="1" strokeLinejoin="round" />
                 </svg>
               </div>
 
@@ -511,14 +519,14 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
               
               {/* Subtitle / desc */}
               <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-[370px] mt-3">
-                To comply with regional payout laws, complete your instant financial credentials. <span className="font-extrabold text-[#7C5CFF] whitespace-nowrap">Takes less than 5 minutes!</span>
+                To comply with regional payout laws, complete your instant financial credentials. <span className="font-extrabold text-[#3B82F6] whitespace-nowrap">Takes less than 5 minutes!</span>
               </p>
 
-              {/* Action solid purple button */}
+              {/* Action solid blue button */}
               <button 
                 onClick={handleStartVerification}
                 id="btn-start-verification-welcome"
-                className="w-full mt-8 bg-[#7C5CFF] hover:bg-[#6a42f4] text-white py-3.5 px-6 rounded-2xl font-bold shadow-lg shadow-[#7C5CFF]/25 hover:shadow-[#7C5CFF]/35 transform hover:-translate-y-0.5 transition-all duration-200 text-sm tracking-wide"
+                className="w-full mt-8 bg-[#3B82F6] hover:bg-blue-600 text-white py-3.5 px-6 rounded-2xl font-bold shadow-lg shadow-[#3B82F6]/25 hover:shadow-[#3B82F6]/35 transform hover:-translate-y-0.5 transition-all duration-200 text-sm tracking-wide"
               >
                 Start Verification
               </button>
@@ -527,7 +535,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
               <button 
                 onClick={onClose}
                 id="btn-skip-for-later-welcome"
-                className="text-sm font-bold text-slate-400 hover:text-[#7C5CFF] transition-colors mt-4 block focus:outline-none"
+                className="text-sm font-bold text-slate-400 hover:text-[#3B82F6] transition-colors mt-4 block focus:outline-none"
               >
                 Skip For Later
               </button>
@@ -575,77 +583,61 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
               </div>
             </div>
 
-            {/* TWO COLUMN STEP CONTENT BODY */}
-            <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+            {/* HORIZONTAL STEPPER WIZARD */}
+            <div className="flex-1 flex flex-col overflow-visible px-4 md:px-8 bg-transparent pb-6 mt-4">
               
-              {/* LEFT SIDEBAR: DYNAMIC VERTICAL INDEX CHECKLIST */}
-              <div className="hidden md:block md:w-[38%] border-r border-white/10 bg-[#0E0E14] p-5 sm:p-6 overflow-y-auto">
-                <div className="mb-6">
-                  <h2 className="text-lg font-sans font-black text-white leading-tight">Match Your Information</h2>
-                  <p className="text-xs text-white/60 font-medium mt-1.5 leading-relaxed">
-                    Check points are stored strictly under secure hashed AES-256 standards, processed instantly for verification.
-                  </p>
-                </div>
+              {/* Stepper Header */}
+              {!(isApproved || isPending) && !kycLoading && (
+                <div className="flex items-center justify-between w-full max-w-2xl mx-auto mb-10 relative mt-4">
+                  {/* Background connecting line */}
+                  <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/10 -translate-y-1/2 z-0 rounded-full" />
+                  {/* Active connecting line */}
+                  <div 
+                    className="absolute top-1/2 left-0 h-1 bg-[#3B82F6] -translate-y-1/2 z-0 rounded-full transition-all duration-500 ease-in-out shadow-[0_0_10px_#3B82F6]" 
+                    style={{ width: `${((activeStep - 1) / (stepsList.length - 1)) * 100}%` }}
+                  />
 
-                {/* Steps cards vertical tree */}
-                <div className="space-y-2 select-none">
                   {stepsList.map((st, index) => {
                     const stepNum = index + 1;
                     const stepState = getStepStatus(stepNum);
-                    const isActive = !isApproved && !isPending && activeStep === stepNum;
-                    
+                    const isActive = activeStep === stepNum;
+                    const isPassed = stepNum < activeStep || stepState === "completed";
+
+                    // The circle itself
                     return (
-                      <button
-                        key={stepNum}
-                        disabled={isApproved || isPending}
-                        onClick={() => setActiveStep(stepNum)}
-                        id={`btn-sidebar-step-${stepNum}`}
-                        className={`w-full p-3 rounded-xl border text-left flex items-start gap-3 transition-all outline-none ${
-                          isActive 
-                            ? "bg-white/5 border-[#7C5CFF]/45 shadow-md shadow-[#7C5CFF]/10 text-[#9D7CFF]" 
-                            : "bg-transparent border-transparent text-white/50 hover:bg-white/5 hover:text-white"
-                        }`}
-                      >
-                        <div className={`p-1.5 rounded-lg shrink-0 ${
-                          isActive 
-                            ? "bg-[#7C5CFF] text-white" 
-                            : "bg-white/10 text-white/60"
-                        }`}>
-                          {st.icon}
+                      <div key={stepNum} className="relative z-10 flex flex-col items-center">
+                        <button
+                          disabled={isApproved || isPending}
+                          onClick={() => setActiveStep(stepNum)}
+                          className={`w-[42px] h-[42px] rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 relative ${
+                            isActive 
+                              ? "bg-[#3B82F6] text-white shadow-[0_0_20px_#3B82F6] ring-4 ring-[#3B82F6]/30 scale-110" 
+                              : isPassed
+                                ? "bg-[#3B82F6] text-white shadow-[0_0_10px_#3B82F6]"
+                                : "bg-[#1E1E28] text-white/40 ring-1 ring-white/10"
+                          }`}
+                        >
+                          {isPassed && !isActive ? <CheckCircle2 size={20} strokeWidth={3} /> : stepNum}
+                        </button>
+                        <div className="absolute top-[52px] w-32 text-center">
+                           <span className={`text-[10px] font-bold uppercase tracking-wider block ${isActive ? "text-white" : "text-white/40"}`}>Step {stepNum}</span>
+                           <span className={`text-xs font-medium block truncate mt-0.5 ${isActive ? "text-white/90" : "text-white/40"}`}>{st.title}</span>
                         </div>
-                        
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2">
-                            <h5 className={`text-xs font-black truncate ${isActive ? "text-[#9D7CFF]" : "text-white/80"}`}>
-                              {st.title}
-                            </h5>
-                            {stepState === "completed" ? (
-                              <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono font-black whitespace-nowrap">Completed</span>
-                            ) : (
-                              <span className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-white/30 font-mono font-bold whitespace-nowrap">Pending</span>
-                            )}
-                          </div>
-                          <p className="text-[10px] text-white/40 mt-0.5 leading-snug truncate md:whitespace-normal font-semibold">
-                            {st.desc}
-                          </p>
-                        </div>
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
-              </div>
+              )}
 
-              {/* RIGHT SIDE PANEL: STEP-SPECIFIC DYNAMIC FORM PANELS */}
-              <div className="flex-1 bg-[#13131B] p-5 sm:p-8 overflow-y-auto flex flex-col justify-between">
+              {/* CENTER PANEL: STEP CONTENT */}
+              <div className="flex-1 flex justify-center items-start overflow-y-auto w-full pt-12 md:pt-4 pb-12 mb-4 scrollbar-hide">
                 
                 {kycLoading ? (
-                  <div className="flex-1 flex flex-col items-center justify-center text-white/50">
-                    <Loader2 size={32} className="animate-spin text-[#7C5CFF] mb-3" />
-                    <p className="text-xs font-semibold">Connecting securely to Verification APIs...</p>
+                  <div className="flex-1 flex flex-col items-center justify-center text-white/50 h-full">
+                    <Loader2 size={32} className="animate-spin text-[#3B82F6] mb-3" />
+                    <p className="text-xs font-semibold">Connecting securely to APIs...</p>
                   </div>
                 ) : (isApproved || isPending) ? (
-                  
-                  /* APPROVED OR PENDING DISPLAY SHEET */
                   <div className="flex-1 flex flex-col items-center justify-center text-center max-w-md mx-auto py-10 scale-100 animate-in fade-in zoom-in-95">
                     <div className="relative mb-6">
                       <div className={`w-20 h-20 rounded-full flex items-center justify-center border-4 ${
@@ -656,7 +648,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                         {isApproved ? <CheckCircle2 size={44} /> : <Loader2 size={44} className="animate-spin" />}
                       </div>
                       {isApproved && (
-                        <span className="absolute -bottom-1 -right-1 p-1 rounded-full bg-[#7C5CFF] text-white text-xs border-2 border-white">
+                        <span className="absolute -bottom-1 -right-1 p-1 rounded-full bg-[#3B82F6] text-white text-xs border-2 border-white">
                           <CheckSquare size={14} />
                         </span>
                       )}
@@ -668,38 +660,40 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                     
                     <p className="text-sm text-white/75 leading-relaxed max-w-[340px] mb-6 font-medium">
                       {isApproved 
-                        ? "Thank you for completing your verification. Your financial identity is matched and fully compliance-cleared for payouts."
-                        : "We received your KYC submission! Our manual reviewer board evaluates accounts every day. Your review usually resolves within 24 hours."}
+                        ? "Your identity is matched and fully compliance-cleared for payouts."
+                        : "We received your submission! Checks usually resolve within 24 hours."}
                     </p>
 
                     <button 
                       onClick={onClose}
-                      id="btn-payout-complete-close"
-                      className="w-full py-3.5 px-6 rounded-xl font-bold bg-[#7C5CFF] hover:bg-[#6c4be0] text-white shadow-lg transition-all text-xs uppercase tracking-wider"
+                      className="w-full py-3.5 px-6 rounded-xl font-bold bg-[#3B82F6] hover:bg-blue-600 text-white shadow-lg transition-all text-sm tracking-wide"
                     >
                       Close Window
                     </button>
                   </div>
-
                 ) : (
                   
-                  /* ACTIVE FORM ACTIONS WIZARD CONTAINER */
-                  <div className="flex-1 flex flex-col justify-between h-full">
-                    <div className="space-y-6">
+                  /* ACTIVE FORM WIZARD CARD */
+                   <div className="w-full max-w-[500px] bg-[#1a1a24]/80 backdrop-blur-3xl border border-white/5 rounded-3xl p-6 sm:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
+                    <div className="flex flex-col h-full space-y-6">
                       
                       {/* Active Panel Header Information */}
-                      <div className="pb-4 border-b border-white/10">
-                        <span className="text-[10px] font-mono font-black uppercase tracking-widest text-[#7C5CFF]">Step {activeStep} of 5</span>
-                        <h3 className="text-base font-black text-white font-sans mt-0.5">
-                          {activeStep === 1 && (user?.role === "brand" ? "Attach Corporate Tax Registry" : "Government Identity Details")}
-                          {activeStep === 2 && (user?.role === "brand" ? "Representative Point-of-Contact" : "Configure Settlement Account")}
-                          {activeStep === 3 && "Documents Proof Upload"}
-                          {activeStep === 4 && (user?.role === "brand" ? "Official Domain URL" : "Media Reach Info")}
-                          {activeStep === 5 && "Review & Submit"}
+                      <div className="pb-4">
+                        <h3 className="text-xl font-bold text-white mb-1">
+                          {stepsList[activeStep - 1]?.title}
                         </h3>
+                        <p className="text-xs text-white/50">{stepsList[activeStep - 1]?.desc}</p>
                       </div>
 
                       {/* Step 1: Identity Card details */}
+                      <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeStep}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                      >
                       {activeStep === 1 && (
                         <div className="space-y-4">
                           {user?.role === "brand" ? (
@@ -712,7 +706,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                   value={gstCert}
                                   id="input-brand-gstin"
                                   onChange={e => setGstCert(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono uppercase font-bold"
+                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono uppercase font-bold"
                                 />
                               </div>
                               <div>
@@ -723,7 +717,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                   value={brandPan}
                                   id="input-brand-pan"
                                   onChange={e => setBrandPan(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono uppercase font-bold"
+                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono uppercase font-bold"
                                 />
                               </div>
                             </>
@@ -738,7 +732,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                     setIdentityType(e.target.value);
                                     setIdentityNum("");
                                   }}
-                                  className="w-full bg-[#13131B] border border-white/10 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-sans font-black"
+                                  className="w-full bg-[#13131B] border border-white/10 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-black"
                                 >
                                   <option value="Aadhaar" className="bg-[#13131B] text-white font-bold">Aadhaar Card</option>
                                   <option value="PAN" className="bg-[#13131B] text-white font-bold">PAN Card (Income Tax)</option>
@@ -767,13 +761,13 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                       setIdentityNum(cleanAndTruncated);
                                     }
                                   }}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono uppercase font-bold"
+                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono uppercase font-bold"
                                 />
                               </div>
                             </>
                           )}
                           <div className="text-[10px] text-white/60 leading-normal bg-white/[0.02] p-3.5 rounded-xl border border-white/5 flex gap-2 items-start font-medium">
-                            <Shield size={14} className="text-[#7C5CFF] shrink-0 mt-0.5" />
+                            <Shield size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
                             <span>Identity numbers are stored in secure encrypted environments. We never lease, trade, or distribute structural card details.</span>
                           </div>
                         </div>
@@ -792,7 +786,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                   value={pocName}
                                   id="input-brand-poc-name"
                                   onChange={e => setPocName(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-sans font-bold"
+                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-bold"
                                 />
                               </div>
                               <div className="grid grid-cols-2 gap-4">
@@ -804,7 +798,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                     value={pocDesignation}
                                     id="input-brand-poc-pos"
                                     onChange={e => setPocDesignation(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-sans font-bold"
+                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-bold"
                                   />
                                 </div>
                                 <div>
@@ -815,7 +809,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                     value={pocEmail}
                                     id="input-brand-poc-email"
                                     onChange={e => setPocEmail(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-sans font-semibold"
+                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-semibold"
                                   />
                                 </div>
                               </div>
@@ -827,7 +821,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                   value={pocPhone}
                                   id="input-brand-poc-phone"
                                   onChange={e => setPocPhone(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono font-bold"
+                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold"
                                 />
                               </div>
                             </div>
@@ -842,7 +836,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                     value={bankName}
                                     id="input-creator-bank"
                                     onChange={e => setBankName(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-sans font-bold"
+                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-bold"
                                   />
                                 </div>
                                 <div>
@@ -857,7 +851,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                       const cleaned = e.target.value.replace(/\D/g, "");
                                       setBankAccount(cleaned);
                                     }}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono font-bold"
+                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold"
                                   />
                                 </div>
                               </div>
@@ -874,7 +868,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                       const cleaned = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
                                       setBankIfsc(cleaned);
                                     }}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono font-bold uppercase"
+                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold uppercase"
                                   />
                                 </div>
                                 <div>
@@ -892,8 +886,8 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                   />
                                 </div>
                               </div>
-                              <div className="text-[10px] text-[#9D7CFF] bg-[#7C5CFF]/10 p-3.5 rounded-xl border border-[#7C5CFF]/20 flex gap-2 items-center font-bold">
-                                <HelpCircle size={14} className="text-[#9D7CFF]" />
+                              <div className="text-[10px] text-blue-400 bg-[#3B82F6]/10 p-3.5 rounded-xl border border-[#3B82F6]/20 flex gap-2 items-center font-bold">
+                                <HelpCircle size={14} className="text-blue-400" />
                                 <span>We verify settlement configurations instantly using penny-drop micro transfers.</span>
                               </div>
                             </div>
@@ -914,18 +908,18 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                               type="button"
                               onClick={() => handleUploadClick("id")}
                               id="btn-upload-file-id"
-                              className="p-4.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 text-xs font-bold text-white/70 hover:bg-[#7C5CFF]/10 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none shadow-xs"
+                              className="p-4.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 text-xs font-bold text-white/70 hover:bg-[#3B82F6]/10 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none shadow-xs"
                             >
-                              <UploadCloud size={16} className="text-[#9D7CFF]" /> Add {user?.role === "brand" ? "Company PAN Proof" : "Identity ID Card Copy"}
+                              <UploadCloud size={16} className="text-blue-400" /> Add {user?.role === "brand" ? "Company PAN Proof" : "Identity ID Card Copy"}
                             </button>
                             
                             <button
                               type="button"
                               onClick={() => handleUploadClick(user?.role === "brand" ? "gst" : "bank")}
                               id="btn-upload-file-bank"
-                              className="p-4.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 text-xs font-bold text-white/70 hover:bg-[#7C5CFF]/10 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none shadow-xs"
+                              className="p-4.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 text-xs font-bold text-white/70 hover:bg-[#3B82F6]/10 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none shadow-xs"
                             >
-                              <UploadCloud size={16} className="text-[#9D7CFF]" /> Add {user?.role === "brand" ? "GST Registry Cert" : "Cancelled Cheque Photo"}
+                              <UploadCloud size={16} className="text-blue-400" /> Add {user?.role === "brand" ? "GST Registry Cert" : "Cancelled Cheque Photo"}
                             </button>
                           </div>
 
@@ -966,7 +960,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                   value={brandSiteUrl}
                                   id="input-brand-site"
                                   onChange={e => setBrandSiteUrl(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono font-bold"
+                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold"
                                 />
                               </div>
                             </>
@@ -980,7 +974,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                   value={socialHandle}
                                   id="input-creator-social"
                                   onChange={e => setSocialHandle(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono font-bold"
+                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold"
                                 />
                               </div>
                               <div>
@@ -991,7 +985,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                   value={gstin}
                                   id="input-creator-gstin"
                                   onChange={e => setGstin(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono font-bold uppercase"
+                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold uppercase"
                                 />
                               </div>
                             </>
@@ -1001,7 +995,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
 
                       {/* Step 5: Declaration & Final submit */}
                       {activeStep === 5 && (
-                        <div className="space-y-4 bg-[#7C5CFF]/10 border border-[#7C5CFF]/20 rounded-2xl p-4 sm:p-5">
+                        <div className="space-y-4 bg-[#3B82F6]/10 border border-[#3B82F6]/20 rounded-2xl p-4 sm:p-5">
                           <div className="flex items-center gap-2 text-emerald-400 mb-1">
                             <CheckCircle2 size={18} />
                             <span className="text-xs font-black uppercase tracking-wider font-mono">Legitimacy Confirmed</span>
@@ -1011,24 +1005,27 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                             By triggering formal dispatch, you verify that all supplied values correspond to valid government identities owned by you or your legal organization. Forged files result in permanent profile lock.
                           </p>
                           
-                          <div className="pt-3 border-t border-[#7C5CFF]/15 space-y-1.5 text-[11px] text-[#9D7CFF] font-black">
+                          <div className="pt-3 border-t border-[#3B82F6]/15 space-y-1.5 text-[11px] text-blue-400 font-black">
                             <div>• ID documents securely encrypted and bundled.</div>
                             <div>• Settlement routing successfully mapped to verification queues.</div>
                             <div>• Hand verified trust badge activation request dispatched.</div>
                           </div>
                         </div>
                       )}
+                      
+                      </motion.div>
+                      </AnimatePresence>
 
                     </div>
 
                     {/* BOTTOM ACTIONS / FORM STEPS CONTROLS */}
-                    <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3 mt-6">
+                    <div className="pt-4 flex items-center justify-between gap-3 mt-6">
                       <button
                         type="button"
                         disabled={activeStep === 1 || kycSubmitting}
                         onClick={handlePrev}
                         id="btn-actions-prev-step"
-                        className="px-4 py-2.5 rounded-xl text-xs font-bold border border-white/10 bg-white/5 hover:bg-white/10 text-white/70 shadow-xs transition-all disabled:opacity-35 disabled:pointer-events-none"
+                        className="px-6 py-3.5 rounded-xl text-sm font-bold border border-white/10 bg-transparent hover:bg-white/5 text-white/70 transition-all disabled:opacity-0 disabled:pointer-events-none"
                       >
                         Back
                       </button>
@@ -1038,7 +1035,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                         onClick={handleNext}
                         disabled={kycSubmitting}
                         id="btn-actions-next-step"
-                        className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#7C5CFF] hover:bg-[#6c4be0] text-white transition-all shadow-md shadow-[#7C5CFF]/20 hover:shadow-[#7C5CFF]/35 transform hover:-translate-y-0.5 duration-200 flex items-center gap-1.5"
+                        className="px-8 py-3.5 rounded-xl text-sm font-bold bg-[#3B82F6] hover:bg-blue-600 text-white transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transform hover:-translate-y-0.5 duration-200 flex items-center gap-1.5 w-full md:w-auto mt-2 md:mt-0 justify-center"
                       >
                         {kycSubmitting ? (
                           <>
@@ -1047,7 +1044,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                         ) : activeStep === 5 ? (
                           "Submit Handover"
                         ) : (
-                          "Save & Continue"
+                          "Continue"
                         )}
                       </button>
                     </div>
@@ -1068,7 +1065,9 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
           accept="image/*,application/pdf"
           onChange={handleRealFileChange}
         />
-      </div>
-    </AnimatePresence>
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body
   );
 }

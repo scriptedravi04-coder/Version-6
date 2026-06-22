@@ -55,7 +55,7 @@ export default function Login() {
   // Auto-redirect if already logged in
   useEffect(() => {
     if (user && !authLoading) {
-      navigate(user.onboarded ? "/dashboard" : "/onboarding");
+      navigate(user.onboarded || user.onboarding_completed ? "/dashboard" : "/onboarding");
     }
   }, [user, authLoading, navigate]);
 
@@ -90,7 +90,7 @@ export default function Login() {
         refreshUser().then((user) => {
           setLoading(false);
           if (user) {
-            navigate(user.onboarded ? "/dashboard" : "/onboarding");
+            navigate(user.onboarded || user.onboarding_completed ? "/dashboard" : "/onboarding");
           }
         });
       } else if (event.data?.type === "OAUTH_FAILURE") {
@@ -135,7 +135,7 @@ export default function Login() {
     try {
       const user = await login(email, password);
       toast.success("Welcome back!");
-      navigate(user.onboarded ? "/dashboard" : "/onboarding");
+      navigate(user.onboarded || user.onboarding_completed ? "/dashboard" : "/onboarding");
     } catch (err) {
       toast.error(err.response?.data?.detail || "Login failed");
     } finally { setLoading(false); }

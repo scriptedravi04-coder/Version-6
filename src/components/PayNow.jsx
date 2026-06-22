@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { CreditCard, CheckCircle2 } from 'lucide-react';
-import FeeBreakup from './FeeBreakup';
 import { api } from '../lib/api';
 import { toast } from 'sonner';
 
@@ -42,8 +41,11 @@ export default function PayNow({ dealId, creatorId, grossAmount }) {
         </div>
       </div>
 
-      <div className="mb-8">
-        <FeeBreakup grossAmount={grossAmount} />
+      <div className="mb-8 bg-[#1A1A2E] border border-white/10 rounded-xl p-5">
+        <div className="flex justify-between items-center text-lg">
+          <span className="text-white/80">Total Amount to Pay</span>
+          <span className="font-bold text-white tracking-tight">₹{grossAmount.toLocaleString('en-IN')}</span>
+        </div>
       </div>
 
       <div className="flex items-center gap-2 mb-6 text-xs text-white/40 bg-white/5 p-3 rounded-xl border border-white/5">

@@ -147,7 +147,7 @@ function ProtectedRoute({ children, requireOnboarded = false }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="min-h-screen flex items-center justify-center text-foreground/60">Loading...</div>;
   if (!user) return <Navigate to="/login" replace />;
-  if (requireOnboarded && !user.onboarded) return <Navigate to="/onboarding" replace />;
+  if (requireOnboarded && !user.onboarded && !user.onboarding_completed) return <Navigate to="/onboarding" replace />;
   return children;
 }
 

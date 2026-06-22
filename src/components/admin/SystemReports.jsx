@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, MessageSquare, AlertTriangle, Scale, Check, IndianRupee, ShieldAlert, FileText, Ban } from 'lucide-react';
 import { api } from '../../lib/api';
+import { CustomDatePicker } from '../ui/custom-date-picker';
 
 const mockCollabs = [
   { id: 'col_123', campaign: 'Summer Launch', brand: 'Nova Brand Co', creator: 'Aarushi Jain', status: 'In Progress', escrow: 50000, deadline: '2026-06-25', lastUpdate: '2 days ago' },
@@ -190,7 +191,10 @@ function CollabStatusControl({ collab, onBack }) {
                 <h3 className="font-semibold mb-4 text-lg">Extend Deadline</h3>
                 <div className="flex gap-4">
                    <div className="flex-1">
-                      <input type="date" className="w-full p-3 bg-black/40 border border-foreground/10 rounded-xl text-sm focus:border-[#9D7CFF] focus:outline-none"/>
+                      <CustomDatePicker 
+                        placeholder="Select extension date" 
+                        className="w-full bg-black/40 border-foreground/10" 
+                      />
                    </div>
                    <button className="px-6 bg-foreground/10 hover:bg-foreground/20 font-semibold rounded-xl text-sm transition-colors">Extend</button>
                 </div>

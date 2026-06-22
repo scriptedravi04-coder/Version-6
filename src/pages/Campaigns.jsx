@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, DollarSign, Clock, Briefcase, Plus, CheckCircle, Package, Monitor, X, PlayCircle, Instagram, Twitter, Youtube, Linkedin, Star, AlignLeft, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "sonner";
+import { api } from "../lib/api";
 
 // Liquid Logo Component
 const LiquidLoader = () => (
@@ -65,12 +66,40 @@ export default function Campaigns() {
   const [applySuccess, setApplySuccess] = useState(false);
 
   useEffect(() => {
-    // Simulate network fetch
-    const timer = setTimeout(() => {
-      setData(MOCK_CAMPAIGNS);
-      setLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
+    const fetchCampaigns = async () => {
+      try {
+        const { data } = await api.get("/campaigns");
+        // Map database schema to UI expectations if necessary
+        const mapped = data.filter(c => c.status === "live").map(c => {
+          let days = 0;
+          if (c.deadline) {
+            const diff = new Date(c.deadline).getTime() - Date.now();
+            days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+          }
+          return {
+            id: c.campaign_id || c.id,
+            brand_name: c.brand_name || "Brand",
+            brand_logo: c.brand_logo || "✨",
+            title: c.title,
+            category: (c.categories && c.categories[0]) || c.category || "General",
+            platforms: c.platforms || [],
+            location: c.city || "Anywhere",
+            budget: c.budget_max || c.budget || 0,
+            deliverables: c.deliverables || [],
+            expiry_days: days,
+            description: c.description || "",
+            status: c.status,
+          };
+        });
+        setData(mapped.length > 0 ? mapped : []);
+      } catch (e) {
+        console.error(e);
+        setData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCampaigns();
   }, []);
 
   const togglePlatform = (p) => {
@@ -88,10 +117,10 @@ export default function Campaigns() {
     });
   }, [data, search, catFilter, locFilter, platFilter, budgetRange]);
 
-  const handleApply = () => {
+  const handleApply = async () => {
     setIsApplying(true);
-    // Simulate backend check & process
-    setTimeout(() => {
+    try {
+      await api.post(`/campaigns/${activeModal.id}/apply`);
       setIsApplying(false);
       setApplySuccess(true);
       setAppliedIds(prev => new Set(prev).add(activeModal.id));
@@ -101,7 +130,11 @@ export default function Campaigns() {
         setApplySuccess(false);
         setActiveModal(null);
       }, 2000);
-    }, 1500);
+    } catch (e) {
+      setIsApplying(false);
+      const err = e.response?.data?.detail || "Could not apply.";
+      toast.error(err);
+    }
   };
 
   const getDaysLabel = (days) => {
@@ -256,7 +289,13 @@ export default function Campaigns() {
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center text-xl shadow-inner border border-border">{c.brand_logo}</div>
+                          <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center text-xl shadow-inner border border-border overflow-hidden">
+                            {c.brand_logo?.startsWith('http') || c.brand_logo?.startsWith('data:image') ? (
+                              <img src={c.brand_logo} alt={c.brand_name} className="w-full h-full object-cover" />
+                            ) : (
+                              c.brand_logo
+                            )}
+                          </div>
                           <div>
                             <div className="font-bold text-sm text-foreground">{c.brand_name}</div>
                             <div className="text-[10px] text-muted-foreground font-mono tracking-wider uppercase mt-0.5">{c.category}</div>
@@ -328,7 +367,13 @@ export default function Campaigns() {
                 </button>
                 
                 <div className="flex items-center gap-4 mb-4 mt-2">
-                  <div className="w-12 h-12 rounded-xl bg-[#1A1A2E] border border-[rgba(255,255,255,0.1)] shadow-inner flex items-center justify-center text-3xl">{activeModal.brand_logo}</div>
+                  <div className="w-12 h-12 rounded-xl bg-[#1A1A2E] border border-[rgba(255,255,255,0.1)] shadow-inner flex items-center justify-center text-3xl overflow-hidden">
+                    {activeModal.brand_logo?.startsWith('http') || activeModal.brand_logo?.startsWith('data:image') ? (
+                      <img src={activeModal.brand_logo} alt={activeModal.brand_name} className="w-full h-full object-cover" />
+                    ) : (
+                      activeModal.brand_logo
+                    )}
+                  </div>
                   <div>
                     <h2 className="font-display font-bold text-2xl text-white">{activeModal.title}</h2>
                     <div className="text-xs text-[#9CA3AF] flex items-center gap-2 mt-1 font-semibold">

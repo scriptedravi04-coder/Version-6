@@ -37,20 +37,28 @@ export default function ChatBox({ thread, user }) {
     return () => clearInterval(interval);
   }, [thread]);
 
+  useEffect(() => {
+    if (scrollRef.current && messages.length > 0) {
+      const isAtBottom = scrollRef.current.scrollHeight - scrollRef.current.scrollTop <= scrollRef.current.clientHeight + 100;
+      // Scroll if we're already near bottom, or if it's the first load
+      if (isAtBottom) {
+        scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+      }
+    }
+  }, [messages]);
+
   const loadMessages = async () => {
     if (!thread) return;
     try {
       const { data } = await api.get(`/chat/v2/threads/${thread.id}/messages`);
-      setMessages(data || []);
-      // Ideally we also fetch updated thread
+      if (data) {
+        setMessages(prev => {
+          if (prev.length === data.length) return prev; // simple check to avoid unnecessary state updates
+          return data;
+        });
+      }
     } catch (err) {}
   };
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-    }
-  }, [messages]);
 
   const handleSend = async () => {
     if (!text.trim() || !thread) return;
