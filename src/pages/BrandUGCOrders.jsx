@@ -9,15 +9,13 @@ const getStageDetails = (createdAt) => {
   const elapsedMins = elapsedMs / (1000 * 60);
   const elapsedHours = elapsedMins / 60;
 
-  if (elapsedMins < 5) return { stage: "AI Scanning Creator Attributes...", progress: 5, statusColor: "text-blue-500", glow: "from-blue-500" };
-  if (elapsedMins < 15) return { stage: "Briefing & Script Analysis", progress: 12, statusColor: "text-[#7c3aed]", glow: "from-[#7c3aed]" };
-  if (elapsedHours < 2) return { stage: "Talent Shortlisting & Assignment", progress: 25, statusColor: "text-emerald-500", glow: "from-emerald-500" };
-  if (elapsedHours < 10) return { stage: "Production Setup & Shoot Preparation", progress: 40, statusColor: "text-orange-500", glow: "from-orange-500" };
-  if (elapsedHours < 18) return { stage: "Principal Photography & Filming", progress: 65, statusColor: "text-[#facc15]", glow: "from-[#facc15]" };
-  if (elapsedHours < 22) return { stage: "Editing, Grading & Audio Post", progress: 85, statusColor: "text-pink-500", glow: "from-pink-500" };
-  if (elapsedHours < 24) return { stage: "Final Quality Assessment Check", progress: 95, statusColor: "text-indigo-500", glow: "from-indigo-500" };
+  if (elapsedMins < 5) return { stage: "✅ Brief Posted", progress: 5, statusColor: "text-blue-500", glow: "from-blue-500" };
+  if (elapsedHours < 1) return { stage: "📦 Matching Creator...", progress: 20, statusColor: "text-[#7c3aed]", glow: "from-[#7c3aed]" };
+  if (elapsedHours < 4) return { stage: "🎯 Creator Found & Briefed", progress: 40, statusColor: "text-emerald-500", glow: "from-emerald-500" };
+  if (elapsedHours < 18) return { stage: "🎬 Content Being Created", progress: 70, statusColor: "text-orange-500", glow: "from-orange-500" };
+  if (elapsedHours < 24) return { stage: "🔍 Under Quality Review", progress: 95, statusColor: "text-indigo-500", glow: "from-indigo-500" };
   
-  return { stage: "Awaiting Final Delivery", progress: 99, statusColor: "text-green-500", glow: "from-green-500" };
+  return { stage: "✅ Delivered!", progress: 100, statusColor: "text-green-500", glow: "from-green-500" };
 };
 
 export default function BrandUGCOrders() {
@@ -25,19 +23,24 @@ export default function BrandUGCOrders() {
   const { startLoading, stopLoading } = useLoading();
   const navigate = useNavigate();
 
-  const loadData = () => {
-    startLoading();
-    // Fetch briefs for tracking
-    api.get("/ugc/briefs/my").then(res => {
-      // Filter out completed ones, we only want active tracking
+  const fetchBriefs = async () => {
+    try {
+      const res = await api.get("/ugc/briefs/my");
       setBriefs(res.data.filter(b => b.status !== "COMPLETED"));
-      stopLoading();
-    }).catch(() => stopLoading());
+    } catch(e) {
+      console.error(e);
+    }
+  };
+
+  const loadData = async () => {
+    startLoading();
+    await fetchBriefs();
+    stopLoading();
   };
 
   useEffect(() => {
     loadData();
-    const intv = setInterval(loadData, 30000);
+    const intv = setInterval(fetchBriefs, 30000);
     return () => clearInterval(intv);
   }, []);
 
@@ -61,92 +64,93 @@ export default function BrandUGCOrders() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 relative">
+    <div className="max-w-[1600px] w-full mx-auto px-4 lg:px-8 py-8 lg:py-12 relative">
       {/* Decorative Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[200px] bg-[#7c3aed]/20 blur-[100px] pointer-events-none rounded-full" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[#7c3aed]/20 blur-[120px] pointer-events-none rounded-full" />
       
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 relative z-10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 relative z-10">
         <div>
-          <h1 className="text-3xl font-display font-bold text-white tracking-tight">Live Orders Tracking</h1>
-          <p className="text-white/50 mt-2 font-medium">Real-time production tracking with 24-hour SLA</p>
+          <h1 className="text-3xl lg:text-4xl font-display font-bold text-white tracking-tight">Live Orders Tracking</h1>
+          <p className="text-white/50 mt-2 font-medium text-lg">Real-time production tracking with 24-hour SLA</p>
         </div>
       </div>
 
-      <div className="space-y-8 relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 relative z-10">
         {briefs.map(brief => {
           const { stage, progress, statusColor, glow } = getStageDetails(brief.created_at);
           const isFullyClaimed = brief.claimed_creators_count >= brief.max_creators;
 
           return (
              <div key={brief.id} className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent blur-xl rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent blur-[30px] rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 
-                <div className="relative bg-[#12121A] rounded-[2.5rem] overflow-hidden border border-white/[0.05] shadow-[0_8px_30px_rgb(0,0,0,0.5)]">
+                <div className="relative h-full bg-[#12121A] rounded-[2rem] overflow-hidden border border-white/[0.05] shadow-[0_8px_30px_rgb(0,0,0,0.5)] flex flex-col">
                    
                    {/* Top Half (Lightened dark for contrast) */}
-                   <div className="bg-[#1A1A24] p-6 lg:p-8 relative overflow-hidden">
-                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[50px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+                   <div className="bg-[#1A1A24] p-6 relative overflow-hidden flex-shrink-0 border-b border-white/[0.02]">
+                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-[40px] rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" />
                      
                      <div className="flex justify-between items-start mb-6">
-                        <div className="flex items-center gap-4">
-                           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#7c3aed]/20 to-[#3B82F6]/20 border border-white/10 flex items-center justify-center shrink-0 shadow-inner">
-                              <Video size={24} className="text-white/80" />
-                           </div>
-                           <div>
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold bg-[#12121A] border border-white/10 flex items-center gap-1.5`}>
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                  Active
-                                </span>
-                              </div>
-                              <h2 className="text-xl lg:text-2xl font-bold text-white tracking-tight">{brief.title || "UGC Campaign"}</h2>
-                           </div>
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7c3aed]/20 to-[#3B82F6]/20 border border-[#7c3aed]/30 flex items-center justify-center shrink-0 shadow-inner">
+                           <Video size={20} className="text-white/80" />
                         </div>
 
-                        <div className="text-right flex flex-col items-end">
-                           <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1 shadow-sm">Budget</span>
-                           <span className="text-lg font-black text-white bg-[#12121A] px-3 py-1 rounded-xl border border-white/5">₹{brief.budget?.toLocaleString()}</span>
+                        <div className="flex flex-col items-end">
+                           <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1.5 drop-shadow-sm">Budget</span>
+                           <span className="text-base font-black text-white bg-black/40 px-3 py-1 rounded-xl border border-white/5 shadow-inner">₹{brief.budget?.toLocaleString()}</span>
                         </div>
                      </div>
 
+                     <div className="mb-2">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold bg-[#12121A] border border-white/10 flex items-center gap-1.5 shadow-sm`}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            Active
+                          </span>
+                        </div>
+                        <h2 className="text-xl font-bold text-white tracking-tight line-clamp-1">{brief.title || "UGC Campaign"}</h2>
+                     </div>
+
                      <div className="flex items-center justify-between mt-4 border-t border-white/5 pt-4">
-                        <p className="text-sm font-medium text-white/50">{brief.product_name}</p>
-                        <span className="bg-white/10 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-lg">
+                        <p className="text-sm font-medium text-white/50 line-clamp-1 flex-1 pr-2">{brief.product_name}</p>
+                        <span className="bg-white/5 text-white/80 text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg border border-white/5 shadow-sm shrink-0">
                            {brief.claimed_creators_count || 0} / {brief.max_creators || 1} CLAIMED
                         </span>
                      </div>
                    </div>
 
-                   {/* Bottom Half (Darkest) */}
-                   <div className="bg-[#0A0A0F] p-6 lg:p-8">
-                     <div className="flex justify-between items-end mb-4">
-                        <div>
-                           <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-1.5">Production Progress</p>
-                           <div className="flex items-center gap-3">
-                              <span className="text-4xl font-display font-black tracking-tight text-white">{progress}%</span>
-                              <div className={`px-2 py-1 rounded-md bg-white/5 border border-white/5 text-[10px] font-bold tracking-wider ${statusColor} animate-pulse`}>
-                                 {stage}
+                   {/* Bottom Half (Darkest, auto takes remaining space) */}
+                   <div className="bg-[#0A0A0F] p-6 flex-1 flex flex-col justify-end">
+                     <div>
+                        <div className="flex justify-between items-end mb-4">
+                           <div>
+                              <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-2">Production Progress</p>
+                              <div className="flex flex-wrap items-center gap-2">
+                                 <span className="text-3xl font-display font-black tracking-tight text-white">{progress}%</span>
+                                 <div className={`px-2 py-1 flex items-center justify-center rounded-md bg-white/5 border border-white/5 text-[10px] font-bold tracking-wider ${statusColor} shadow-sm text-center whitespace-nowrap`}>
+                                    {stage}
+                                 </div>
                               </div>
                            </div>
+                           <div className="flex items-center gap-1.5 text-white/30 text-[10px] font-bold uppercase tracking-wider shrink-0 mb-1">
+                              FAST <Zap size={12} className="text-[#facc15]" />
+                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5 text-white/40 text-xs font-bold uppercase tracking-wider">
-                           Fast Delivery <Zap size={14} className="text-[#facc15]" />
-                        </div>
-                     </div>
 
-                     {/* The Slider / Progress Bar */}
-                     <div className="relative mt-8 mb-4">
-                        <div className="absolute inset-0 bg-white/5 rounded-full h-2" />
-                        <div 
-                          className={`absolute top-0 left-0 h-2 rounded-full bg-gradient-to-r ${glow} to-white shadow-[0_0_15px_rgba(255,255,255,0.3)] transition-all duration-1000`} 
-                          style={{ width: `${progress}%` }} 
-                        />
-                        {/* Thumb */}
-                        <div 
-                          className="absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#12121A] border-4 border-[#12121A] shadow-[0_0_20px_rgba(255,255,255,0.4)] flex items-center justify-center transition-all duration-1000 z-10"
-                          style={{ left: `calc(${progress}% - 16px)` }}
-                        >
-                           <div className={`w-full h-full rounded-full bg-gradient-to-br ${glow} to-white animate-pulse`} />
+                        {/* The Slider / Progress Bar */}
+                        <div className="relative mt-8 mb-2">
+                           <div className="absolute inset-0 bg-white/5 rounded-full h-2 shadow-inner" />
+                           <div 
+                             className={`absolute top-0 left-0 h-2 rounded-full bg-gradient-to-r ${glow} to-white shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-1000`} 
+                             style={{ width: `${progress}%` }} 
+                           />
+                           {/* Thumb */}
+                           <div 
+                             className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#12121A] border-[3px] border-[#12121A] shadow-[0_0_15px_rgba(255,255,255,0.3)] flex items-center justify-center transition-all duration-1000 z-10"
+                             style={{ left: `calc(${progress}% - 12px)` }}
+                           >
+                              <div className={`w-full h-full rounded-full bg-gradient-to-br ${glow} to-white`} />
+                           </div>
                         </div>
                      </div>
                    </div>

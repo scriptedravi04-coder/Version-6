@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useLoading } from "../contexts/LoadingContext";
-import { Zap, Tag, Clock } from "lucide-react";
+import { Zap, Tag, Clock, Video, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -47,30 +47,80 @@ export default function CreatorUGCBrowse() {
           <p className="text-gray-400 font-medium">No open briefs right now. Check back soon!</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
           {briefs.map(b => (
-            <div key={b.id} onClick={() => setSelectedBrief(b)} className="bg-[#16161e] border border-white/10 hover:border-[#7c3aed]/50 transition-colors rounded-3xl p-6 cursor-pointer flex flex-col group">
-               <div className="flex justify-between items-start mb-4">
-                 <div className="inline-flex items-center gap-1.5 bg-[#facc15]/10 text-[#facc15] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border border-[#facc15]/20">
-                    <Zap size={10} /> 22-Hour Brief
-                 </div>
-                 <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">{b.claimed_count}/{b.max_creators} Claimed</div>
-               </div>
-               
-               <h3 className="text-lg font-bold text-white mb-1 line-clamp-2">"{b.title}"</h3>
-               <p className="text-sm text-gray-500 mb-4 line-clamp-1">{b.product_name}</p>
+             <div key={b.id} onClick={() => setSelectedBrief(b)} className="relative group cursor-pointer">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent blur-[30px] rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                
+                <div className="relative h-full bg-[#12121A] rounded-[2rem] overflow-hidden border border-white/[0.05] shadow-[0_8px_30px_rgb(0,0,0,0.5)] flex flex-col transition-transform duration-300 group-hover:-translate-y-1">
+                   {/* Top Half */}
+                   <div className="bg-[#1A1A24] p-6 relative overflow-hidden flex-shrink-0 border-b border-white/[0.02]">
+                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-[40px] rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+                     
+                     <div className="flex justify-between items-start mb-6">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#7c3aed]/20 to-[#3B82F6]/20 border border-[#7c3aed]/30 flex items-center justify-center shrink-0 shadow-inner">
+                           <Video size={20} className="text-white/80" />
+                        </div>
 
-               <div className="flex flex-col gap-2 mt-auto text-xs font-bold uppercase tracking-wider">
-                 <div className="flex justify-between">
-                   <span className="text-gray-500">Format:</span>
-                   <span className="text-white">🎬 {b.deliverable_type?.replace(/_/g," ")} · {b.video_duration || '30s'}</span>
-                 </div>
-                 <div className="flex justify-between mt-2 pt-2 border-t border-white/5">
-                   <span className="text-gray-500">Your Payout:</span>
-                   <span className="text-emerald-400 text-lg">₹{getPayout(b.budget).toLocaleString()}</span>
-                 </div>
-               </div>
-            </div>
+                        <div className="flex flex-col items-end">
+                           <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest mb-1.5 drop-shadow-sm">Your Payout</span>
+                           <span className="text-lg font-black text-emerald-400 bg-black/40 px-3 py-1 rounded-xl border border-white/5 shadow-inner">₹{getPayout(b.budget).toLocaleString()}</span>
+                        </div>
+                     </div>
+
+                     <div className="mb-2">
+                        <div className="flex items-center gap-2 mb-2">
+                           <div className="flex bg-[#12121A] px-2 py-0.5 rounded-full border border-white/10 shadow-sm">
+                              <div className="text-[9px] font-bold tracking-widest uppercase flex items-center gap-1.5 text-[#facc15]">
+                                 <Zap size={10} /> 24-HOUR DELIVERY
+                              </div>
+                           </div>
+                        </div>
+                        <h2 className="text-xl font-bold text-white tracking-tight line-clamp-1">{b.title || "UGC Campaign"}</h2>
+                     </div>
+
+                     <div className="flex items-center justify-between mt-4 border-t border-white/5 pt-4">
+                        <p className="text-sm font-medium text-white/50 line-clamp-1 flex-1 pr-2">{b.product_name}</p>
+                        <span className="bg-white/5 text-white/80 text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg border border-white/5 shadow-sm shrink-0">
+                           {b.claimed_count || 0} / {b.max_creators || 1} CLAIMED
+                        </span>
+                     </div>
+                   </div>
+
+                   {/* Bottom Half */}
+                   <div className="bg-[#0A0A0F] p-6 flex-1 flex flex-col justify-end">
+                     <div>
+                        <div className="flex justify-between items-end mb-4">
+                           <div>
+                              <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest mb-2">Claim Progress</p>
+                              <div className="flex flex-wrap items-center gap-2">
+                                 <span className="text-3xl font-display font-black tracking-tight text-white">{Math.round(((b.claimed_count || 0)/(b.max_creators || 1))*100)}%</span>
+                              </div>
+                           </div>
+                           <div className="flex items-center gap-1.5 text-white/30 text-[10px] font-bold uppercase tracking-wider shrink-0 mb-1">
+                              {b.video_duration || '30s'} <PlayCircle size={12} className="text-[#7c3aed]" />
+                           </div>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div className="relative mt-8 mb-2">
+                           <div className="absolute inset-0 bg-white/5 rounded-full h-2 shadow-inner" />
+                           <div 
+                             className="absolute top-0 left-0 h-2 rounded-full bg-gradient-to-r from-[#7c3aed] to-white shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-1000"
+                             style={{ width: `${Math.min(100, ((b.claimed_count || 0)/(b.max_creators || 1))*100)}%` }} 
+                           />
+                           <div 
+                             className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-[#12121A] border-[3px] border-[#12121A] shadow-[0_0_15px_rgba(255,255,255,0.3)] flex items-center justify-center transition-all duration-1000 z-10"
+                             style={{ left: `calc(${Math.min(100, ((b.claimed_count || 0)/(b.max_creators || 1))*100)}% - 12px)` }}
+                           >
+                              <div className="w-full h-full rounded-full bg-gradient-to-br from-[#7c3aed] to-white" />
+                           </div>
+                        </div>
+
+                     </div>
+                   </div>
+                </div>
+             </div>
           ))}
         </div>
       )}

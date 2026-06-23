@@ -150,7 +150,7 @@ export default function BrandCampaigns() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filtered.length === 0 ? (
               <div className="py-20 text-center bg-[#131224]/50 rounded-2xl border border-white/5 text-xs text-white/40 font-medium">
                 No campaigns match selected status filter &ldquo;{activeTab}&rdquo;.
