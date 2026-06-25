@@ -845,14 +845,18 @@ export default function Settings() {
             </h2>
             <div className="grid grid-cols-2 gap-3">
               <button onClick={() => handleEdit('qr_code')} className="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[#7C3AED]/50 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all group">
-                <div className="w-10 h-10 rounded-full bg-[var(--bg-elevated)] text-[var(--text-primary)] flex items-center justify-center group-hover:scale-110 group-hover:bg-[var(--violet)] transition-all"><Grid size={20}/></div>
+                <div className="w-10 h-10 rounded-t-[14px] rounded-bl-[14px] rounded-br-[4px] bg-[var(--bg-elevated)] text-[var(--text-primary)] flex items-center justify-center group-hover:bg-[var(--violet)] transition-all">
+                  <Grid size={20} className="group-hover:anim-jiggle" />
+                </div>
                 <span className="font-medium text-xs text-[var(--text-primary)]">QR Code</span>
               </button>
               <button 
                 onClick={() => { navigator.clipboard.writeText(window.location.origin + "/creator/demo"); toast.success("Profile link copied!"); }}
                 className="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[#D9F111]/50 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all group"
               >
-                <div className="w-10 h-10 rounded-full bg-[var(--bg-elevated)] text-[var(--text-primary)] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#D9F111] group-hover:text-black transition-all"><LinkIcon size={20}/></div>
+                <div className="w-10 h-10 rounded-t-[14px] rounded-bl-[14px] rounded-br-[4px] bg-[var(--bg-elevated)] text-[var(--text-primary)] flex items-center justify-center group-hover:bg-[#D9F111] group-hover:text-black transition-all">
+                  <LinkIcon size={20} className="group-hover:anim-jiggle" />
+                </div>
                 <span className="font-medium text-xs text-[var(--text-primary)]">Copy Link</span>
               </button>
             </div>

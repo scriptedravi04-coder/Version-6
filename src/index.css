@@ -374,6 +374,22 @@ html.light .creator-name, html.light .creator-meta, html.light .creator-reach-bl
   animation: blink-eye 3.5s infinite;
 }
 
+@keyframes jiggle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-12deg); }
+  50% { transform: rotate(12deg); }
+  75% { transform: rotate(-6deg); }
+  100% { transform: rotate(0deg); }
+}
+.anim-jiggle { animation: jiggle 0.4s ease-in-out; }
+
+@keyframes fold-paper {
+  0% { transform: scaleY(1) skewX(0deg); }
+  50% { transform: scaleY(0.9) skewX(-2deg) translateY(-2px); }
+  100% { transform: scaleY(1) skewX(0deg); }
+}
+.anim-fold { animation: fold-paper 0.4s ease-in-out; }
+
 /* Timeline */
 .timeline-line {
   position: absolute;

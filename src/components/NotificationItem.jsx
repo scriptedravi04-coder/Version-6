@@ -64,7 +64,7 @@ export default function NotificationItem({ notification, onRead }) {
       }`}
     >
       {/* Icon */}
-      <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 ${
+      <div className={`w-9 h-9 rounded-t-[14px] rounded-bl-[14px] rounded-br-[4px] flex items-center justify-center text-lg shrink-0 ${
         !isRead ? 'bg-[#7C5CFF]/20 text-[#9D7CFF]' : 'bg-foreground/5'
       }`}>
         {icon}

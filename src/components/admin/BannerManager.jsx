@@ -121,7 +121,7 @@ export default function BannerManager() {
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map(b => (
              <div key={b.id} className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl overflow-hidden group relative">
-                <div className="relative aspect-[21/9] bg-[var(--bg-elevated)]">
+                <div className="relative aspect-[3/1] bg-[var(--bg-elevated)]">
                    <img src={b.imgUrl} alt="Banner" className="w-full h-full object-cover" />
                    <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur border border-[var(--border-default)] rounded-md text-[10px] font-bold uppercase text-[var(--text-primary)] tracking-widest">
                       {b.placement}
@@ -170,7 +170,7 @@ export default function BannerManager() {
                         <>
                           <ImageIcon size={32} className="mb-2 opacity-50" />
                           <div className="text-sm font-semibold">Click to upload image</div>
-                          <div className="text-xs mt-1">1200x400px recommended (Max 2MB)</div>
+                          <div className="text-xs mt-1">Size: 1200 x 400 pixels (3:1 aspect ratio)</div>
                         </>
                       )}
                    </div>

@@ -295,8 +295,8 @@ export default function CreatorProfile() {
             <div className="space-y-3">
               <a href={`https://instagram.com/${c.instagram}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] transition-colors border border-[var(--border-default)] group">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 flex items-center justify-center text-[var(--text-primary)]">
-                    <Instagram size={18} />
+                  <div className="w-9 h-9 rounded-t-[12px] rounded-bl-[12px] rounded-br-sm bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 flex items-center justify-center text-[var(--text-primary)]">
+                    <Instagram size={18} className="group-hover:anim-jiggle" />
                   </div>
                   <div>
                     <div className="font-semibold text-xs text-[var(--text-primary)]/90 group-hover:underline">@{c.instagram || c.name.toLowerCase().replace(' ','_')}</div>
@@ -309,8 +309,8 @@ export default function CreatorProfile() {
               {c.youtube && (
                 <a href={`https://youtube.com/@${c.youtube}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] transition-colors border border-[var(--border-default)] group">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-red-600 flex items-center justify-center text-[var(--text-primary)]">
-                      <Youtube size={18} />
+                    <div className="w-9 h-9 rounded-t-[12px] rounded-bl-[12px] rounded-br-sm bg-red-600 flex items-center justify-center text-[var(--text-primary)]">
+                      <Youtube size={18} className="group-hover:anim-jiggle" />
                     </div>
                     <div>
                       <div className="font-semibold text-xs text-[var(--text-primary)]/90 group-hover:underline">{c.youtube || c.name}</div>

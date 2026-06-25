@@ -161,14 +161,14 @@ export default function Layout({ children }) {
               
               <div className="flex items-center gap-3 px-2 py-2 mb-2">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--violet)] to-[#A78BFA] p-[2px]">
-                   <img src="https://i.pravatar.cc/150?u=ravi" alt="Ravi Verma" className="w-full h-full rounded-full border-2 border-white object-cover" />
+                   <img src={user?.avatar || "https://i.pravatar.cc/150?u=ravi"} alt={user?.name || "Ravi Sharma"} className="w-full h-full rounded-full border-2 border-[var(--bg-card)] object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-bold text-[var(--text-primary)] truncate">Ravi Verma</h4>
-                  <p className="text-xs text-[var(--text-secondary)] truncate font-medium">Food Creator</p>
+                  <h4 className="text-sm font-bold text-[var(--text-primary)] truncate">{user?.name || "Ravi Sharma"}</h4>
+                  <p className="text-xs text-[var(--text-secondary)] truncate font-medium">{user?.role || "Creator"}</p>
                 </div>
               </div>
-              <Link to="/profile/public" className="text-xs font-semibold text-[var(--violet)] hover:text-[#A78BFA] flex items-center gap-1.5 px-2 transition-colors">
+              <Link to="/profile/overview" className="text-xs font-semibold text-[var(--violet)] hover:text-[#A78BFA] flex items-center gap-1.5 px-2 transition-colors">
                 View Public Profile <ArrowRight size={14} />
               </Link>
             </div>

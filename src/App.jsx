@@ -40,6 +40,7 @@ import UgcOrders from "./pages/UgcOrders";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import InfoHub from "./pages/InfoHub";
 import CreatorCampaignFlow from "./pages/CreatorCampaignFlow";
+import MyProfile from "./pages/MyProfile";
 
 // Brand Specific Pages
 import BrandCampaigns from "./pages/BrandCampaigns";
@@ -187,6 +188,7 @@ function AnimatedRoutes() {
         <Route path="/onboarding" element={<ProtectedRoute><Layout><Page><Onboarding /></Page></Layout></ProtectedRoute>} />
         <Route path="/explore" element={<Layout><Page><ExploreWrapper /></Page></Layout>} />
         <Route path="/creator/:id" element={<Layout><Page><CreatorProfile /></Page></Layout>} />
+        <Route path="/profile/overview" element={<ProtectedRoute><Layout><Page><MyProfile /></Page></Layout></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute requireOnboarded><Layout><Page><Dashboard /></Page></Layout></ProtectedRoute>} />
         <Route path="/campaigns" element={<Layout><Page><Campaigns /></Page></Layout>} />
         <Route path="/campaigns/:id" element={<Layout><Page><CampaignDetail /></Page></Layout>} />
@@ -221,6 +223,7 @@ function AnimatedRoutes() {
         <Route path="/notifications" element={<ProtectedRoute><Layout><Page><Notifications /></Page></Layout></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Layout><Page><Settings /></Page></Layout></ProtectedRoute>} />
         <Route path="/earnings" element={<ProtectedRoute><Layout><Page><Earnings /></Page></Layout></ProtectedRoute>} />
+        <Route path="/refer" element={<ProtectedRoute><Layout><Page><div className="flex flex-col items-center justify-center h-full p-8"><h1 className="text-2xl font-bold mb-4">Refer & Earn</h1><p className="text-gray-500">Coming soon!</p></div></Page></Layout></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><Layout><Page><Admin /></Page></Layout></ProtectedRoute>} />
         <Route path="/ugc-orders" element={<Layout><Page><UgcOrders /></Page></Layout>} />
         <Route path="/privacy-policy" element={<Layout><Page><PrivacyPolicy /></Page></Layout>} />

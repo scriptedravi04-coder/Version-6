@@ -227,8 +227,8 @@ export default function Earnings() {
               </div>
             ) : kycObj?.status === "rejected" ? (
               <div id="kyc-banner-rejected" className="bg-rose-500/10 border border-rose-500/20 rounded-3xl p-5 sm:p-6 text-rose-400 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-start gap-3.5">
-                  <span className="p-2.5 bg-rose-500/20 text-rose-400 rounded-xl border border-rose-500/30 mt-0.5 sm:mt-0 shrink-0">
+                <div className="flex items-start gap-3.5 group cursor-pointer">
+                  <span className="p-2.5 bg-rose-500/20 text-rose-400 rounded-t-[14px] rounded-bl-[14px] rounded-br-[4px] border border-rose-500/30 mt-0.5 sm:mt-0 shrink-0 group-hover:anim-jiggle">
                     <ShieldAlert size={18} />
                   </span>
                   <div>
@@ -248,8 +248,8 @@ export default function Earnings() {
             ) : (
               <div id="kyc-banner-unverified" className="bg-[var(--violet)]/10 border border-[var(--violet)]/20 rounded-3xl p-6 text-[var(--violet)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
                 <div className="absolute right-0 top-0 h-32 w-32 bg-[var(--violet)]/5 rounded-full filter blur-2xl pointer-events-none" />
-                <div className="flex items-start gap-4">
-                  <span className="p-3 bg-[var(--violet)]/20 text-[var(--violet)] rounded-2xl border border-[var(--violet)]/20 shrink-0">
+                <div className="flex items-start gap-4 group cursor-pointer">
+                  <span className="p-3 bg-[var(--violet)]/20 text-[var(--violet)] rounded-t-[14px] rounded-bl-[14px] rounded-br-[4px] border border-[var(--violet)]/20 shrink-0 group-hover:anim-jiggle">
                     <ShieldAlert size={20} />
                   </span>
                   <div>
@@ -282,10 +282,10 @@ export default function Earnings() {
 
       {/* SUMMARY CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-        <div className="bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-default)] rounded-3xl p-6 relative overflow-hidden transition-all hover:bg-[var(--bg-card)]">
+        <div className="bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-default)] rounded-3xl p-6 relative overflow-hidden transition-all hover:bg-[var(--bg-card)] group">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-[var(--violet)]/20 text-[var(--violet)] flex items-center justify-center">
-              <DollarSign size={20} />
+            <div className="w-10 h-10 rounded-t-[16px] rounded-bl-[16px] rounded-br-sm bg-[var(--violet)]/20 text-[var(--violet)] flex items-center justify-center">
+              <DollarSign size={20} className="group-hover:-translate-y-1 transition-transform" />
             </div>
             <div className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Total Earned</div>
           </div>
@@ -294,10 +294,10 @@ export default function Earnings() {
           </div>
         </div>
 
-        <div className="bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-default)] rounded-3xl p-6 relative overflow-hidden transition-all hover:bg-[var(--bg-card)]">
+        <div className="bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-default)] rounded-3xl p-6 relative overflow-hidden transition-all hover:bg-[var(--bg-card)] group">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
-              <Clock size={20} />
+            <div className="w-10 h-10 rounded-t-[16px] rounded-bl-[16px] rounded-br-sm bg-blue-500/20 text-blue-400 flex items-center justify-center">
+              <Clock size={20} className="group-hover:anim-jiggle" />
             </div>
             <div className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">This Month</div>
           </div>
@@ -306,10 +306,10 @@ export default function Earnings() {
           </div>
         </div>
 
-        <div className="bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-default)] rounded-3xl p-6 relative overflow-hidden transition-all hover:bg-[var(--bg-card)]">
+        <div className="bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-default)] rounded-3xl p-6 relative overflow-hidden transition-all hover:bg-[var(--bg-card)] group">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center">
-              <Wallet size={20} />
+            <div className="w-10 h-10 rounded-t-[16px] rounded-bl-[16px] rounded-br-sm bg-amber-500/20 text-amber-500 flex items-center justify-center">
+              <Wallet size={20} className="group-hover:animate-pulse" />
             </div>
             <div className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Pending Payout</div>
           </div>
@@ -318,10 +318,10 @@ export default function Earnings() {
           </div>
         </div>
 
-        <div className="bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-default)] rounded-3xl p-6 relative overflow-hidden transition-all hover:bg-[var(--bg-card)]">
+        <div className="bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-default)] rounded-3xl p-6 relative overflow-hidden transition-all hover:bg-[var(--bg-card)] group">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-              <CheckCircle size={20} />
+            <div className="w-10 h-10 rounded-t-[16px] rounded-bl-[16px] rounded-br-sm bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+              <CheckCircle size={20} className="group-hover:anim-fold" />
             </div>
             <div className="text-sm font-semibold text-[var(--text-secondary)] uppercase tracking-wider">Completed Collabs</div>
           </div>

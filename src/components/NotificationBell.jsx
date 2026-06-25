@@ -111,10 +111,10 @@ export default function NotificationBell() {
       {/* Bell Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="w-10 h-10 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] flex items-center justify-center relative shadow-sm hover:bg-[var(--bg-elevated)] transition-colors focus:outline-none"
+        className="w-10 h-10 rounded-t-[20px] rounded-bl-[20px] rounded-br-sm bg-[var(--bg-card)] border border-[var(--border-default)] flex items-center justify-center relative shadow-sm hover:bg-[var(--bg-elevated)] transition-colors focus:outline-none group"
         data-testid="notification-bell-btn"
       >
-        <Bell size={18} className="text-[var(--text-secondary)]" />
+        <Bell size={18} className="text-[var(--text-secondary)] group-hover:animate-[jiggle_0.4s_ease-in-out]" />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 bg-[var(--violet)] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold border border-[var(--bg-card)]">
             {unreadCount > 9 ? "9+" : unreadCount}

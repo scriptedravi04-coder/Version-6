@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { AlertTriangle } from "lucide-react";
 
 const CreatorCountdown = ({ internalDeadline }) => {
   const [timeLeft, setTimeLeft] = useState({ h: 0, m: 0, s: 0 });
@@ -28,8 +29,9 @@ const CreatorCountdown = ({ internalDeadline }) => {
   }, [internalDeadline]);
 
   if (isExpired) return (
-    <div className="text-[#ef4444] font-bold text-center py-2 bg-[#ef4444]/10 rounded-lg border border-[#ef4444]/20">
-      ⏰ Time's up — submit immediately!
+    <div className="w-full text-rose-600 font-black text-center py-4 bg-rose-500/10 border-y border-rose-500/20 animate-pulse flex items-center justify-center gap-2 uppercase tracking-widest text-sm shadow-[inset_0_0_20px_rgba(244,63,94,0.1)]">
+      <AlertTriangle size={20} />
+      Action Required: Deadline Exceeded!
     </div>
   );
 
@@ -37,18 +39,18 @@ const CreatorCountdown = ({ internalDeadline }) => {
     <motion.div
       animate={isUrgent ? { scale: [1, 1.03, 1] } : {}}
       transition={{ repeat: Infinity, duration: 1 }}
-      className={`flex gap-3 justify-center py-4 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-default)] ${isUrgent ? 'text-[#ef4444]' : 'text-emerald-400'}`}
+      className={`flex gap-3 justify-center py-5 bg-[var(--bg-card)] shadow-inner rounded-xl border border-[var(--border-default)] ${isUrgent ? 'text-rose-500 ring-2 ring-rose-500/50 animate-pulse' : 'text-emerald-500'}`}
     >
       {[
         { val: timeLeft.h, label: 'HRS' },
         { val: timeLeft.m, label: 'MIN' },
         { val: timeLeft.s, label: 'SEC' }
       ].map(({ val, label }) => (
-        <div key={label} className="flex flex-col items-center min-w-[3rem]">
-          <span className="font-mono text-3xl font-bold bg-black/30 w-full text-center py-1 rounded-md">
+        <div key={label} className="flex flex-col items-center min-w-[3.5rem]">
+          <span className="font-mono text-4xl font-bold tracking-tight">
             {String(val).padStart(2, '0')}
           </span>
-          <span className="text-[10px] text-[var(--text-secondary)] mt-1 uppercase font-bold tracking-widest">{label}</span>
+          <span className="text-[9px] text-[var(--text-secondary)] mt-1 uppercase font-black tracking-widest">{label}</span>
         </div>
       ))}
     </motion.div>
@@ -56,3 +58,4 @@ const CreatorCountdown = ({ internalDeadline }) => {
 };
 
 export default CreatorCountdown;
+

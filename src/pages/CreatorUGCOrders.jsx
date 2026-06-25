@@ -4,7 +4,7 @@ import { api } from "../lib/api";
 import { useLoading } from "../contexts/LoadingContext";
 import CreatorCountdown from "../components/ugc/CreatorCountdown";
 import { toast } from "sonner";
-import { Upload, Link as LinkIcon, CheckCircle, AlertTriangle, MessageCircle } from "lucide-react";
+import { Upload, Link as LinkIcon, CheckCircle, AlertTriangle, MessageCircle, FileText, ArrowRight, X, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function CreatorUGCOrders() {
@@ -56,25 +56,24 @@ export default function CreatorUGCOrders() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-3xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-black text-[var(--text-primary)] mb-2">My UGC Orders</h1>
       <p className="text-[var(--text-tertiary)] mb-8 font-medium">Upload deliverables before your timer runs out.</p>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {orders.map(o => (
-           <div key={o.id} className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl overflow-hidden shadow-2xl relative">
+           <div key={o.id} className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 relative w-full group">
               {o.creator_status === 'CLAIMED' && (
-                <div className="bg-[var(--bg-elevated)] border-b border-[var(--border-default)] py-4 flex flex-col items-center">
-                  <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase tracking-widest mb-2">Internal Deadline Timer</span>
+                <div className="bg-[var(--bg-elevated)] border-b border-[var(--border-default)]">
                   <CreatorCountdown internalDeadline={o.internal_deadline} />
                 </div>
               )}
 
               {o.creator_status === 'REVISION_REQUESTED' && (
-                <div className="bg-[#facc15]/10 border-b border-[#facc15]/20 py-6 px-8">
+                <div className="bg-[#facc15]/10 border-b border-[#facc15]/20 py-5 px-6 md:px-8">
                   <div className="flex items-start gap-3">
                     <AlertTriangle className="text-[#facc15] shrink-0 mt-0.5" size={20}/>
-                    <div>
+                    <div className="w-full">
                       <h3 className="text-[#facc15] font-bold uppercase tracking-widest text-xs mb-1">Revision Requested (1/1)</h3>
                       <p className="text-[#facc15]/80 text-sm font-medium mb-4">Brand Feedback: "{o.revision_note}"</p>
                       <CreatorCountdown internalDeadline={o.internal_deadline} />
@@ -84,14 +83,14 @@ export default function CreatorUGCOrders() {
               )}
 
               {o.creator_status === 'DELIVERED' && o.brand_status !== 'COMPLETED' && (
-                <div className="bg-blue-500/10 border-b border-blue-500/20 py-4 px-8 flex items-center gap-3">
+                <div className="bg-blue-500/10 border-b border-blue-500/20 py-4 px-6 md:px-8 flex items-center gap-3">
                   <Clock className="text-blue-400" size={18}/>
                   <span className="text-blue-400 font-bold text-sm tracking-wide">Delivered! Waiting for brand approval.</span>
                 </div>
               )}
 
               {o.brand_status === 'COMPLETED' && (
-                <div className="bg-emerald-500/10 border-b border-emerald-500/20 py-4 px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="bg-emerald-500/10 border-b border-emerald-500/20 py-4 px-6 md:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <CheckCircle className="text-emerald-400" size={18}/>
                     <span className="text-emerald-400 font-bold text-sm tracking-wide">COMPLETED — Payout Received!</span>
@@ -108,50 +107,52 @@ export default function CreatorUGCOrders() {
                   <div className="space-y-4 mb-8">
                     {o.brief?.detailed_requirements && (
                       <div>
-                        <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2">Detailed Requirements</h4>
-                        <p className="text-sm text-[var(--text-tertiary)] bg-[var(--bg-elevated)] p-3 rounded-xl border border-[var(--border-default)] leading-relaxed">{o.brief.detailed_requirements}</p>
+                        <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2 flex items-center gap-2"><FileText size={12}/> Detailed Requirements</h4>
+                        <p className="text-sm text-[var(--text-tertiary)] bg-[var(--bg-elevated)] p-4 rounded-xl border border-[var(--border-default)] leading-relaxed shadow-inner">{o.brief.detailed_requirements}</p>
                       </div>
                     )}
                     {o.brief?.sample_content_url && (
                       <div>
-                        <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-1">Sample Reference</h4>
-                        <a href={o.brief.sample_content_url} target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--violet)] hover:underline flex items-center gap-1">
-                          View Sample Content
+                        <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-1 flex items-center gap-2"><LinkIcon size={12}/> Sample Reference</h4>
+                        <a href={o.brief.sample_content_url} target="_blank" rel="noopener noreferrer" className="inline-flex text-sm text-[var(--text-primary)] hover:text-[var(--violet)] bg-[var(--bg-elevated)] px-4 py-2 rounded-lg border border-[var(--border-default)] items-center gap-2 transition-colors">
+                          View Sample Content <ArrowRight size={14}/>
                         </a>
                       </div>
                     )}
-                    <div>
-                      <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-1">Must Do</h4>
-                      <ul className="text-sm text-emerald-400/80 space-y-1">
-                        {o.brief?.dos?.map((d,i) => <li key={i}>✅ {d}</li>)}
-                      </ul>
-                    </div>
-                    {o.brief?.donts?.[0] && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
-                        <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-1">Must Not Do</h4>
-                        <ul className="text-sm text-[#ef4444]/80 space-y-1">
-                          {o.brief?.donts.map((d,i) => <li key={i}>❌ {d}</li>)}
+                        <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2">Must Do</h4>
+                        <ul className="text-sm text-[var(--text-primary)] space-y-2">
+                          {o.brief?.dos?.map((d,i) => <li key={i} className="flex items-start gap-2"><span className="text-emerald-500 mt-0.5"><CheckCircle size={14}/></span> <span className="flex-1">{d}</span></li>)}
                         </ul>
                       </div>
-                    )}
+                      {o.brief?.donts?.[0] && (
+                        <div>
+                          <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-2">Must Not Do</h4>
+                          <ul className="text-sm text-[var(--text-primary)] space-y-2">
+                            {o.brief?.donts.map((d,i) => <li key={i} className="flex items-start gap-2"><span className="text-rose-500 mt-0.5"><X size={14}/></span> <span className="flex-1">{d}</span></li>)}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {o.brand_status !== 'COMPLETED' && (
                     <div className="flex justify-between items-center bg-[var(--bg-elevated)] p-4 rounded-xl border border-[var(--border-default)]">
                       <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase tracking-widest">Payout on Approval</span>
-                      <span className="text-emerald-400 font-black text-lg">₹{o.creator_payout.toLocaleString()}</span>
+                      <span className="text-emerald-500 font-black text-lg">₹{o.creator_payout.toLocaleString()}</span>
                     </div>
                   )}
 
                 </div>
                 
-                <div className="md:w-64 flex flex-col justify-end gap-3">
-                  <button onClick={() => navigate(`/chat/${o.brief?.brand_id || o.brand_id}`)} className="w-full bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] font-bold uppercase tracking-wider py-4 rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2 border border-[var(--border-default)]">
-                    <MessageCircle size={18}/> Message Brand
+                <div className="md:w-56 flex flex-col justify-end gap-3 shrink-0">
+                  <button onClick={() => navigate(`/chat/${o.brief?.brand_id || o.brand_id}`)} className="w-full bg-[var(--bg-card)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] font-bold uppercase tracking-wider py-3.5 rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2 border border-[var(--border-default)] text-xs shadow-sm">
+                    <MessageCircle size={16}/> Message Brand
                   </button>
                   {(o.creator_status === 'CLAIMED' || o.creator_status === 'REVISION_REQUESTED') && (
-                    <button onClick={() => setSubmitModal(o.id)} className="w-full bg-[var(--violet)] hover:bg-[#6d28d9] text-[var(--text-primary)] font-bold uppercase tracking-wider py-4 rounded-xl active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(124,58,237,0.3)]">
-                      <Upload size={18}/> Submit Video
+                    <button onClick={() => setSubmitModal(o.id)} className="w-full bg-[var(--violet)] hover:bg-[#6d28d9] text-white font-bold uppercase tracking-wider py-3.5 rounded-xl active:scale-95 transition-transform flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(124,58,237,0.4)] text-xs">
+                      <Upload size={16}/> Submit Video
                     </button>
                   )}
                 </div>

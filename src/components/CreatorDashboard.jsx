@@ -37,6 +37,95 @@ const AnimatedNumber = ({ value, prefix = "", format = false }) => {
 export default function CreatorDashboard({ user }) {
   const navigate = useNavigate();
   const { startLoading, stopLoading } = useLoading();
+  const importantTasks = React.useMemo(() => {
+    const tasks = [];
+    if (!user?.kyc_verified) {
+      tasks.push({ 
+        id: 'kyc', 
+        icon: AlertTriangle, 
+        iconColor: 'text-orange-500',
+        animClass: 'group-hover:anim-jiggle',
+        title: 'Complete Financial KYC', 
+        desc: 'Identify and verify individuals for contracts. Unlock high-paying campaigns!', 
+        btnText: 'Complete Verification',
+        link: '/settings',
+        actionRequired: true
+      });
+    }
+    if (!user?.has_previous_collabs) {
+      tasks.push({ 
+        id: 'portfolio', 
+        icon: Briefcase, 
+        iconColor: 'text-orange-400',
+        animClass: 'group-hover:anim-jiggle',
+        title: 'Update Portfolio', 
+        desc: 'Your previous collaborations section is empty. Adding past brand work increases selection chance by 40%.', 
+        btnText: 'Add Details',
+        link: '/profile/overview',
+        dot: true
+      });
+    }
+    if (!user?.profile_completed) {
+      tasks.push({ 
+        id: 'profile', 
+        icon: User, 
+        iconColor: 'text-blue-500',
+        animClass: 'group-hover:animate-pulse',
+        title: 'Complete your profile', 
+        desc: 'Finish onboarding to attract top brands', 
+        btnText: 'Complete Profile',
+        link: '/profile/overview' 
+      });
+    }
+    if (!user?.rate_card_added) {
+      tasks.push({ 
+        id: 'rate', 
+        icon: FileText, 
+        iconColor: 'text-rose-500',
+        animClass: 'group-hover:anim-fold',
+        title: 'Add your charges and prices',
+        desc: 'Add your rate card so the brand can view your pricing.', 
+        btnText: 'Add Rates',
+        link: '/profile/overview?edit=true' 
+      });
+    }
+    if (!user?.bank_details_added) {
+      tasks.push({ 
+        id: 'bank', 
+        icon: Wallet, 
+        iconColor: 'text-emerald-500',
+        animClass: 'group-hover:-translate-y-1 transition-transform',
+        title: 'Add Bank Details',
+        desc: 'Add your bank details to receive payments and credit your account.', 
+        btnText: 'Add Bank',
+        link: '/earnings' 
+      });
+    }
+    if (tasks.length < 3) {
+      tasks.push({ 
+        id: 'campaign', 
+        icon: Megaphone, 
+        iconColor: 'text-[var(--violet)]',
+        animClass: 'group-hover:anim-jiggle',
+        title: 'Apply to a Campaign',
+        desc: 'You have not applied for any campaigns yet. Start earning by applying to your first campaign!', 
+        btnText: 'Explore',
+        link: '/explore' 
+      });
+    }
+    return tasks.slice(0, 5);
+  }, [user]);
+
+  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+
+  useEffect(() => {
+    if (importantTasks.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentTaskIndex((prev) => (prev + 1) % importantTasks.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [importantTasks.length]);
+
   const [loading, setLoading] = useState(true);
   
   const [profile, setProfile] = useState({ profile_views: 0, profile_reach: 0, portfolio: "" });
@@ -176,9 +265,9 @@ export default function CreatorDashboard({ user }) {
       </div>
 
       {/* Hero Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8 lg:h-[300px]">
         {/* 75% Width Auto-Sliding Banner */}
-        <div className="lg:col-span-3 bg-[var(--bg-card)] rounded-[1.5rem] relative overflow-hidden flex flex-col justify-center min-h-[300px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[var(--border-default)] group">
+        <div className="lg:col-span-3 bg-[var(--bg-card)] rounded-[1.5rem] relative overflow-hidden flex flex-col justify-center shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[var(--border-default)] group h-[200px] lg:h-full">
            
            {heroBanners.length > 0 ? (
              <>
@@ -265,205 +354,90 @@ export default function CreatorDashboard({ user }) {
            )}
         </div>
 
-        {/* Right Column: Pending Tasks & Inbox */}
-        <div className="flex flex-col gap-6">
-          
-          {/* Pending Tasks (Important for you) */}
-          <div className="bg-[var(--bg-card)] rounded-[1.5rem] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[var(--border-default)] flex flex-col aspect-square relative overflow-hidden">
+        {/* Right Column: Important for you */}
+        <div className="bg-[var(--bg-card)] rounded-[1.5rem] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[var(--border-default)] flex flex-col h-full relative overflow-hidden">
              <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-3xl"></div>
              <div className="absolute bottom-0 left-0 w-32 h-32 bg-[var(--violet)]/5 rounded-full blur-3xl"></div>
              
-             <div className="relative z-10 flex-1 flex flex-col">
+             <div className="relative z-10 flex-1 flex flex-col h-full">
                <div className="mb-4">
-                 <span className="inline-block bg-orange-100 text-orange-600 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 animate-pulse border border-orange-200">
-                   Action Required
-                 </span>
                  <h4 className="text-xl font-bold text-[var(--text-primary)] tracking-tight">Important For You</h4>
                  <p className="text-xs text-[var(--text-secondary)] mt-1">Complete these steps to boost your reach</p>
                </div>
-               
-               <div className="flex flex-col gap-3 flex-1 overflow-y-auto custom-scrollbar pr-1 mt-2">
-                 {(() => {
-                   const tasks = [];
-                   if (!user?.kyc_verified) {
-                     tasks.push({ 
-                       id: 'kyc', 
-                       icon: AlertTriangle, 
-                       iconColor: 'text-orange-500',
-                       title: 'Complete Financial KYC', 
-                       desc: 'Compliance regulations require active Identity and Bank verification before applying to campaign orders. Unlock high-paying contracts!', 
-                       btnText: 'Complete Verification',
-                       link: '/settings' 
-                     });
-                   }
-                   if (!user?.has_previous_collabs) {
-                     tasks.push({ 
-                       id: 'portfolio', 
-                       icon: Briefcase, 
-                       iconColor: 'text-orange-400',
-                       title: 'Update Portfolio', 
-                       desc: 'Your previous collaborations section is empty. Adding past brand work increases selection chance by 40%.', 
-                       btnText: 'Add Details',
-                       link: '/profile/public',
-                       dot: true
-                     });
-                   }
-                   if (!user?.profile_completed) {
-                     tasks.push({ 
-                       id: 'profile', 
-                       icon: User, 
-                       iconColor: 'text-blue-500',
-                       title: 'Complete your profile', 
-                       desc: 'Finish onboarding to attract top brands', 
-                       btnText: 'Complete Profile',
-                       link: '/profile/public' 
-                     });
-                   }
-                   if (!user?.rate_card_added) {
-                     tasks.push({ 
-                       id: 'rate', 
-                       icon: FileText, 
-                       iconColor: 'text-rose-500',
-                       title: 'Add your charges and prices',
-                        desc: 'Add your rate card so the brand can view your pricing.', 
-                       btnText: 'Add Rates',
-                       link: '/settings' 
-                     });
-                   }
-                   if (!user?.bank_details_added) {
-                     tasks.push({ 
-                       id: 'bank', 
-                       icon: Wallet, 
-                       iconColor: 'text-emerald-500',
-                       title: 'Add Bank Details',
-                        desc: 'Add your bank details to receive payments and credit your account.', 
-                       btnText: 'Add Bank',
-                       link: '/settings' 
-                     });
-                   }
-                   if (tasks.length < 3) {
-                     tasks.push({ 
-                       id: 'campaign', 
-                       icon: Megaphone, 
-                       iconColor: 'text-[var(--violet)]',
-                       title: 'Apply to a Campaign',
-                        desc: 'You have not applied for any campaigns yet. Start earning by applying to your first campaign!', 
-                       btnText: 'Explore',
-                       link: '/explore' 
-                     });
-                   }
-                   
-                   if (tasks.length === 0) {
-                     return (
-                       <div className="flex-1 flex flex-col items-center justify-center text-center text-[var(--text-tertiary)]">
-                          <span className="text-2xl mb-2">🎉</span>
-                          <p className="text-sm font-medium">You are all caught up!</p>
-                       </div>
-                     );
-                   }
-                   
-                   return tasks.map(task => {
-                     const Icon = task.icon;
-                     return (
-                       <Link to={task.link} key={task.id} className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-2xl p-4 cursor-pointer hover:bg-[var(--bg-card)] hover:shadow-sm transition-all group relative shrink-0">
-                         {task.dot && <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-orange-400"></div>}
-                         <div className="flex items-center gap-2 mb-1.5">
-                           <Icon size={14} className={task.iconColor} />
-                           <h5 className="font-bold text-sm text-[var(--text-primary)]">{task.title}</h5>
+                            <div className="flex flex-col gap-3 flex-1 justify-center mt-2 relative min-h-[140px]">
+                 {importantTasks.length === 0 ? (
+                   <div className="flex-1 flex flex-col items-center justify-center text-center text-[var(--text-tertiary)]">
+                     <span className="text-2xl mb-2">🎉</span>
+                     <p className="text-sm font-medium">You are all caught up!</p>
+                   </div>
+                 ) : (
+                   <AnimatePresence mode="wait">
+                     <motion.div
+                       key={importantTasks[currentTaskIndex].id}
+                       initial={{ opacity: 0, x: 20 }}
+                       animate={{ opacity: 1, x: 0 }}
+                       exit={{ opacity: 0, x: -20 }}
+                       transition={{ duration: 0.3 }}
+                       className="w-full pb-4"
+                     >
+                       <Link
+                         to={importantTasks[currentTaskIndex].link}
+                         className={`block bg-[var(--bg-elevated)] rounded-[1.25rem] p-4 cursor-pointer hover:bg-[var(--bg-card)] transition-all group relative ${importantTasks[currentTaskIndex].actionRequired ? 'bg-rose-500/5 border border-rose-500/10 shadow-[0_0_15px_rgba(244,63,94,0.05)]' : 'border border-[var(--border-default)]'}`}
+                       >
+                         {importantTasks[currentTaskIndex].dot && (
+                           <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-orange-400"></div>
+                         )}
+                         {importantTasks[currentTaskIndex].actionRequired && (
+                           <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
+                         )}
+                         <div className="flex items-center gap-2 mb-2">
+                           {React.createElement(importantTasks[currentTaskIndex].icon, {
+                             size: 16,
+                             className: `${importantTasks[currentTaskIndex].iconColor} ${importantTasks[currentTaskIndex].animClass}`
+                           })}
+                           <h5 className="font-bold text-sm text-[var(--text-primary)]">
+                             {importantTasks[currentTaskIndex].title}
+                           </h5>
+                           {importantTasks[currentTaskIndex].actionRequired && (
+                             <span className="ml-auto mr-5 text-[9px] font-black px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-500 uppercase tracking-widest border border-rose-500/20">
+                                Action Required
+                             </span>
+                           )}
                          </div>
-                         <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed mb-3">
-                           {task.desc}
+                         <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-3">
+                           {importantTasks[currentTaskIndex].desc}
                          </p>
-                         <span className="text-[10px] font-bold text-[var(--violet)] uppercase tracking-wider group-hover:text-[#4a35d4] transition-colors flex items-center gap-1">
-                           {task.btnText} <ChevronRight size={12} />
+                         <span className="text-[11px] font-bold text-[var(--violet)] uppercase tracking-wider transition-colors flex items-center gap-1">
+                           {importantTasks[currentTaskIndex].btnText} <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                          </span>
                        </Link>
-                     );
-                   });
-                 })()}
+                     </motion.div>
+                   </AnimatePresence>
+                 )}
+                 {importantTasks.length > 1 && (
+                   <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-1.5 pb-1">
+                     {importantTasks.map((_, i) => (
+                       <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentTaskIndex ? 'w-4 bg-[var(--violet)]' : 'w-1.5 bg-[var(--border-default)]'}`} />
+                     ))}
+                   </div>
+                 )}
                </div>
              </div>
           </div>
-
-          {/* Inbox Box */}
-          <div className="bg-[var(--bg-card)] rounded-[1.5rem] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[var(--border-default)] flex flex-col aspect-square relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--violet)]/5 rounded-full blur-3xl"></div>
-             
-             <div className="relative z-10 flex-1 flex flex-col">
-               <div className="flex justify-between items-center mb-4">
-                 <div>
-                   <h4 className="text-xl font-bold text-[var(--text-primary)] tracking-tight">Inbox</h4>
-                   <p className="text-xs text-[var(--text-secondary)] mt-1">Recent messages & updates</p>
-                 </div>
-                 <span className="w-6 h-6 rounded-full bg-[var(--violet)] flex items-center justify-center text-xs font-bold text-white animate-pulse">2</span>
-               </div>
-               
-               <div className="flex flex-col gap-0 flex-1 overflow-y-auto custom-scrollbar pr-1 mt-2 divide-y divide-[var(--border-default)]">
-                   <div className="py-3 flex items-start gap-3 cursor-pointer group">
-                     <div className="relative shrink-0">
-                       <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=100&auto=format&fit=crop" className="w-10 h-10 rounded-full object-cover border border-[var(--border-default)]" alt="Brand" />
-                       <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[var(--bg-card)]"></div>
-                     </div>
-                     <div className="flex-1 min-w-0 pt-0.5">
-                       <div className="flex justify-between items-center mb-0.5">
-                         <h5 className="font-bold text-sm text-[var(--text-primary)] truncate group-hover:text-[var(--violet)] transition-colors">Nike Sports</h5>
-                         <span className="text-[10px] font-medium text-[var(--violet)]">2m ago</span>
-                       </div>
-                       <p className="text-[11px] text-[var(--text-secondary)] truncate font-semibold group-hover:text-[var(--text-primary)] transition-colors">
-                         Hey, we loved your recent reel! Are you available...
-                       </p>
-                     </div>
-                   </div>
-
-                   <div className="py-3 flex items-start gap-3 cursor-pointer group opacity-80 hover:opacity-100 transition-opacity">
-                     <div className="relative shrink-0">
-                       <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=100&auto=format&fit=crop" className="w-10 h-10 rounded-full object-cover border border-[var(--border-default)]" alt="Brand" />
-                     </div>
-                     <div className="flex-1 min-w-0 pt-0.5">
-                       <div className="flex justify-between items-center mb-0.5">
-                         <h5 className="font-bold text-sm text-[var(--text-primary)] truncate">Zomato</h5>
-                         <span className="text-[10px] font-medium text-[var(--text-tertiary)]">1h ago</span>
-                       </div>
-                       <p className="text-[11px] text-[var(--text-secondary)] truncate">
-                         Your content has been approved. Payment...
-                       </p>
-                     </div>
-                   </div>
-                   
-                   <div className="py-3 flex items-start gap-3 cursor-pointer group">
-                     <div className="relative shrink-0">
-                       <div className="w-10 h-10 rounded-full bg-[var(--violet)]/10 text-[var(--violet)] flex items-center justify-center font-bold text-sm border border-[var(--border-default)]">S</div>
-                       <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[var(--bg-card)]"></div>
-                     </div>
-                     <div className="flex-1 min-w-0 pt-0.5">
-                       <div className="flex justify-between items-center mb-0.5">
-                         <h5 className="font-bold text-sm text-[var(--text-primary)] truncate group-hover:text-[var(--violet)] transition-colors">Support Team</h5>
-                         <span className="text-[10px] font-medium text-[var(--violet)]">3h ago</span>
-                       </div>
-                       <p className="text-[11px] text-[var(--text-secondary)] truncate font-semibold group-hover:text-[var(--text-primary)] transition-colors">
-                         We've upgraded your profile to Pro! 🚀
-                       </p>
-                     </div>
-                   </div>
-               </div>
-             </div>
-          </div>
-          
-        </div>
       </div>
 
       {/* 4 Compact Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
          {[
-           { icon: Eye, label: "Profile Views", value: 1200, format: true, trend: "↑ 18% this week", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 25 L20 15 L40 20 L60 5 L80 15 L100 0", stroke: "var(--violet)" },
-           { icon: Heart, label: "Brand Interest", value: 32, trend: "↑ 12% this week", color: "text-rose-500", bg: "bg-rose-500/10", chartLine: "M0 20 L20 25 L40 10 L60 15 L80 5 L100 10", stroke: "#f43f5e" },
-           { icon: Briefcase, label: "Active Deals", value: 4, sub: "2 in review", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 10 L20 5 L40 15 L60 10 L80 20 L100 15", stroke: "var(--violet)" },
-           { icon: Wallet, label: "Earnings (This Month)", value: monthlyEarnings, prefix: "₹", format: true, trend: "↑ 22% vs last month", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 25 L20 20 L40 15 L60 20 L80 5 L100 0", stroke: "var(--violet)" }
+           { icon: Eye, label: "Profile Views", value: 1200, format: true, trend: "↑ 18% this week", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 25 L20 15 L40 20 L60 5 L80 15 L100 0", stroke: "var(--violet)", animClass: "group-hover:anim-blink" },
+           { icon: Heart, label: "Brand Interest", value: 32, trend: "↑ 12% this week", color: "text-rose-500", bg: "bg-rose-500/10", chartLine: "M0 20 L20 25 L40 10 L60 15 L80 5 L100 10", stroke: "#f43f5e", animClass: "group-hover:animate-pulse" },
+           { icon: Briefcase, label: "Active Deals", value: 4, sub: "2 in review", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 10 L20 5 L40 15 L60 10 L80 20 L100 15", stroke: "var(--violet)", animClass: "group-hover:anim-jiggle" },
+           { icon: Wallet, label: "Earnings (This Month)", value: monthlyEarnings, prefix: "₹", format: true, trend: "↑ 22% vs last month", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 25 L20 20 L40 15 L60 20 L80 5 L100 0", stroke: "var(--violet)", animClass: "group-hover:-translate-y-1 transition-transform" }
          ].map((s, i) => (
            <div key={i} className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-[1.5rem] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative overflow-hidden group">
              <div className="flex items-center gap-3 mb-4 z-10 relative">
-               <div className={`w-10 h-10 rounded-full ${s.bg} ${s.color} flex items-center justify-center`}>
-                 <s.icon size={18} />
+               <div className={`w-10 h-10 rounded-t-[16px] rounded-bl-[16px] rounded-br-sm ${s.bg} ${s.color} flex items-center justify-center`}>
+                 <s.icon size={18} className={s.animClass} />
                </div>
                <span className="text-xs font-bold text-[var(--text-secondary)]">{s.label}</span>
              </div>
@@ -529,19 +503,19 @@ export default function CreatorDashboard({ user }) {
                    
                    <p className="text-sm font-medium text-[var(--text-primary)] mb-4 line-clamp-2">Campaign Theme: <span className="font-normal text-[var(--text-secondary)]">{c.title} - The influencer buys a product from a local retail shop, then tracks its journey back...</span></p>
                    
-                   <div className="flex items-center gap-4 text-xs mb-4">
-                      <div className="flex items-center gap-2">
-                         <span className="text-[var(--text-primary)] bg-[var(--bg-elevated)] p-1.5 rounded-lg border border-[var(--border-default)]"><IndianRupee size={14}/></span>
+                   <div className="flex flex-wrap items-center gap-6 text-xs mb-5">
+                      <div className="flex items-center gap-3">
+                         <span className="flex items-center justify-center w-[42px] h-[42px] text-[var(--text-primary)] bg-[var(--bg-card)] border-[2.5px] border-[var(--text-primary)] shadow-sm rounded-t-[20px] rounded-bl-[20px] rounded-br-sm"><IndianRupee size={18} strokeWidth={2.5}/></span>
                          <div>
-                            <div className="text-[10px] text-[var(--text-tertiary)]">Per Influencer</div>
-                            <div className="font-semibold text-[var(--text-primary)]">{c.price_range || `₹10,000`}</div>
+                            <div className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-widest font-bold mb-0.5">Per Influencer</div>
+                            <div className="font-bold text-[var(--text-primary)] text-[15px]">{c.price_range || `₹10,000`}</div>
                          </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                         <span className="text-[var(--text-primary)] bg-[var(--bg-elevated)] p-1.5 rounded-lg border border-[var(--border-default)]"><Megaphone size={14}/></span>
+                      <div className="flex items-center gap-3">
+                         <span className="flex items-center justify-center w-[42px] h-[42px] text-[var(--text-primary)] bg-[var(--bg-card)] border-[2.5px] border-[var(--text-primary)] shadow-sm rounded-t-[20px] rounded-bl-sm rounded-br-[20px]"><Megaphone size={18} strokeWidth={2.5}/></span>
                          <div>
-                            <div className="text-[10px] text-[var(--text-tertiary)]">Brand collab with</div>
-                            <div className="font-semibold text-[var(--text-primary)]">{c.company || c.brand_name || 'Brand'}</div>
+                            <div className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-widest font-bold mb-0.5">Brand collab with</div>
+                            <div className="font-bold text-[var(--text-primary)] text-[15px] line-clamp-1">{c.company || c.brand_name || 'Brand'}</div>
                          </div>
                       </div>
                    </div>
