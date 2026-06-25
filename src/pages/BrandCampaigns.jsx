@@ -74,10 +74,10 @@ export default function BrandCampaigns() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32 bg-[#09090e] min-h-screen">
+      <div className="flex items-center justify-center py-32 bg-[var(--bg-base)] min-h-screen">
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 rounded-full border-2 border-[#7C5CFF] border-t-transparent animate-spin"></div>
-          <div className="text-white/40 text-sm font-mono tracking-widest uppercase">Loading Campaigns Panel...</div>
+          <div className="text-[var(--text-tertiary)] text-sm font-mono tracking-widest uppercase">Loading Campaigns Panel...</div>
         </div>
       </div>
     );
@@ -91,37 +91,37 @@ export default function BrandCampaigns() {
   ];
 
   return (
-    <div className="w-full max-w-none px-4 sm:px-6 md:px-10 py-10 text-left min-h-screen bg-[#09090e] text-white">
+    <div className="w-full max-w-none px-4 sm:px-6 md:px-10 py-10 text-left min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[var(--text-primary)] mb-2">
             My Campaign Briefs
           </h1>
-          <p className="text-white/50 text-xs sm:text-sm">
+          <p className="text-[var(--text-secondary)] text-xs sm:text-sm">
             Launch, edit, or configure live performance tracking briefs for Indian creators.
           </p>
         </div>
 
         <button 
           onClick={() => navigate("/brand/campaigns/create")}
-          className="px-5 py-3 rounded-xl bg-[#7C5CFF] hover:bg-[#6B4AFF] text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-xl transition-all hover:scale-[1.02] cursor-pointer"
+          className="px-5 py-3 rounded-xl bg-[var(--violet)] hover:bg-[#6B4AFF] text-[var(--text-primary)] text-xs sm:text-sm font-bold flex items-center gap-2 shadow-xl transition-all hover:scale-[1.02] cursor-pointer"
         >
           <Plus size={16} strokeWidth={3} /> Post Briefing
         </button>
       </div>
 
       {campaigns.length === 0 ? (
-        <div className="bg-[#131224] border border-white/5 rounded-3xl p-12 sm:p-16 text-center max-w-2xl mx-auto flex flex-col items-center justify-center mt-8">
-          <div className="p-4 bg-[#7C5CFF]/10 text-[#a38aff] rounded-full mb-4 animate-bounce">
+        <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-12 sm:p-16 text-center max-w-2xl mx-auto flex flex-col items-center justify-center mt-8">
+          <div className="p-4 bg-[var(--violet)]/10 text-[#a38aff] rounded-full mb-4 animate-bounce">
             <Megaphone size={28} />
           </div>
-          <h3 className="text-sm sm:text-base font-bold text-white uppercase tracking-wider">No campaign briefings found</h3>
-          <p className="text-xs text-white/50 mt-2 leading-relaxed max-w-md">
+          <h3 className="text-sm sm:text-base font-bold text-[var(--text-primary)] uppercase tracking-wider">No campaign briefings found</h3>
+          <p className="text-xs text-[var(--text-secondary)] mt-2 leading-relaxed max-w-md">
             You haven't posted any campaign deliverables or creative guidelines yet. Launch your first briefing to attract the top Indian creators.
           </p>
           <button 
             onClick={() => navigate("/brand/campaigns/create")}
-            className="mt-6 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-white border border-white/10 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="mt-6 px-5 py-2.5 rounded-xl bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] text-xs font-bold text-[var(--text-primary)] border border-[var(--border-default)] transition-all flex items-center gap-1.5 cursor-pointer"
           >
             Create Your First Campaign
           </button>
@@ -129,7 +129,7 @@ export default function BrandCampaigns() {
       ) : (
         <div className="space-y-6">
           {/* Tabs header */}
-          <div className="flex gap-2 border-b border-white/5 overflow-x-auto scrollbar-thin scrollbar-thumb-white/10">
+          <div className="flex gap-2 border-b border-[var(--border-default)] overflow-x-auto scrollbar-thin scrollbar-thumb-white/10">
             {tabs.map((t) => (
               <button
                 key={t.id}
@@ -137,12 +137,12 @@ export default function BrandCampaigns() {
                 className={`py-3 px-4 text-xs font-bold whitespace-nowrap border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
                   activeTab === t.id 
                     ? "border-b-[#7C5CFF] text-[#a98eff]" 
-                    : "border-b-transparent text-white/50 hover:text-white"
+                    : "border-b-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <span>{t.label}</span>
                 <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-mono ${
-                  activeTab === t.id ? "bg-[#7C5CFF]/20 text-[#a98eff]" : "bg-white/5 text-white/40"
+                  activeTab === t.id ? "bg-[var(--violet)]/20 text-[#a98eff]" : "bg-[var(--bg-elevated)] text-[var(--text-tertiary)]"
                 }`}>
                   {t.count}
                 </span>
@@ -152,7 +152,7 @@ export default function BrandCampaigns() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filtered.length === 0 ? (
-              <div className="py-20 text-center bg-[#131224]/50 rounded-2xl border border-white/5 text-xs text-white/40 font-medium">
+              <div className="py-20 text-center bg-[var(--bg-card)]/50 rounded-2xl border border-[var(--border-default)] text-xs text-[var(--text-tertiary)] font-medium">
                 No campaigns match selected status filter &ldquo;{activeTab}&rdquo;.
               </div>
             ) : (

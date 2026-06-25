@@ -15,7 +15,7 @@ export default function InvoiceModal({ transaction, onClose }) {
       >
         <button 
           onClick={onClose}
-          className="absolute -top-12 right-0 p-2 text-white/50 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors"
+          className="absolute -top-12 right-0 p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] rounded-full transition-colors"
         >
           <X size={20} />
         </button>
@@ -74,7 +74,7 @@ export default function InvoiceModal({ transaction, onClose }) {
 
                 <div className="bg-[#EEF1F6] rounded-2xl p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-[#111827] rounded-full flex items-center justify-center text-white shrink-0">
+                        <div className="w-8 h-8 bg-[#111827] rounded-full flex items-center justify-center text-[var(--text-primary)] shrink-0">
                             <span className="text-xs font-bold font-display">YB</span>
                         </div>
                         <div>

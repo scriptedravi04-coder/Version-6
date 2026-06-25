@@ -187,19 +187,19 @@ export default function BrandCampaignCreate() {
   ];
 
   return (
-    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-10 text-left min-h-screen bg-[#09090e] text-white">
+    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-10 text-left min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <button 
             onClick={() => navigate("/brand/campaigns")}
-            className="flex items-center gap-1.5 text-xs font-bold text-white/50 hover:text-white mb-3"
+            className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-3"
           >
             <ArrowLeft size={14} /> Back to Listings
           </button>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)] flex items-center gap-2">
             Brief Creator Wizard
           </h1>
-          <p className="text-white/50 text-xs mt-1">
+          <p className="text-[var(--text-secondary)] text-xs mt-1">
             Build your briefs step-by-step and pair with the finest creator partnerships.
           </p>
         </div>
@@ -213,14 +213,14 @@ export default function BrandCampaignCreate() {
           const isDone = currentStep > info.number;
           return (
             <div key={info.number} className="text-left font-sans">
-              <div className={`h-1.5 rounded-full transition-all duration-300 ${isDone ? "bg-[#10b981]" : isActive ? "bg-[#7C5CFF]" : "bg-white/5"}`} />
+              <div className={`h-1.5 rounded-full transition-all duration-300 ${isDone ? "bg-[#10b981]" : isActive ? "bg-[var(--violet)]" : "bg-[var(--bg-elevated)]"}`} />
               <div className="hidden sm:flex items-center gap-2 mt-3 pl-1">
                 <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                  isDone ? "bg-[#10b981] text-white" : isActive ? "bg-[#7C5CFF] text-white" : "bg-white/5 text-white/40"
+                  isDone ? "bg-[#10b981] text-[var(--text-primary)]" : isActive ? "bg-[var(--violet)] text-white" : "bg-[var(--bg-elevated)] text-[var(--text-tertiary)]"
                 }`}>
                   {isDone ? <Check size={10} strokeWidth={4} /> : info.number}
                 </span>
-                <span className={`text-[10px] font-bold tracking-wider uppercase ${isActive ? "text-white" : "text-white/40"}`}>
+                <span className={`text-[10px] font-bold tracking-wider uppercase ${isActive ? "text-[var(--text-primary)]" : "text-[var(--text-tertiary)]"}`}>
                   {info.title}
                 </span>
               </div>
@@ -229,7 +229,7 @@ export default function BrandCampaignCreate() {
         })}
       </div>
 
-      <div className="bg-[#131224] border border-white/5 p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-2xl">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-default)] p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-2xl">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStep}
@@ -243,11 +243,11 @@ export default function BrandCampaignCreate() {
             {currentStep === 1 && (
               <div className="space-y-5">
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Campaign Title *</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Campaign Title *</label>
                   <input
                     value={campaignForm.title}
                     onChange={(e) => setCampaignForm(prev => ({ ...prev, title: e.target.value }))}
-                    className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none"
+                    className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none"
                     type="text"
                     required
                     placeholder="e.g. Summer Glow Skincare Series launch"
@@ -255,12 +255,12 @@ export default function BrandCampaignCreate() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Descriptive Guidelines / Brief *</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Descriptive Guidelines / Brief *</label>
                   <textarea
                     rows={6}
                     value={campaignForm.description}
                     onChange={(e) => setCampaignForm(prev => ({ ...prev, description: e.target.value }))}
-                    className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none leading-relaxed"
+                    className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none leading-relaxed"
                     required
                     placeholder="Provide a highly rich explanation. Details regarding your goals, deliverables format, audio constraints and references..."
                   />
@@ -281,11 +281,11 @@ export default function BrandCampaignCreate() {
             {currentStep === 2 && (
               <div className="space-y-5">
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Follower scale category</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Follower scale category</label>
                   <select
                     value={campaignForm.follower_range}
                     onChange={(e) => setCampaignForm(prev => ({ ...prev, follower_range: e.target.value }))}
-                    className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none cursor-pointer"
+                    className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none cursor-pointer"
                   >
                     <option value="10K-50K">Micro Creators (10K - 50K)</option>
                     <option value="50K-100K">Mid-Tier Creators (50K - 100K)</option>
@@ -295,22 +295,22 @@ export default function BrandCampaignCreate() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Target Geolocation Constraint</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Target Geolocation Constraint</label>
                   <input
                     value={campaignForm.target_location}
                     onChange={(e) => setCampaignForm(prev => ({ ...prev, target_location: e.target.value }))}
-                    className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none"
+                    className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none"
                     type="text"
                     placeholder="All India / Mumbai / Delhi NCR"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Maximum shortlists limit</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Maximum shortlists limit</label>
                   <input
                     value={campaignForm.max_creators}
                     onChange={(e) => setCampaignForm(prev => ({ ...prev, max_creators: Number(e.target.value) }))}
-                    className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none font-mono"
+                    className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none font-mono"
                     type="number"
                     min={1}
                     placeholder="5"
@@ -324,21 +324,21 @@ export default function BrandCampaignCreate() {
               <div className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Budget Minimum (INR) *</label>
+                    <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Budget Minimum (INR) *</label>
                     <input
                       value={campaignForm.budget_min}
                       onChange={(e) => setCampaignForm(prev => ({ ...prev, budget_min: e.target.value }))}
-                      className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none font-mono"
+                      className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none font-mono"
                       type="number"
                       required
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Budget Maximum (INR) *</label>
+                    <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Budget Maximum (INR) *</label>
                     <input
                       value={campaignForm.budget_max}
                       onChange={(e) => setCampaignForm(prev => ({ ...prev, budget_max: e.target.value }))}
-                      className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none font-mono"
+                      className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none font-mono"
                       type="number"
                       required
                     />
@@ -346,7 +346,7 @@ export default function BrandCampaignCreate() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Application submission deadline *</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Application submission deadline *</label>
                   <CustomDatePicker
                     date={campaignForm.deadline}
                     setDate={(d) => setCampaignForm(prev => ({ ...prev, deadline: d }))}
@@ -360,7 +360,7 @@ export default function BrandCampaignCreate() {
             {currentStep === 4 && (
               <div className="space-y-5">
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Primary Target Channels</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Primary Target Channels</label>
                   <div className="flex gap-4">
                     {["Instagram", "YouTube", "TikTok", "X / Twitter"].map(plat => {
                       const has = campaignForm.platforms.includes(plat);
@@ -378,8 +378,8 @@ export default function BrandCampaignCreate() {
                           }}
                           className={`px-4 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
                             has 
-                              ? "bg-[#7C5CFF]/15 text-[#a98eff] border-[#7C5CFF]/30" 
-                              : "bg-white/5 text-white/50 border-transparent hover:bg-white/10"
+                              ? "bg-[var(--violet)]/15 text-[#a98eff] border-[var(--violet)]/20" 
+                              : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-transparent hover:bg-[var(--bg-elevated)]"
                           }`}
                         >
                           {plat}
@@ -390,11 +390,11 @@ export default function BrandCampaignCreate() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-3 block uppercase tracking-wider">Required Deliverables List</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-3 block uppercase tracking-wider">Required Deliverables List</label>
                   {campaignForm.deliverables.map((del, idx) => (
-                    <div key={idx} className="flex flex-col sm:flex-row items-center gap-3 bg-white/[0.01] border border-white/5 p-4 rounded-xl">
+                    <div key={idx} className="flex flex-col sm:flex-row items-center gap-3 bg-white/[0.02] border border-[var(--border-default)] p-4 rounded-xl">
                       <div className="flex-1 w-full text-left">
-                        <span className="text-[10px] font-bold text-white/30 block mb-1">FORMAT type</span>
+                        <span className="text-[10px] font-bold text-[var(--text-tertiary)] block mb-1">FORMAT type</span>
                         <select
                           value={del.type}
                           onChange={(e) => {
@@ -402,7 +402,7 @@ export default function BrandCampaignCreate() {
                             copy[idx].type = e.target.value;
                             setCampaignForm(prev => ({ ...prev, deliverables: copy }));
                           }}
-                          className="w-full p-2.5 bg-white/5 rounded-lg border border-white/5 text-xs text-white"
+                          className="w-full p-2.5 bg-[var(--bg-elevated)] rounded-lg border border-[var(--border-default)] text-xs text-[var(--text-primary)]"
                         >
                           <option value="Reel">Reels (60s Vertical Video)</option>
                           <option value="Video">YouTube Dedicated (5m - 10m Video)</option>
@@ -413,7 +413,7 @@ export default function BrandCampaignCreate() {
                       </div>
 
                       <div className="w-full sm:w-[90px] text-left">
-                        <span className="text-[10px] font-bold text-white/30 block mb-1">How many</span>
+                        <span className="text-[10px] font-bold text-[var(--text-tertiary)] block mb-1">How many</span>
                         <input
                           value={del.count}
                           type="number"
@@ -423,12 +423,12 @@ export default function BrandCampaignCreate() {
                             copy[idx].count = Math.max(1, Number(e.target.value));
                             setCampaignForm(prev => ({ ...prev, deliverables: copy }));
                           }}
-                          className="w-full p-2.5 bg-white/5 rounded-lg border border-white/5 text-xs text-white font-mono"
+                          className="w-full p-2.5 bg-[var(--bg-elevated)] rounded-lg border border-[var(--border-default)] text-xs text-[var(--text-primary)] font-mono"
                         />
                       </div>
 
                       <div className="w-full sm:w-[110px] text-left">
-                        <span className="text-[10px] font-bold text-white/30 block mb-1">Duration (Sec)</span>
+                        <span className="text-[10px] font-bold text-[var(--text-tertiary)] block mb-1">Duration (Sec)</span>
                         <input
                           value={del.duration_sec}
                           type="number"
@@ -438,7 +438,7 @@ export default function BrandCampaignCreate() {
                             copy[idx].duration_sec = Math.max(5, Number(e.target.value));
                             setCampaignForm(prev => ({ ...prev, deliverables: copy }));
                           }}
-                          className="w-full p-2.5 bg-white/5 rounded-lg border border-white/5 text-xs text-white font-mono"
+                          className="w-full p-2.5 bg-[var(--bg-elevated)] rounded-lg border border-[var(--border-default)] text-xs text-[var(--text-primary)] font-mono"
                         />
                       </div>
                     </div>
@@ -452,22 +452,22 @@ export default function BrandCampaignCreate() {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">DOs (deliverable instructions)</label>
+                    <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">DOs (deliverable instructions)</label>
                     <textarea
                       rows={4}
                       value={campaignForm.dos}
                       onChange={(e) => setCampaignForm(prev => ({ ...prev, dos: e.target.value }))}
-                      className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none leading-relaxed"
+                      className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none leading-relaxed"
                       placeholder="e.g. Must mention the natural herbs. Show container clearly in first 5s."
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">DONTs (brand boundaries)</label>
+                    <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">DONTs (brand boundaries)</label>
                     <textarea
                       rows={4}
                       value={campaignForm.donts}
                       onChange={(e) => setCampaignForm(prev => ({ ...prev, donts: e.target.value }))}
-                      className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none leading-relaxed"
+                      className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none leading-relaxed"
                       placeholder="e.g. Do not show competitor logos. Do not make unverified claims."
                     />
                   </div>
@@ -475,32 +475,32 @@ export default function BrandCampaignCreate() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Custom Hashtags (comma separated)</label>
+                    <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Custom Hashtags (comma separated)</label>
                     <input
                       value={campaignForm.hashtags}
                       onChange={(e) => setCampaignForm(prev => ({ ...prev, hashtags: e.target.value }))}
-                      className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none font-mono"
+                      className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none font-mono"
                       placeholder="#SummerGlow, #NaturalHerbalSkin"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Mentions (comma separated)</label>
+                    <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Mentions (comma separated)</label>
                     <input
                       value={campaignForm.mentions}
                       onChange={(e) => setCampaignForm(prev => ({ ...prev, mentions: e.target.value }))}
-                      className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none font-mono"
+                      className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none font-mono"
                       placeholder="@ybexmedia, @my_skincare_brand"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Brand Guidelines / Asset Document URL (Doc Link or upload PDF)</label>
+                  <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Brand Guidelines / Asset Document URL (Doc Link or upload PDF)</label>
                   <div className="flex gap-3">
                     <input
                       value={campaignForm.guidelines_url}
                       onChange={(e) => setCampaignForm(prev => ({ ...prev, guidelines_url: e.target.value }))}
-                      className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none font-mono flex-1"
+                      className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none font-mono flex-1"
                       placeholder="https://docs.google.com/document/d/your-doc-link"
                     />
 
@@ -514,7 +514,7 @@ export default function BrandCampaignCreate() {
                       />
                       <label 
                         htmlFor="guidelines-upload"
-                        className="px-4 py-3 rounded-xl border border-white/10 hover:bg-white/5 transition-all text-xs font-bold font-sans cursor-pointer flex items-center justify-center gap-1.5 h-full whitespace-nowrap"
+                        className="px-4 py-3 rounded-xl border border-[var(--border-default)] hover:bg-[var(--bg-elevated)] transition-all text-xs font-bold font-sans cursor-pointer flex items-center justify-center gap-1.5 h-full whitespace-nowrap"
                       >
                         {uploadingFile ? "Uploading..." : <><UploadCloud size={14} /> Upload Asset</>}
                       </label>
@@ -527,11 +527,11 @@ export default function BrandCampaignCreate() {
         </AnimatePresence>
 
         {/* Form control interactions bar */}
-        <div className="mt-8 pt-5 border-t border-white/5 flex items-center justify-between">
+        <div className="mt-8 pt-5 border-t border-[var(--border-default)] flex items-center justify-between">
           <button
             onClick={handleBack}
             disabled={currentStep === 1}
-            className="px-4 py-2 border border-white/10 text-white hover:bg-white/5 hover:border-white/20 text-xs font-bold rounded-xl transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer flex items-center gap-1.5"
+            className="px-4 py-2 border border-[var(--border-default)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] hover:border-white/20 text-xs font-bold rounded-xl transition-all disabled:opacity-30 disabled:pointer-events-none cursor-pointer flex items-center gap-1.5"
           >
             <ChevronLeft size={16} /> Back
           </button>
@@ -540,7 +540,7 @@ export default function BrandCampaignCreate() {
             <button
               onClick={() => handleSaveCampaign(true)}
               disabled={submitting}
-              className="px-4 py-2 text-white/60 hover:text-white text-xs font-bold rounded-xl cursor-pointer"
+              className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs font-bold rounded-xl cursor-pointer"
             >
               Save as Draft 🗒️
             </button>
@@ -548,7 +548,7 @@ export default function BrandCampaignCreate() {
             {currentStep < 5 ? (
               <button
                 onClick={handleNext}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#7C5CFF] hover:bg-[#6b4aff] text-white flex items-center gap-1.5 cursor-pointer"
+                className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[var(--violet)] hover:bg-[#6b4aff] text-[var(--text-primary)] flex items-center gap-1.5 cursor-pointer"
               >
                 Next Step <ChevronRight size={16} />
               </button>
@@ -556,7 +556,7 @@ export default function BrandCampaignCreate() {
               <button
                 onClick={() => handleSaveCampaign(false)}
                 disabled={submitting}
-                className="px-6 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 border border-teal-500/20 text-white shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                className="px-6 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 border border-teal-500/20 text-[var(--text-primary)] shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {submitting ? "Launching..." : <><Check size={14} strokeWidth={3} /> Submit Brief for Review</>}
               </button>

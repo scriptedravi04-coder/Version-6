@@ -18,9 +18,9 @@ const DoodleArrowTooltip = ({ step, role }) => {
         <path d="M10 90 Q 30 20 90 20" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeDasharray="5,5" fill="none" />
         <path d="M75 10 L 95 20 L 80 35" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       </svg>
-      <div className="bg-[#12121A] border border-[#D9F111]/30 p-3 rounded-xl max-w-[200px] shadow-2xl relative translate-y-12">
+      <div className="bg-[var(--bg-card)] border border-[#D9F111]/30 p-3 rounded-xl max-w-[200px] shadow-2xl relative translate-y-12">
         <p className="text-[#D9F111] font-semibold text-sm mb-1 uppercase tracking-tight">Pro Tip</p>
-        <p className="text-white/80 text-xs">
+        <p className="text-[var(--text-primary)]/80 text-xs">
           {role === 'brand' ? (
             step === 1 ? "A clear logo gets 3x more creator applications." :
             step === 2 ? "GST Verification tags boost your trust significantly." :
@@ -47,8 +47,8 @@ const StepContextText = ({ step }) => {
   const current = texts[step] || texts[1];
   return (
     <div className="mt-6 text-center transform hover:scale-105 transition-transform">
-      <p className="text-white font-semibold text-sm">{current.title}</p>
-      <p className="text-gray-500 text-xs mt-1">{current.sub}</p>
+      <p className="text-[var(--text-primary)] font-semibold text-sm">{current.title}</p>
+      <p className="text-[var(--text-secondary)] text-xs mt-1">{current.sub}</p>
     </div>
   );
 };
@@ -60,7 +60,7 @@ export default function CreatorLivePreview({ formData, currentStep, user }) {
       <div className="relative w-full max-w-[340px] sm:w-[320px]">
         <DoodleArrowTooltip step={currentStep} role="creator" />
 
-        <div className="bg-[#1a1a2e] rounded-[1.5rem] overflow-hidden border border-white/10 w-full shadow-2xl transition-all duration-300 transform group hover:border-[#7C5CFF]/30">
+        <div className="bg-[var(--bg-elevated)] rounded-[1.5rem] overflow-hidden border border-[var(--border-default)] w-full shadow-2xl transition-all duration-300 transform group hover:border-[#7C5CFF]/30">
           {/* Cover */}
           <div className="h-28 bg-gradient-to-br from-purple-900/80 to-slate-800 relative z-0">
              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
@@ -77,7 +77,7 @@ export default function CreatorLivePreview({ formData, currentStep, user }) {
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-white font-display font-bold text-lg leading-tight truncate">
+                  <h3 className="text-[var(--text-primary)] font-display font-bold text-lg leading-tight truncate">
                     {formData.name || user?.name || 'Your Name'}
                   </h3>
                   {formData.languages?.[0] && (
@@ -92,7 +92,7 @@ export default function CreatorLivePreview({ formData, currentStep, user }) {
               </div>
 
               {formData.city && (
-                <p className="text-gray-400 text-xs flex items-center gap-1.5 bg-white/5 py-1 px-2.5 rounded-lg w-max border border-white/5">
+                <p className="text-[var(--text-tertiary)] text-xs flex items-center gap-1.5 bg-[var(--bg-elevated)] py-1 px-2.5 rounded-lg w-max border border-[var(--border-default)]">
                   <span className="text-[#7C5CFF]">📍</span> {formData.city}{formData.state ? `, ${formData.state}` : ''}
                 </p>
               )}
@@ -103,9 +103,9 @@ export default function CreatorLivePreview({ formData, currentStep, user }) {
                 </p>
               )}
 
-              <div className="flex items-center justify-between pt-4 border-t border-white/10 mt-2">
+              <div className="flex items-center justify-between pt-4 border-t border-[var(--border-default)] mt-2">
                 <div>
-                  <p className="text-[10px] text-gray-500 uppercase font-black tracking-wider flex items-center gap-1 mb-0.5">
+                  <p className="text-[10px] text-[var(--text-secondary)] uppercase font-black tracking-wider flex items-center gap-1 mb-0.5">
                     <Instagram size={12} /> Followers
                   </p>
                   <p className="text-[#c1aeff] font-display font-bold text-lg">
@@ -113,14 +113,14 @@ export default function CreatorLivePreview({ formData, currentStep, user }) {
                   </p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-gray-500 uppercase font-black tracking-wider flex items-center gap-1 mb-0.5">
+                  <p className="text-[10px] text-[var(--text-secondary)] uppercase font-black tracking-wider flex items-center gap-1 mb-0.5">
                     📊 Avg Reach
                   </p>
-                  <p className="text-white font-display font-bold text-lg">
+                  <p className="text-[var(--text-primary)] font-display font-bold text-lg">
                     {formatNumber(formData.avgReach)}
                   </p>
                 </div>
-                <button className="bg-white/10 hover:bg-white text-white hover:text-black transition-colors text-xs px-4 py-2 rounded-xl font-bold border border-white/20">
+                <button className="bg-[var(--bg-elevated)] hover:bg-white text-[var(--text-primary)] hover:text-black transition-colors text-xs px-4 py-2 rounded-xl font-bold border border-white/20">
                   Contact
                 </button>
               </div>

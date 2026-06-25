@@ -128,20 +128,20 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
       </section>
 
       {/* Right panel */}
-      <section className="w-full lg:col-span-5 flex flex-col justify-center pt-24 pb-12 px-6 sm:p-12 md:p-16 relative bg-background min-h-screen">
+      <section className="w-full lg:col-span-5 flex flex-col justify-center pt-24 pb-12 px-6 sm:p-12 md:p-16 relative bg-[var(--bg-base)] min-h-screen">
         <div className="w-full max-w-sm sm:max-w-md mx-auto relative mb-12">
         <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div key="bs1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-3xl font-display font-bold text-white">Tell us about your brand</h2>
-              <p className="text-gray-400 mt-2 mb-8">Your logo and category will appear on your brand profile visible to creators.</p>
+              <h2 className="text-3xl font-display font-bold text-[var(--text-primary)]">Tell us about your brand</h2>
+              <p className="text-[var(--text-tertiary)] mt-2 mb-8">Your logo and category will appear on your brand profile visible to creators.</p>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Brand Logo (Highly Recommended)</label>
+                  <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Brand Logo (Highly Recommended)</label>
                    <div className="flex items-center gap-4">
-                     <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                       {formData.logoUrl ? <img src={formData.logoUrl} className="w-full h-full object-contain" /> : <Building2 className="text-gray-500" />}
+                     <div className="w-16 h-16 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-default)] flex items-center justify-center overflow-hidden">
+                       {formData.logoUrl ? <img src={formData.logoUrl} className="w-full h-full object-contain" /> : <Building2 className="text-[var(--text-secondary)]" />}
                      </div>
                      <label className="text-sm bg-[#3B82F6]/10 text-[#3B82F6] hover:bg-[#3B82F6]/20 px-4 py-2 rounded-xl border border-[#3B82F6]/30 transition font-bold cursor-pointer">
                        Upload Logo
@@ -157,13 +157,13 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                        />
                      </label>
                    </div>
-                   <p className="text-xs text-gray-400 mt-2">ⓘ Brands with logos get 3x more creator applications.</p>
+                   <p className="text-xs text-[var(--text-tertiary)] mt-2">ⓘ Brands with logos get 3x more creator applications.</p>
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Brand / Company Name *</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Brand / Company Name *</label>
                    <input 
-                     className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#3B82F6]/50 focus:outline-none"
+                     className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none"
                      placeholder="e.g. Nova Brand Co"
                      value={formData.companyName}
                      onChange={e => setFormData({...formData, companyName: e.target.value})}
@@ -171,10 +171,10 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Industry / Category *</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Industry / Category *</label>
                    <div className="relative">
                      <input 
-                       className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#3B82F6]/50 focus:outline-none"
+                       className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none"
                        placeholder="e.g. Fashion"
                        value={nicheSearch}
                        onChange={e => {
@@ -184,11 +184,11 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                        onFocus={() => setShowNicheDropdown(true)}
                      />
                      {showNicheDropdown && nicheSearch && (
-                       <div className="absolute top-full left-0 right-0 mt-2 bg-[#1A1A2E] border border-[#3B82F6]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
+                       <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-elevated)] border border-[#3B82F6]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
                          {filteredNiches.length > 0 ? filteredNiches.map(n => (
                            <button 
                              key={n} 
-                             className="w-full text-left px-4 py-3 text-white hover:bg-[#3B82F6]/20 flex justify-between group"
+                             className="w-full text-left px-4 py-3 text-[var(--text-primary)] hover:bg-[#3B82F6]/20 flex justify-between group"
                              onClick={() => {
                                setFormData({...formData, industry: n});
                                setNicheSearch(n);
@@ -197,31 +197,31 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                            >
                              {n} <span className="text-[#3B82F6] opacity-0 group-hover:opacity-100 uppercase text-[10px] font-bold">Select ↓</span>
                            </button>
-                         )) : <div className="p-4 text-gray-500 text-sm">No matching category found</div>}
+                         )) : <div className="p-4 text-[var(--text-secondary)] text-sm">No matching category found</div>}
                        </div>
                      )}
                    </div>
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Brand Description</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Brand Description</label>
                    <textarea 
-                     className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#3B82F6]/50 focus:outline-none min-h-[100px]"
+                     className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none min-h-[100px]"
                      placeholder="Tell creators what your brand is about..."
                      value={formData.description}
                      onChange={e => setFormData({...formData, description: e.target.value})}
                    />
-                   <div className="text-[10px] text-right text-gray-500 mt-1">Max 200 characters</div>
+                   <div className="text-[10px] text-right text-[var(--text-secondary)] mt-1">Max 200 characters</div>
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Gender Focus (Your Target Audience)</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Gender Focus (Your Target Audience)</label>
                    <div className="flex flex-wrap gap-2">
                      {["Primarily Female", "Primarily Male", "Mixed", "All"].map(focus => (
                        <button
                          key={focus}
                          onClick={() => setFormData({...formData, genderFocus: focus})}
-                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.genderFocus === focus ? 'bg-[#3B82F6] border-[#3B82F6] text-white' : 'bg-[#12121A] border-white/10 text-gray-400 hover:border-white/30'}`}
+                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.genderFocus === focus ? 'bg-[#3B82F6] border-[#3B82F6] text-[var(--text-primary)]' : 'bg-[var(--bg-card)] border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-white/30'}`}
                        >
                          {focus}
                        </button>
@@ -230,7 +230,7 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div className="pt-4 flex justify-end">
-                   <button onClick={() => setStep(2)} className="bg-[#3B82F6] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-600 transition shadow-[0_4px_15px_rgba(59,130,246,0.3)] hover:-translate-y-0.5">
+                   <button onClick={() => setStep(2)} className="bg-[#3B82F6] text-[var(--text-primary)] px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-600 transition shadow-[0_4px_15px_rgba(59,130,246,0.3)] hover:-translate-y-0.5">
                      Continue <ArrowRight size={18} />
                    </button>
                 </div>
@@ -240,15 +240,15 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
 
           {step === 2 && (
             <motion.div key="bs2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-3xl font-display font-bold text-white">Your Business Presence</h2>
-              <p className="text-gray-400 mt-2 mb-8">Help creators understand your scale and legitimacy.</p>
+              <h2 className="text-3xl font-display font-bold text-[var(--text-primary)]">Your Business Presence</h2>
+              <p className="text-[var(--text-tertiary)] mt-2 mb-8">Help creators understand your scale and legitimacy.</p>
 
               <div className="space-y-6">
                  <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Website URL</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Website URL</label>
                    <div className="relative">
                      <input 
-                       className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl p-4 text-white focus:border-[#3B82F6]/50 focus:outline-none"
+                       className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none"
                        placeholder="https://"
                        value={formData.websiteUrl}
                        onChange={e => setFormData({...formData, websiteUrl: e.target.value})}
@@ -257,11 +257,11 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                  </div>
 
                  <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Primary Social Handle</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Primary Social Handle</label>
                    <div className="relative">
-                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">@</span>
+                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] font-bold">@</span>
                      <input 
-                       className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl p-4 pl-8 text-white focus:border-[#3B82F6]/50 focus:outline-none"
+                       className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 pl-8 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none"
                        placeholder="brand_handle"
                        value={formData.socialHandle}
                        onChange={e => setFormData({...formData, socialHandle: e.target.value.replace('@', '')})}
@@ -270,13 +270,13 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                  </div>
 
                  <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Team Size</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Team Size</label>
                    <div className="flex flex-wrap gap-2">
                      {["Solo", "2-10", "11-50", "51-200", "200+"].map(size => (
                        <button
                          key={size}
                          onClick={() => setFormData({...formData, teamSize: size})}
-                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.teamSize === size ? 'bg-[#3B82F6] border-[#3B82F6] text-white' : 'bg-[#12121A] border-white/10 text-gray-400 hover:border-white/30'}`}
+                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.teamSize === size ? 'bg-[#3B82F6] border-[#3B82F6] text-[var(--text-primary)]' : 'bg-[var(--bg-card)] border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-white/30'}`}
                        >
                          {size}
                        </button>
@@ -286,9 +286,9 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
 
                  <div className="flex gap-4">
                    <div className="flex-1 relative">
-                     <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">City *</label>
+                     <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">City *</label>
                      <input 
-                       className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#3B82F6]/50 focus:outline-none"
+                       className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none"
                        placeholder="e.g. Mumbai"
                        value={citySearch}
                        onChange={e => {
@@ -298,11 +298,11 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                        onFocus={() => setShowCityDropdown(true)}
                      />
                      {showCityDropdown && citySearch && (
-                       <div className="absolute top-full left-0 right-0 mt-2 bg-[#1A1A2E] border border-[#3B82F6]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
+                       <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-elevated)] border border-[#3B82F6]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
                          {filteredCities.map(c => (
                            <button 
                              key={c} 
-                             className="w-full text-left px-4 py-3 text-white hover:bg-[#3B82F6]/20"
+                             className="w-full text-left px-4 py-3 text-[var(--text-primary)] hover:bg-[#3B82F6]/20"
                              onClick={() => {
                                setFormData({...formData, city: c, state: CITY_TO_STATE[c] || ""});
                                setCitySearch(c);
@@ -316,9 +316,9 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                      )}
                    </div>
                    <div className="flex-1">
-                     <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">State *</label>
+                     <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">State *</label>
                      <input 
-                       className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#3B82F6]/50 focus:outline-none"
+                       className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none"
                        readOnly
                        value={formData.state}
                        placeholder="e.g. Maharashtra"
@@ -327,9 +327,9 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Pin Code</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Pin Code</label>
                    <input 
-                     className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#3B82F6]/50 focus:outline-none border-dashed"
+                     className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none border-dashed"
                      placeholder="e.g. 400001"
                      value={formData.pinCode}
                      onChange={e => handlePincodeChange(e.target.value)}
@@ -338,10 +338,10 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div className="pt-4 flex justify-between">
-                   <button onClick={() => setStep(1)} className="text-gray-400 hover:text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
+                   <button onClick={() => setStep(1)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
                      <ArrowLeft size={18} /> Back
                    </button>
-                   <button onClick={() => setStep(3)} className="bg-[#3B82F6] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-600 transition shadow-[0_4px_15px_rgba(59,130,246,0.3)] hover:-translate-y-0.5">
+                   <button onClick={() => setStep(3)} className="bg-[#3B82F6] text-[var(--text-primary)] px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-600 transition shadow-[0_4px_15px_rgba(59,130,246,0.3)] hover:-translate-y-0.5">
                      Continue <ArrowRight size={18} />
                    </button>
                 </div>
@@ -351,13 +351,13 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
 
           {step === 3 && (
             <motion.div key="bs3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-3xl font-display font-bold text-white">What campaigns will you run?</h2>
-              <p className="text-gray-400 mt-2 mb-8">This helps creators understand if they're a match for you.</p>
+              <h2 className="text-3xl font-display font-bold text-[var(--text-primary)]">What campaigns will you run?</h2>
+              <p className="text-[var(--text-tertiary)] mt-2 mb-8">This helps creators understand if they're a match for you.</p>
 
               <div className="space-y-6">
                 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Campaign Types (Select all that apply)</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Campaign Types (Select all that apply)</label>
                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                      {[
                        { id: "paid", icon: "💰", label: "Paid Collaborations" },
@@ -368,7 +368,7 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                        <button
                          key={type.id}
                          onClick={() => toggleCampaignType(type.id)}
-                         className={`p-3 rounded-xl text-sm font-bold border transition-all text-left flex items-center gap-2 ${formData.campaignTypes.includes(type.id) ? 'bg-[#3B82F6]/10 border-[#3B82F6] text-white' : 'bg-[#12121A] border-white/10 text-gray-400 hover:border-white/30'}`}
+                         className={`p-3 rounded-xl text-sm font-bold border transition-all text-left flex items-center gap-2 ${formData.campaignTypes.includes(type.id) ? 'bg-[#3B82F6]/10 border-[#3B82F6] text-[var(--text-primary)]' : 'bg-[var(--bg-card)] border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-white/30'}`}
                        >
                          <span className="text-xl">{type.icon}</span> {type.label}
                        </button>
@@ -377,13 +377,13 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Typical Budget Per Campaign</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Typical Budget Per Campaign</label>
                    <div className="flex flex-wrap gap-2">
                      {["Under ₹10,000", "₹10K–₹50K", "₹50K–₹2L", "₹2L+"].map(budget => (
                        <button
                          key={budget}
                          onClick={() => setFormData({...formData, budgetRange: budget})}
-                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.budgetRange === budget ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400' : 'bg-[#12121A] border-white/10 text-gray-400 hover:border-white/30'}`}
+                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.budgetRange === budget ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400' : 'bg-[var(--bg-card)] border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-white/30'}`}
                        >
                          {budget}
                        </button>
@@ -392,13 +392,13 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Preferred Creator Size</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Preferred Creator Size</label>
                    <div className="flex flex-wrap gap-2">
                      {["Nano 1K–10K", "Micro 10K–100K", "Macro 100K–1M", "Mega 1M+"].map(size => (
                        <button
                          key={size}
                          onClick={() => setFormData({...formData, creatorSize: size})}
-                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.creatorSize === size ? 'bg-[#3B82F6] border-[#3B82F6] text-white' : 'bg-[#12121A] border-white/10 text-gray-400 hover:border-white/30'}`}
+                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.creatorSize === size ? 'bg-[#3B82F6] border-[#3B82F6] text-[var(--text-primary)]' : 'bg-[var(--bg-card)] border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-white/30'}`}
                        >
                          {size}
                        </button>
@@ -407,16 +407,16 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Preferred Niches (Optional)</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Preferred Niches (Optional)</label>
                    <input 
-                     className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#3B82F6]/50 focus:outline-none"
+                     className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none"
                      placeholder="e.g. Fashion & Apparel"
                      value={formData.niches}
                      onChange={e => setFormData({...formData, niches: e.target.value})}
                    />
                 </div>
 
-                <div className="bg-[#12121A] border border-[#10B981]/20 p-4 rounded-xl flex items-start gap-4 text-xs text-gray-400 leading-relaxed max-w-lg mt-8">
+                <div className="bg-[var(--bg-card)] border border-[#10B981]/20 p-4 rounded-xl flex items-start gap-4 text-xs text-[var(--text-tertiary)] leading-relaxed max-w-lg mt-8">
                    <div className="w-10 h-10 rounded-full bg-[#10B981]/10 flex items-center justify-center shrink-0">
                      <Shield className="text-[#10B981]" size={18} />
                    </div>
@@ -427,7 +427,7 @@ export default function BrandOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div className="pt-4 flex justify-between">
-                   <button onClick={() => setStep(2)} className="text-gray-400 hover:text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
+                   <button onClick={() => setStep(2)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
                      <ArrowLeft size={18} /> Back
                    </button>
                    <button onClick={handleSaveAndComplete} disabled={loading} className="bg-gradient-to-r from-[#D9F111] to-[#cbe010] text-[#12121A] px-8 py-3 rounded-xl font-black uppercase tracking-wider hover:opacity-90 transition shadow-[0_0_20px_rgba(217,241,17,0.3)] disabled:opacity-50 flex items-center gap-2 hover:-translate-y-0.5">

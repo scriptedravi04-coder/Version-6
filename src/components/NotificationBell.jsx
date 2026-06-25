@@ -111,67 +111,50 @@ export default function NotificationBell() {
       {/* Bell Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="relative p-2.5 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer focus:outline-none flex items-center justify-center border border-foreground/5 shrink-0 shadow-inner"
+        className="w-10 h-10 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] flex items-center justify-center relative shadow-sm hover:bg-[var(--bg-elevated)] transition-colors focus:outline-none"
         data-testid="notification-bell-btn"
       >
-        <Bell className="w-5 h-5" />
+        <Bell size={18} className="text-[var(--text-secondary)]" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-0.5 bg-[#EF4444] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold font-mono animate-pulse">
+          <span className="absolute -top-1 -right-1 bg-[var(--violet)] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold border border-[var(--bg-card)]">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
       </button>
 
-      {/* Drawer Panel */}
+      {/* Dropdown Panel */}
       <AnimatePresence>
         {open && (
           <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setOpen(false)}
-              className="fixed inset-0 bg-black/60 z-[200] backdrop-blur-sm"
-            />
-            
             {/* Slide-over Content */}
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 250 }}
-              className="fixed top-0 right-0 w-full max-w-sm sm:max-w-md h-full bg-white/95 dark:bg-[#0c0c12]/95 backdrop-blur-2xl border-l border-foreground/10 shadow-2xl z-[250] flex flex-col overflow-hidden select-none"
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-full right-0 mt-3 w-[360px] max-h-[480px] bg-[var(--bg-card)] border border-[var(--border-default)] shadow-[0_10px_40px_rgba(0,0,0,0.3)] rounded-2xl z-[250] flex flex-col overflow-hidden select-none"
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-foreground/5 bg-foreground/[0.02]">
-                <div className="flex items-center gap-2">
-                  <Bell className="w-5 h-5 text-[#9D7CFF]" />
-                  <h3 className="text-[var(--text-primary)] font-bold text-lg tracking-wide">Notifications</h3>
-                </div>
-                <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between p-4 px-5 border-b border-[var(--border-default)] bg-[var(--bg-card)]">
+                <h3 className="text-[var(--text-primary)] font-bold text-[15px]">Notifications</h3>
+                <div className="flex items-center gap-3 text-xs font-semibold">
+                  <button className="text-[var(--text-primary)] hover:text-[var(--violet)]">All</button>
+                  <button className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)]">Unread</button>
                   {unreadCount > 0 && (
                     <button
                       onClick={markAllRead}
-                      className="text-xs text-[#9D7CFF] hover:text-[#7C5CFF] font-semibold transition-colors cursor-pointer"
+                      className="text-[var(--violet)] ml-2"
                     >
-                      Mark all read
+                      Mark read
                     </button>
                   )}
-                  <button
-                    onClick={() => setOpen(false)}
-                    className="p-2 -mr-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
                 </div>
               </div>
 
               {/* List */}
-              <div className="flex-1 overflow-y-auto divide-y divide-foreground/5">
+              <div className="flex-1 overflow-y-auto divide-y divide-[var(--border-default)] bg-[var(--bg-card)]">
                 {notifications.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center gap-3 text-[var(--text-tertiary)] py-12">
-                    <div className="w-16 h-16 rounded-full bg-foreground/5 flex items-center justify-center text-2xl shadow-inner">🔔</div>
                     <span className="text-sm font-medium">No notifications yet</span>
                   </div>
                 ) : (
@@ -183,17 +166,6 @@ export default function NotificationBell() {
                     />
                   ))
                 )}
-              </div>
-
-              {/* Footer */}
-              <div className="p-4 border-t border-foreground/5 text-center bg-foreground/[0.02]">
-                <Link
-                  to="/notifications"
-                  onClick={() => setOpen(false)}
-                  className="text-xs text-[var(--text-secondary)] hover:text-[#9D7CFF] font-bold transition-colors inline-block py-2.5 px-4 rounded-xl bg-foreground/5 hover:bg-foreground/10 w-full text-center"
-                >
-                  View all notifications
-                </Link>
               </div>
             </motion.div>
           </>

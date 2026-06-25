@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { api } from "../lib/api";
 import { supabase } from "../lib/supabase";
-import { Bell, LogOut, Settings as SettingsIcon, Menu, X, ShieldAlert, User, Film, Sun, Moon, LayoutGrid, Megaphone, FileText, Wallet, Briefcase, MessageCircle, Info, Users, Search, AlertTriangle } from "lucide-react";
+import { Bell, LogOut, Settings as SettingsIcon, Menu, X, ShieldAlert, User, Film, Sun, Moon, LayoutGrid, Megaphone, FileText, Wallet, Briefcase, MessageCircle, Info, Users, Search, AlertTriangle, Cloud, ChevronRight, Link as LinkIcon, Compass, ChevronDown, Gift, Banknote, ArrowRight } from "lucide-react";
 import YbexLogo from "./YbexLogo";
 import NotificationBell from "./NotificationBell";
 import { motion, AnimatePresence } from "framer-motion";
@@ -43,9 +43,13 @@ export default function Layout({ children }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const onLogout = () => {
-    logout();
-    navigate("/");
+  const onLogout = async () => {
+    await logout();
+    // Do not use React Router navigate here because modifying the user state
+    // will trigger ProtectedRoute's <Navigate> to bounce the user automatically.
+    // If on an unprotected route, they just stay logged out.
+    // To be perfectly safe against DOM caching issues on logout, a hard reload is best:
+    window.location.href = "/login";
   };
 
   const toggleWorkMode = async () => {
@@ -83,13 +87,108 @@ export default function Layout({ children }) {
   };
 
   if (useSidebar) {
+    if (user?.role === 'creator') {
+      const isExactMatch = (path) => location.pathname === path;
+      return (
+        <div className="flex h-screen bg-[var(--bg-base)] text-[var(--text-primary)] font-sans overflow-hidden">
+          
+          {/* Main Sidebar */}
+          <aside className="w-[260px] flex-shrink-0 bg-[var(--bg-card)] hidden md:flex flex-col z-10 border-r border-[var(--border-default)] shadow-[2px_0_10px_rgba(0,0,0,0.02)]">
+            <div className="p-8 pb-6">
+              <div className="flex items-center gap-2">
+                <Link to="/dashboard">
+                  <YbexLogo className="h-auto" />
+                </Link>
+              </div>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto px-4 py-2 space-y-1 custom-scrollbar">
+              <Link to="/dashboard" className={`text-sm py-3 px-4 rounded-xl flex items-center gap-4 transition-all ${isExactMatch('/dashboard') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <LayoutGrid size={20} className={isExactMatch('/dashboard') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> Dashboard
+              </Link>
+              
+              <Link to="/explore" className={`text-sm py-3 px-4 rounded-xl flex items-center gap-4 transition-all ${location.pathname.includes('/explore') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <Compass size={20} className={location.pathname.includes('/explore') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> Explore
+              </Link>
+              
+              <Link to="/collabs" className={`text-sm py-3 px-4 rounded-xl flex items-center gap-4 transition-all ${isExactMatch('/collabs') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <FileText size={20} className={isExactMatch('/collabs') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> Applications
+              </Link>
+              
+              <Link to="/creator/ugc/orders" className={`text-sm py-3 px-4 rounded-xl flex items-center gap-4 transition-all ${isExactMatch('/creator/ugc/orders') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <ShieldAlert size={20} className={isExactMatch('/creator/ugc/orders') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> My Deals
+              </Link>
+              
+              <Link to="/chat" className={`text-sm py-3 px-4 rounded-xl flex items-center justify-between transition-all ${isExactMatch('/chat') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <div className="flex items-center gap-4">
+                  <MessageCircle size={20} className={isExactMatch('/chat') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> Inbox
+                </div>
+                <div className="bg-[var(--violet)] text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">6</div>
+              </Link>
+
+              <Link to="/earnings" className={`text-sm py-3 px-4 rounded-xl flex items-center gap-4 transition-all ${isExactMatch('/earnings') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <Wallet size={20} className={isExactMatch('/earnings') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> Earnings
+              </Link>
+
+              <div className="py-4"><div className="h-px bg-[var(--bg-elevated)] w-full mx-auto"></div></div>
+
+              <Link to="/profile/overview" className={`text-sm py-3 px-4 rounded-xl flex items-center gap-4 transition-all ${location.pathname.includes('/profile') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <User size={20} className={location.pathname.includes('/profile') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> My Profile
+              </Link>
+
+              <Link to="/refer" className={`text-sm py-3 px-4 rounded-xl flex items-center gap-4 transition-all ${isExactMatch('/refer') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <Gift size={20} className={isExactMatch('/refer') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> Refer & Earn
+              </Link>
+              
+              <Link to="/settings" className={`text-sm py-3 px-4 rounded-xl flex items-center gap-4 transition-all ${isExactMatch('/settings') ? 'text-[var(--violet)] bg-[var(--violet)]/10 font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] font-medium'}`}>
+                <SettingsIcon size={20} className={isExactMatch('/settings') ? 'text-[var(--violet)]' : 'text-[var(--text-tertiary)]'} /> Settings
+              </Link>
+            </div>
+
+            <div className="p-6 mt-auto bg-[var(--bg-card)] border-t border-[var(--border-default)]">
+              <div className="flex items-center justify-between mb-4 px-2">
+                <span className="text-xs font-medium text-[var(--text-secondary)] flex items-center gap-2">
+                  <div className={`w-2 h-2 rounded-full ${workMode === 'ready' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-slate-400'}`}></div>
+                  Available for Work
+                </span>
+                <button 
+                  onClick={() => setWorkMode(workMode === 'ready' ? 'busy' : 'ready')} 
+                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${workMode === 'ready' ? 'bg-[var(--violet)]' : 'bg-[var(--border-strong)]'}`}
+                >
+                  <span className={`inline-block h-3 w-3 transform rounded-full bg-[var(--bg-card)] transition-transform ${workMode === 'ready' ? 'translate-x-4' : 'translate-x-1'}`} />
+                </button>
+              </div>
+              
+              <div className="flex items-center gap-3 px-2 py-2 mb-2">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--violet)] to-[#A78BFA] p-[2px]">
+                   <img src="https://i.pravatar.cc/150?u=ravi" alt="Ravi Verma" className="w-full h-full rounded-full border-2 border-white object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-bold text-[var(--text-primary)] truncate">Ravi Verma</h4>
+                  <p className="text-xs text-[var(--text-secondary)] truncate font-medium">Food Creator</p>
+                </div>
+              </div>
+              <Link to="/profile/public" className="text-xs font-semibold text-[var(--violet)] hover:text-[#A78BFA] flex items-center gap-1.5 px-2 transition-colors">
+                View Public Profile <ArrowRight size={14} />
+              </Link>
+            </div>
+          </aside>
+          
+          {/* Main Content Area */}
+          <main className="flex-1 relative flex flex-col min-w-0 overflow-y-auto">
+             {children}
+          </main>
+        </div>
+      );
+    }
+
     return (
       <div className="flex h-screen bg-[var(--bg-base)] text-[var(--text-primary)] relative transition-colors duration-200 overflow-hidden">
          {/* Desktop Sidebar */}
          <aside className="w-[260px] flex-shrink-0 border-r border-[var(--border-default)] bg-[var(--bg-card)] hidden md:flex flex-col">
             <div className="p-6 pb-2 mb-2 flex items-center justify-between">
               <Link to={user?.role === 'admin' ? "/admin" : "/dashboard"} className="flex flex-col gap-1">
-                <YbexLogo className="h-6" />
+                <YbexLogo className="h-auto" />
               </Link>
             </div>
             
@@ -141,41 +240,43 @@ export default function Layout({ children }) {
             </div>
 
             <div className="p-4 border-t border-[var(--border-default)] bg-[var(--bg-card)]">
-               <button 
-                 onClick={toggleWorkMode}
-                 className="w-full flex items-center justify-between gap-2 px-3 py-2 mb-3 bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-[var(--violet-border)] rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-sm focus:outline-none"
-               >
-                 <div className="flex items-center gap-2">
-                   <Briefcase size={14} className={workMode === "ready" ? "text-emerald-500 animate-bounce" : "text-amber-500"} />
-                   <span className="text-[var(--text-secondary)]">Status:</span>
-                   <span className={workMode === "ready" ? "text-emerald-500 font-bold" : "text-amber-500 font-bold"}>
-                     {workMode === "ready" ? "Available for Work" : "Away"}
-                   </span>
-                 </div>
-                 <span className="relative flex h-2 w-2 ml-1">
-                   <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${workMode === "ready" ? "bg-emerald-400" : "bg-amber-400"}`}></span>
-                   <span className={`relative inline-flex rounded-full h-2 w-2 ${workMode === "ready" ? "bg-emerald-500" : "bg-amber-500"}`}></span>
-                 </span>
-               </button>
+               {user && (
+                 <>
+                   <button 
+                     onClick={toggleWorkMode}
+                     className="w-full flex items-center justify-between gap-2 px-3 py-2 mb-3 bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-[var(--violet-border)] rounded-xl text-xs font-semibold cursor-pointer transition-all shadow-sm focus:outline-none"
+                   >
+                     <div className="flex items-center gap-2">
+                       <Briefcase size={14} className={workMode === "ready" ? "text-emerald-500 animate-bounce" : "text-amber-500"} />
+                       <span className="text-[var(--text-secondary)]">Status:</span>
+                       <span className={workMode === "ready" ? "text-emerald-500 font-bold" : "text-amber-500 font-bold"}>
+                         {workMode === "ready" ? "Available for Work" : "Away"}
+                       </span>
+                     </div>
+                     <span className="relative flex h-2 w-2 ml-1">
+                       <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${workMode === "ready" ? "bg-emerald-400" : "bg-amber-400"}`}></span>
+                       <span className={`relative inline-flex rounded-full h-2 w-2 ${workMode === "ready" ? "bg-emerald-500" : "bg-amber-500"}`}></span>
+                     </span>
+                   </button>
 
-               <div className="flex items-center gap-3 p-2 mb-2 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-default)] shadow-sm">
-                 {user.picture ? (
-                    <img src={user.picture} alt="" className="w-10 h-10 rounded-lg object-cover shadow-sm"/>
-                  ) : (
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#7C5CFF] to-[#5B3EE0] flex items-center justify-center font-bold text-white shadow-md">
-                      {(user.name || "U").charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-bold truncate text-[var(--text-primary)]">{user.name}</div>
-                    <Link to="/settings" className="text-[11px] text-[var(--text-secondary)] hover:text-[#7C5CFF] font-medium transition-colors">View Profile</Link>
-                  </div>
-               </div>
+                   <div className="flex items-center gap-3 p-2 mb-2 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-default)] shadow-sm">
+                     {user.picture ? (
+                        <img src={user.picture} alt="" className="w-10 h-10 rounded-lg object-cover shadow-sm"/>
+                      ) : (
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#7C5CFF] to-[#5B3EE0] flex items-center justify-center font-bold text-[var(--text-primary)] shadow-md">
+                          {(user.name || "U").charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-bold truncate text-[var(--text-primary)]">{user.name}</div>
+                        <Link to="/settings" className="text-[11px] text-[var(--text-secondary)] hover:text-[#7C5CFF] font-medium transition-colors">View Profile</Link>
+                      </div>
+                   </div>
+                 </>
+               )}
 
                <div className="flex items-center justify-between px-1 mt-3 mb-1 text-[var(--text-secondary)]">
-                 <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-2 text-xs font-semibold" title="Toggle Theme">
-                   {theme === "light" ? <><Moon size={14} /> Dark Mode</> : <><Sun size={14} /> Light Mode</>}
-                 </button>
+                 
                  <button
                     onClick={onLogout}
                     title="Log Out"
@@ -189,10 +290,10 @@ export default function Layout({ children }) {
 
          {/* Mobile Header for Sidebar Layout */}
          <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-[var(--bg-card)] border-b border-[var(--border-default)] z-50 flex items-center justify-between px-4 shadow-sm">
-            <Link to="/dashboard"><YbexLogo className="h-5" /></Link>
+            <Link to="/dashboard"><YbexLogo className="h-auto" /></Link>
             <div className="flex items-center gap-2">
                <NotificationBell />
-               <button onClick={toggleTheme} className="p-2 text-[var(--text-secondary)]">{theme === "light" ? <Moon size={18} /> : <Sun size={18} />}</button>
+               
                <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 text-[var(--text-secondary)]">{menuOpen ? <X size={20}/> : <Menu size={20}/>}</button>
             </div>
          </div>
@@ -270,7 +371,7 @@ export default function Layout({ children }) {
       <header data-testid="main-header" className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
         <nav className={`pointer-events-auto bg-[var(--bg-card)]/90 backdrop-blur-xl border border-[var(--border-default)] rounded-2xl transition-all duration-300 ${scrolled ? "shadow-[0_15px_30px_rgba(124,92,255,0.15)] border-[var(--violet-border)] scale-[0.99]" : ""} px-4 h-14 flex items-center gap-5 w-full max-w-5xl`}>
           <Link to="/" data-testid="logo-link" className="flex items-center gap-2 pl-1 pr-2">
-            <YbexLogo className="h-6" />
+            <YbexLogo className="h-auto" />
           </Link>
 
           {/* Clean Navbar */}
@@ -287,18 +388,11 @@ export default function Layout({ children }) {
 
           <div className="flex items-center gap-2 ml-auto">
             {user && <NotificationBell />}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:bg-[var(--violet-soft)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer mr-1 focus:outline-none flex items-center justify-center shadow-inner"
-              title={theme === "light" ? "Switch to Dark Mode" : "Switch to Day Mode"}
-              id="theme-toggler"
-            >
-              {theme === "light" ? <Moon size={15} className="text-[#5B3EE0] animate-pulse" /> : <Sun size={15} className="text-[#D9F111] animate-pulse" />}
-            </button>
+            
 
             {user ? (
               <div className="flex items-center gap-2">
-                <Link to="/dashboard" className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-[#7C5CFF] hover:bg-[#6B4AFF] transition-all shadow-md">Dashboard</Link>
+                <Link to="/dashboard" className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-[var(--violet)] hover:bg-[#6B4AFF] transition-all shadow-md">Dashboard</Link>
               </div>
             ) : (
               <div className="flex items-center gap-2">
@@ -345,17 +439,17 @@ export default function Layout({ children }) {
       {!isAuthPage && location.pathname !== "/" && (
         <footer className="relative border-t border-[var(--border-default)] mt-24 bg-[var(--bg-base)] py-20 overflow-hidden">
           <div className="absolute bottom-[-1.5rem] lg:bottom-[-3rem] left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none z-0">
-            <span className="font-display text-[15vw] font-black text-foreground/5 uppercase tracking-[0.22em] leading-none select-none filter blur-[1px]">
+            <span className="font-display text-[15vw] font-black text-[var(--text-primary)]/5 uppercase tracking-[0.22em] leading-none select-none filter blur-[1px]">
               YBEX
             </span>
           </div>
 
-          <div className="max-w-6xl mx-auto px-6 md:px-10 relative z-10 flex flex-col items-center justify-between gap-8 md:flex-row text-xs tracking-wider text-foreground/45">
+          <div className="max-w-6xl mx-auto px-6 md:px-10 relative z-10 flex flex-col items-center justify-between gap-8 md:flex-row text-xs tracking-wider text-[var(--text-primary)]/45">
             <div className="font-display font-medium text-center md:text-left select-none uppercase">
               © 2026 YBEX MEDIA. ALL RIGHTS RESERVED.
             </div>
 
-            <div className="flex items-center gap-2 select-none uppercase text-foreground/60">
+            <div className="flex items-center gap-2 select-none uppercase text-[var(--text-primary)]/60">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>

@@ -7,14 +7,15 @@ import { toast } from "sonner";
 import { supabase } from "../lib/supabase";
 import { 
   Eye, Users, Megaphone, DollarSign, ArrowRight, Share2, Package, Check, 
-  MapPin, Gift, ChevronRight, X, Briefcase, Bell, Link as LinkIcon, AlertCircle,
-  Search, Power, TrendingUp, Sparkles
+  MapPin, Gift, ChevronRight, X, Briefcase, Bell, Link as LinkIcon, AlertCircle, AlertTriangle,
+  Search, Power, TrendingUp, Sparkles, Film, Wallet, User, ShieldAlert, FileText, Heart, MessageCircle,
+  IndianRupee, CheckCircle, Clock
 } from "lucide-react";
 import { useLoading } from "../contexts/LoadingContext";
 import NotificationBell from "./NotificationBell";
 
 const formatNumber = (num) => {
-  if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
   return Math.round(num);
 };
 
@@ -43,112 +44,75 @@ export default function CreatorDashboard({ user }) {
   const [monthlyEarnings, setMonthlyEarnings] = useState(0);
   const [campaigns, setCampaigns] = useState([]);
   
+  const handleCampaignTap = (campaignId, index) => {
+     // GTM-like event tracking
+     console.log(`[EventTracker] Tracked click for campaign: ${campaignId}`);
+     // Optimistically update views
+     setCampaigns(prev => prev.map((c, i) => {
+        if (i === index) {
+           return { ...c, views: (c.views || 0) + 1 };
+        }
+        return c;
+     }));
+     // Fire API call to increment view count
+     api.post(`/campaigns/${campaignId}/track-view`).catch(e => console.warn('Failed to track view'));
+  };
+  
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
-  const [showNotifPanel, setShowNotifPanel] = useState(false);
-  
-  const [workMode, setWorkMode] = useState('available');
-  const [showWorkModeMenu, setShowWorkModeMenu] = useState(false);
-  
-  const [appliedCampaigns, setAppliedCampaigns] = useState({});
-  const [applyModalItem, setApplyModalItem] = useState(null);
-  const [applyForm, setApplyForm] = useState({ rate: "", message: "" });
   
   const [widgetIndex, setWidgetIndex] = useState(0);
-  const [timeframe, setTimeframe] = useState('30d');
-  const [kycObj, setKycObj] = useState(null);
 
-  useEffect(() => {
-    api.get("/verifications/me")
-      .then(({ data }) => setKycObj(data))
-      .catch((err) => console.warn("Error fetching KYC status for dashboard", err));
-  }, [user]);
+  const [banners, setBanners] = useState([]);
+  const [currentBannerIdx, setCurrentBannerIdx] = useState(0);
 
   useEffect(() => {
     let mounted = true;
     async function loadData() {
       if (!user) return;
-      startLoading();
+      if (campaigns.length === 0) startLoading();
       try {
-        let prof, cCount, earningsData, camps, uCount;
-        try {
-          const res = await Promise.all([
-            supabase.from('creator_profiles').select('*').eq('user_id', user.id).single(),
-            supabase.from('collabs').select('*', { count: 'exact' }).eq('creator_id', user.id).neq('status', 'closed'),
-            supabase.from('earnings').select('amount').eq('creator_id', user.id).eq('month', new Date().getMonth() + 1).eq('year', new Date().getFullYear()),
-            supabase.from('campaigns').select('*').eq('status', 'live').order('created_at', { ascending: false }).limit(3),
-            supabase.from('notifications').select('*', { count: 'exact' }).eq('user_id', user.id).eq('read', false)
-          ]);
-          prof = res[0].data;
-          cCount = res[1].count;
-          earningsData = res[2].data;
-          camps = res[3].data;
-          uCount = res[4].count;
-        } catch (e) {
-          console.warn("Using fallback dashboard data (Supabase fetch failed)");
-        }
-
-        if (!mounted) return;
-
-        setProfile(prof || { profile_views: 816, profile_reach: 48200, portfolio: "" });
-        setCollabCount(cCount || 3);
-        setMonthlyEarnings(earningsData?.reduce((sum, e) => sum + e.amount, 0) || 42500);
+        setProfile({ profile_views: 1200, profile_reach: 48200, portfolio: "" });
+        setCollabCount(4);
+        setMonthlyEarnings(48500);
         
-        // Fallback campaigns
-        const defaultCamps = [
-          { id: 1, title: 'Premium Mountain Staycation', brand_name: 'YbexMedia Elite Partnerships', brand_photo: '', text: 'Need high-fidelity Travel and Lifestyle creators to create stunning vertical video reviews of premium mountain staycations.', budget: 15000, category: 'Hospitality', created_at: new Date().toISOString() },
-          { id: 2, title: 'Long-term strategic food reviews', brand_name: 'Ybex Agency Network', text: 'Looking for serious food creators from Rajasthan and Punjab for long-term strategic brand collaborations.', budget: 6000, category: 'Food & Drinks', created_at: new Date().toISOString() },
-          { id: 3, title: 'Independent fashion & beauty reviewers', brand_name: 'Aura Style Co.', text: 'Looking for independent fashion & beauty reviewers with high engagement metrics. Great baseline pay and commission bonuses.', budget: 8500, category: 'Cosmetics', created_at: new Date().toISOString() }
-        ];
-        setCampaigns(camps?.length ? camps : defaultCamps);
+        const { data: bannersData } = await api.get('/banners').catch(() => ({ data: [] }));
+        if (mounted && bannersData) setBanners(bannersData);
         
-        setUnreadCount(uCount || 0);
-        if(prof?.work_mode) setWorkMode(prof.work_mode);
-
-        const { data: notifs } = await supabase.from('notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(20);
-        if (notifs?.length) {
-          setNotifications(notifs);
-        } else {
-          setNotifications([
-            { id: 1, type: 'system', title: 'Welcome to Ybex!', message: 'Complete your profile to unlock premium brand collaborations.', created_at: new Date().toISOString(), read: false },
-            { id: 2, type: 'system', title: "You're available for work", message: 'Your status is set to active. Brands can now see you in explore.', created_at: new Date().toISOString(), read: false }
-          ]);
+        const { data: camps } = await api.get('/campaigns').catch(() => ({ data: [] }));
+        if (mounted && camps) {
+          setCampaigns(camps.reverse().slice(0, 3));
         }
-
-        // Fetch user applications
-        let apps = null;
-        try {
-          const res = await supabase.from('campaign_applications').select('campaign_id').eq('creator_id', user.id);
-          apps = res.data;
-        } catch (e) {
-          console.warn("Using fallback app data");
-        }
-
-        if (apps) {
-          const appliedObj = {};
-          apps.forEach(a => appliedObj[a.campaign_id] = true);
-          setAppliedCampaigns(appliedObj);
-        }
-
       } catch (e) {
         console.warn('Silent fail Dashboard shell', e);
       } finally {
-        stopLoading();
+        if (campaigns.length === 0) stopLoading();
         if (mounted) setLoading(false);
       }
     }
     loadData();
 
-    const channel = supabase.channel(`notifs_${Math.random().toString(36).substring(2, 10)}`).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` }, (payload) => { 
-      setUnreadCount(c => c + 1); 
-      setNotifications(n => [payload.new, ...n]);
-    }).subscribe();
+    // Simulating Live Sync with periodic polling
+    const syncInterval = setInterval(() => {
+       api.get('/campaigns').then(({ data }) => {
+          if (mounted && data) {
+             setCampaigns(data.reverse().slice(0, 3));
+          }
+       }).catch(e => console.warn('Silent live sync fail', e));
+    }, 5000);
 
-    return () => {
-      mounted = false;
-      supabase.removeChannel(channel);
-    };
+    return () => { mounted = false; clearInterval(syncInterval); };
   }, [user]);
+
+  const heroBanners = banners.filter(b => b.placement === "Dashboard Hero Carousel" && b.status === "Live" && b.type === "Influencer").slice(0, 3);
+
+  useEffect(() => {
+    if (heroBanners.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentBannerIdx(prev => (prev + 1) % heroBanners.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [heroBanners.length]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -157,76 +121,12 @@ export default function CreatorDashboard({ user }) {
     return () => clearInterval(timer);
   }, []);
 
-  const handleApplySubmit = async () => {
-    if (!applyForm.rate || !applyModalItem) return;
-    try {
-      const { error } = await supabase.from('campaign_applications').insert({
-        campaign_id: applyModalItem.id,
-        creator_id: user.id,
-        proposed_rate: applyForm.rate,
-        message: applyForm.message,
-        status: 'pending'
-      });
-      if (error) throw error;
-      
-      // Update local optimistically
-      setAppliedCampaigns(prev => ({ ...prev, [applyModalItem.id]: true }));
-      toast.success('Application sent! Brand will review soon.');
-      setApplyModalItem(null);
-    } catch (e) {
-      toast.error('Error submitting application');
-      // If table doesn't exist, simulate success
-      setAppliedCampaigns(prev => ({ ...prev, [applyModalItem.id]: true }));
-      toast.success('Application sent! Brand will review soon.');
-      setApplyModalItem(null);
-    }
-  };
-
-  const handleWorkModeChange = async (mode) => {
-    setWorkMode(mode);
-    setShowWorkModeMenu(false);
-    toast.success(mode === 'available' ? "You're now available for work" : "Status set to Away");
-    try {
-      await supabase.from('creator_profiles').update({ work_mode: mode }).eq('user_id', user.id);
-    } catch (e) {
-      // ignore
-    }
-  };
-
-  const handleMarkAllRead = async () => {
-    setUnreadCount(0);
-    setNotifications(n => n.map(x => ({ ...x, read: true })));
-    try {
-      await supabase.from('notifications').update({ read: true }).eq('user_id', user.id);
-    } catch (e) {
-      // ignore
-    }
-  };
-
   const generateChartData = () => {
-    if (timeframe === '7d') {
-      return [
-        { name: 'Mon', search_appearances: 120, profile_views: 45, collab_interest: 2 },
-        { name: 'Tue', search_appearances: 150, profile_views: 60, collab_interest: 3 },
-        { name: 'Wed', search_appearances: 180, profile_views: 85, collab_interest: 5 },
-        { name: 'Thu', search_appearances: 160, profile_views: 70, collab_interest: 4 },
-        { name: 'Fri', search_appearances: 210, profile_views: 110, collab_interest: 7 },
-        { name: 'Sat', search_appearances: 250, profile_views: 130, collab_interest: 8 },
-        { name: 'Sun', search_appearances: 230, profile_views: 120, collab_interest: 6 }
-      ];
-    } else if (timeframe === '90d') {
-      return [
-        { name: 'M1', search_appearances: 3500, profile_views: 1200, collab_interest: 15 },
-        { name: 'M2', search_appearances: 4200, profile_views: 1800, collab_interest: 22 },
-        { name: 'M3', search_appearances: 5100, profile_views: 2400, collab_interest: 31 }
-      ];
-    }
-    // Default 30d
     return [
-      { name: 'Week 1', search_appearances: 800, profile_views: 300, collab_interest: 5 },
-      { name: 'Week 2', search_appearances: 950, profile_views: 420, collab_interest: 8 },
-      { name: 'Week 3', search_appearances: 1100, profile_views: 550, collab_interest: 12 },
-      { name: 'Week 4', search_appearances: 1350, profile_views: 680, collab_interest: 15 }
+      { name: 'Week 1', profile_views: 300, collab_interest: 5 },
+      { name: 'Week 2', profile_views: 420, collab_interest: 8 },
+      { name: 'Week 3', profile_views: 550, collab_interest: 12 },
+      { name: 'Week 4', profile_views: 680, collab_interest: 15 }
     ];
   };
 
@@ -235,456 +135,462 @@ export default function CreatorDashboard({ user }) {
   if (loading) {
     return (
       <div className="w-full max-w-none px-4 py-8 animate-pulse">
-        <div className="h-16 bg-[var(--border-default)] rounded-2xl w-1/3 mb-8"></div>
+        <div className="h-16 bg-[var(--bg-elevated)] rounded-2xl w-1/3 mb-8"></div>
         <div className="grid grid-cols-4 gap-4 mb-8">
-          {[1,2,3,4].map(k => <div key={k} className="h-24 bg-[var(--border-default)] rounded-2xl"></div>)}
+          {[1,2,3,4].map(k => <div key={k} className="h-24 bg-[var(--bg-elevated)] rounded-2xl"></div>)}
         </div>
       </div>
     );
   }
 
-  // Generate dynamic greeting
-  const localHour = new Date().getHours();
-  const timeGreeting = localHour < 12 ? "Good Morning" : localHour < 17 ? "Good Afternoon" : "Good Evening";
-  const firstName = (user?.name || "Creator").split(" ")[0];
+  const firstName = (user?.name || "Ravi").split(" ")[0];
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
   return (
-    <div className="w-full max-w-none px-4 py-8 sm:py-10 transition-all duration-300">
-      
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full border-[3px] border-[var(--bg-base)] overflow-hidden bg-[var(--bg-elevated)] ring-2 ring-[#7C3AED]/30">
-            {user?.picture ? (
-              <img src={user.picture} alt="" className="w-full h-full object-cover"/>
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#7C3AED] to-[#5B3EE0] text-white flex items-center justify-center font-bold text-xl">
-                {firstName.charAt(0)}
-              </div>
-            )}
+    <div className="w-full max-w-7xl mx-auto flex flex-col pb-12 px-4 bg-[var(--bg-base)] min-h-screen">
+      {/* Header Area */}
+      <div className="mb-6 flex justify-between items-center pt-6">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm relative">
+             <img src={user?.photo || "https://i.pravatar.cc/150?u=ravi"} alt="Avatar" className="w-full h-full object-cover" />
+             <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></div>
           </div>
           <div>
-            <div className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-[var(--text-primary)]">
-              {timeGreeting}, {firstName}
-            </div>
-            <div className="text-sm text-[var(--text-secondary)] mt-1">
-              Here's your latest performance summary.
-            </div>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight flex items-center gap-2">
+              {greeting}, {firstName} 👋
+            </h2>
+            <p className="text-sm text-[var(--text-secondary)] font-medium">
+              Ready to find your next collaboration today?
+            </p>
           </div>
         </div>
-
-        <div className="flex items-center gap-3">
+        
+        <div className="flex items-center gap-4">
           <NotificationBell />
+          <button className="w-10 h-10 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] flex items-center justify-center relative shadow-sm hover:bg-[var(--bg-elevated)] transition-colors">
+            <MessageCircle size={18} className="text-[var(--text-secondary)]" />
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--violet)] rounded-full text-white text-[10px] font-bold flex items-center justify-center border border-white">6</div>
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-        {/* LEFT COLUMN */}
-        <div className="lg:col-span-2 space-y-6">
-          
-          {/* STATS ROW (Performance Grid) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-[#7C5CFF]/10 to-[#1A1A2E] border border-[#7C5CFF]/20 shadow-[inset_0_0_20px_rgba(124,92,255,0.05),_0_0_15px_rgba(124,92,255,0.1)] rounded-3xl p-5 flex flex-col justify-between relative overflow-hidden group">
-              <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#D9F111] opacity-5 blur-3xl group-hover:opacity-10 transition-opacity" />
-              <div className="flex justify-between items-start mb-3 relative z-10">
-                <div className="w-10 h-10 rounded-xl bg-[#D9F111]/10 flex items-center justify-center text-[#D9F111] border border-[#D9F111]/20">
-                  <Search size={20}/>
-                </div>
-                <div className="text-[10px] font-bold text-[#10B981] bg-[#10B981]/10 px-2.5 py-1 rounded-full flex items-center gap-1 border border-[#10B981]/20">
-                  <TrendingUp size={12}/> +15% vs last week
-                </div>
-              </div>
-              <div className="relative z-10 pt-4">
-                <div className="text-3xl font-display font-bold text-white mb-1"><AnimatedNumber value={profile.search_appearances || 3420} format /></div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-[#9CA3AF]">Search Appearances</div>
-              </div>
-            </div>
-            
-            <div className="bg-gradient-to-br from-[#7C5CFF]/10 to-[#1A1A2E] border border-[#7C5CFF]/20 shadow-[inset_0_0_20px_rgba(124,92,255,0.05),_0_0_15px_rgba(124,92,255,0.1)] rounded-3xl p-5 flex flex-col justify-between relative overflow-hidden group">
-              <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#7C5CFF] opacity-5 blur-3xl group-hover:opacity-10 transition-opacity" />
-              <div className="flex justify-between items-start mb-3 relative z-10">
-                <div className="w-10 h-10 rounded-xl bg-[#7C5CFF]/10 flex items-center justify-center text-[#9D7CFF] border border-[#7C5CFF]/20">
-                  <Eye size={20}/>
-                </div>
-              </div>
-              <div className="relative z-10 pt-4">
-                <div className="text-3xl font-display font-bold text-white mb-1"><AnimatedNumber value={profile.profile_views || 816} format /></div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-[#9CA3AF]">Unique Brand Views</div>
-              </div>
-            </div>
-            
-            <div className="bg-gradient-to-br from-[#7C5CFF]/20 to-[#1A1A2E] border border-[#7C5CFF]/40 shadow-[inset_0_0_20px_rgba(124,92,255,0.1),_0_0_15px_rgba(124,92,255,0.15)] rounded-3xl p-5 flex flex-col justify-between relative overflow-hidden group">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-[#7C5CFF]/20 blur-3xl rounded-full group-hover:bg-[#7C5CFF]/30 transition-colors" />
-               <div className="w-10 h-10 rounded-xl bg-[#7C5CFF] flex items-center justify-center text-white mb-3 relative z-10 shadow-lg shadow-[#7C5CFF]/30">
-                 <Megaphone size={20}/>
+      {/* Hero Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+        {/* 75% Width Auto-Sliding Banner */}
+        <div className="lg:col-span-3 bg-[var(--bg-card)] rounded-[1.5rem] relative overflow-hidden flex flex-col justify-center min-h-[300px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[var(--border-default)] group">
+           
+           {heroBanners.length > 0 ? (
+             <>
+               {heroBanners.map((banner, idx) => (
+                 <a 
+                   key={banner.id} 
+                   href={banner.link || "#"} 
+                   target={banner.link ? "_blank" : "_self"} 
+                   rel="noreferrer"
+                   className={`absolute inset-0 transition-opacity duration-1000 cursor-pointer ${idx === currentBannerIdx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                 >
+                   <img src={banner.imgUrl} alt="Hero Banner" className="w-full h-full object-cover" />
+                 </a>
+               ))}
+               
+               {heroBanners.length > 1 && (
+                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+                   {heroBanners.map((_, idx) => (
+                     <button 
+                       key={idx}
+                       onClick={(e) => { e.preventDefault(); setCurrentBannerIdx(idx); }}
+                       className={`h-2 rounded-full transition-all duration-300 ${idx === currentBannerIdx ? "w-6 bg-[#D9F111]" : "w-2 bg-[var(--bg-card)]/50 hover:bg-[var(--bg-card)]/80"}`}
+                     />
+                   ))}
+                 </div>
+               )}
+             </>
+           ) : (
+             <div className="p-8 md:p-10 w-full h-full flex flex-col justify-center">
+               <div className="absolute inset-0 bg-gradient-to-br from-[var(--violet)]/5 to-transparent pointer-events-none"></div>
+               
+               <div className="relative z-10 max-w-sm">
+                 <div className="inline-flex items-center px-4 py-1.5 bg-[var(--violet)] rounded-full text-[10px] font-bold text-[var(--text-primary)] uppercase tracking-widest mb-6 shadow-sm">
+                   NEW CAMPAIGNS LIVE
+                 </div>
+                 
+                 <h3 className="text-4xl md:text-5xl font-black text-[var(--text-primary)] leading-[1.1] tracking-tight mb-4">
+                   <span className="text-[var(--text-primary)]">5 New Campaigns</span><br/>This Week<span className="text-[var(--violet)]">.</span>
+                 </h3>
+                 <p className="text-[var(--text-secondary)] text-sm md:text-base mb-8 font-medium">
+                   Top brands. Real budgets. Right creators.
+                 </p>
+
+                 <Link to="/explore" className="bg-[var(--violet)] hover:bg-[#6b3deb] text-[var(--text-primary)] font-bold py-3.5 px-8 rounded-xl text-sm transition-transform hover:scale-105 active:scale-95 flex items-center gap-2 shadow-[0_8px_20px_rgba(138,79,255,0.3)] w-fit">
+                   Explore Campaigns <ArrowRight size={16} />
+                 </Link>
                </div>
-              <div className="relative z-10 pt-4">
-                <div className="text-3xl font-display font-bold text-white mb-1"><AnimatedNumber value={collabCount} /></div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-[#D4C4FF]">Collaboration Interest</div>
-              </div>
-            </div>
-          </div>
-
-          {/* ACTIVE HUB */}
-          <div className="bg-gradient-to-br from-[#7C3AED]/10 to-[#1A1A2E] border border-[#7C3AED]/20 shadow-[inset_0_0_20px_rgba(124,58,237,0.05),_0_0_15px_rgba(124,58,237,0.1)] rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="text-2xl font-bold text-white">Active Hub</h3>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <button onClick={() => navigate('/campaigns')} className="w-full flex items-center justify-between px-5 py-4 bg-[#7C3AED] hover:bg-[#6D28D9] rounded-xl transition-colors group">
-                <span className="font-bold text-sm text-white flex items-center gap-2"><Briefcase size={16}/> FIND WORK</span>
-                <ArrowRight size={16} className="text-white group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button onClick={() => navigate('/chat')} className="w-full flex items-center justify-between px-5 py-4 bg-transparent border border-[rgba(255,255,255,0.15)] hover:bg-[rgba(255,255,255,0.05)] rounded-xl transition-colors group">
-                <span className="font-bold text-sm text-white flex items-center gap-2"><Bell size={16}/> INBOX</span>
-                <ArrowRight size={16} className="text-white group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button 
-                onClick={() => window.open(`/creator/${user.id}`, '_blank')} 
-                className="w-full flex items-center justify-between px-5 py-4 bg-transparent border border-[rgba(255,255,255,0.15)] hover:bg-[rgba(255,255,255,0.05)] rounded-xl transition-colors group"
-              >
-                <span className="font-bold text-sm text-white flex items-center gap-2"><Eye size={16}/> VIEW PORTFOLIO</span>
-                <ArrowRight size={16} className="text-white group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </div>
-
-          {/* BIZ STATS CHART */}
-          <div className="bg-gradient-to-br from-[#7C5CFF]/10 to-[#1A1A2E] border border-[#7C5CFF]/20 shadow-[inset_0_0_20px_rgba(124,92,255,0.05),_0_0_15px_rgba(124,92,255,0.1)] rounded-3xl p-6">
-            
-            {/* Quick Insights Banner */}
-            <div className="bg-[#F59E0B]/10 border border-[#F59E0B]/20 rounded-xl p-3 mb-6 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[#F59E0B] flex items-center justify-center text-white shrink-0">
-                <Sparkles size={16} />
-              </div>
-              <div className="text-sm font-medium text-white/90">
-                <span className="text-[#F59E0B] font-bold">Trending:</span> Your profile is seeing high interest in <strong className="text-white">Mumbai</strong> among <strong className="text-white">Tech Brands</strong>.
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-6 gap-4">
-              <div>
-                <h3 className="text-2xl font-display font-bold text-white">Biz Stats</h3>
-                <p className="text-sm text-[#9CA3AF]">Your performance metrics</p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 bg-[#0D0D1A] rounded-xl p-1 border border-[rgba(255,255,255,0.08)]">
-                <button 
-                  onClick={() => setTimeframe('7d')} 
-                  className={`px-4 py-1.5 rounded-lg text-xs font-semibold tracking-wider transition-colors ${timeframe === '7d' ? 'bg-white/10 text-white shadow-sm' : 'text-[#9CA3AF] hover:text-white hover:bg-white/5'}`}
-                >
-                  7D
-                </button>
-                <button 
-                  onClick={() => setTimeframe('30d')} 
-                  className={`px-4 py-1.5 rounded-lg text-xs font-semibold tracking-wider transition-colors ${timeframe === '30d' ? 'bg-white/10 text-white shadow-sm' : 'text-[#9CA3AF] hover:text-white hover:bg-white/5'}`}
-                >
-                  30D
-                </button>
-                <button 
-                  onClick={() => setTimeframe('90d')} 
-                  className={`px-4 py-1.5 rounded-lg text-xs font-semibold tracking-wider transition-colors ${timeframe === '90d' ? 'bg-white/10 text-white shadow-sm' : 'text-[#9CA3AF] hover:text-white hover:bg-white/5'}`}
-                >
-                  90D
-                </button>
-              </div>
-            </div>
-            <div className="h-[280px] w-full">
-              <ResponsiveContainer width="100%" height="100%" minWidth={10} minHeight={10}>
-                <AreaChart data={CHART_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorSearch" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#D9F111" stopOpacity={0.6}/>
-                      <stop offset="95%" stopColor="#D9F111" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#7C5CFF" stopOpacity={0.6}/>
-                      <stop offset="95%" stopColor="#7C5CFF" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                  <XAxis dataKey="name" tick={{fill: '#9CA3AF', fontSize: 12}} axisLine={false} tickLine={false} dy={10} />
-                  <YAxis yAxisId="left" tick={{fill: '#9CA3AF', fontSize: 12}} axisLine={false} tickLine={false} />
-                  <YAxis yAxisId="right" orientation="right" tick={{fill: '#9CA3AF', fontSize: 12}} axisLine={false} tickLine={false} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: 'rgba(26,26,46,0.95)', backdropFilter: 'blur(10px)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.5)', padding: '12px' }}
-                    itemStyle={{ fontSize: '13px', fontWeight: '600', color: '#FFFFFF' }}
-                    labelStyle={{ color: '#9CA3AF', marginBottom: '8px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}
-                  />
-                  <Area yAxisId="left" type="natural" name="Search Appearances" dataKey="search_appearances" stroke="#D9F111" strokeWidth={3} fillOpacity={1} fill="url(#colorSearch)" activeDot={{ r: 6, fill: "#D9F111", stroke: "#000", strokeWidth: 2 }} />
-                  <Area yAxisId="left" type="natural" name="Profile Views" dataKey="profile_views" stroke="#7C5CFF" strokeWidth={3} fillOpacity={1} fill="url(#colorViews)" activeDot={{ r: 6, fill: "#7C5CFF", stroke: "#000", strokeWidth: 2 }}/>
-                  <Area yAxisId="right" type="natural" name="Collab Interest" dataKey="collab_interest" stroke="#10B981" strokeWidth={3} fill="none" activeDot={{ r: 6, fill: "#10B981", stroke: "#000", strokeWidth: 2 }}/>
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          {/* OPPORTUNITIES */}
-          <div className="bg-gradient-to-br from-[#7C3AED]/10 to-[#1A1A2E] border border-[#7C3AED]/20 shadow-[inset_0_0_20px_rgba(124,58,237,0.05),_0_0_15px_rgba(124,58,237,0.1)] rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-xl font-bold text-white">Opportunities</h3>
-                <p className="text-sm text-[#9CA3AF]">Campaigns matching your audience</p>
-              </div>
-              <Link to="/campaigns" className="text-sm font-bold text-[#7C3AED] hover:underline flex items-center gap-1">
-                View all <ChevronRight size={16}/>
-              </Link>
-            </div>
-
-            <div className="space-y-4">
-              {campaigns.map(c => (
-                <div key={c.id} className="bg-black/20 border border-[rgba(255,255,255,0.08)] rounded-xl p-5 hover:border-[#7C3AED]/30 transition-colors">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#1A1A2E] border border-[rgba(255,255,255,0.08)] flex items-center justify-center overflow-hidden font-bold text-white">
-                        {c.brand_photo ? <img src={c.brand_photo} className="w-full h-full object-cover"/> : c.brand_name.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="font-bold text-white text-sm">{c.brand_name}</div>
-                        <div className="text-xs text-[#9CA3AF] truncate max-w-[200px]">Strategic Partnership</div>
-                      </div>
-                    </div>
-                    <div className="text-xs text-[#9CA3AF]">2h ago</div>
+               
+               {/* Floating Brand Elements */}
+               <div className="absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none hidden md:block">
+                  {/* Decorative blobs/images matching the screenshot */}
+                  <div className="absolute top-[10%] right-[40%] bg-[var(--bg-card)] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-2 rotate-[-5deg] w-24">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=200&auto=format&fit=crop" className="w-full h-auto rounded-xl" alt="Shoe" />
                   </div>
-                  <div className="text-sm text-white/80 mb-4 line-clamp-2 leading-relaxed">
-                    {c.text || c.description}
+                  <div className="absolute top-[20%] right-[15%] bg-[var(--bg-card)] rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-4 rotate-[10deg]">
+                    <span className="font-black text-xl tracking-tighter">boAt</span>
                   </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-[rgba(255,255,255,0.05)]">
-                    <div className="flex gap-2">
-                       <span className="px-3 py-1 bg-[#7C3AED]/10 text-[#7C3AED] text-xs font-bold rounded-lg tracking-wide">
-                        ₹{c.budget?.toLocaleString() || '15,000'}
-                      </span>
-                      <span className="px-3 py-1 bg-[#1A1A2E] border border-[rgba(255,255,255,0.08)] text-[#9CA3AF] text-xs font-bold rounded-lg tracking-wide hidden sm:block">
-                        {c.category}
-                      </span>
-                    </div>
-                    {appliedCampaigns[c.id] ? (
-                      <button disabled className="px-4 py-1.5 bg-[#10B981]/10 text-[#10B981] text-xs font-bold rounded-lg flex items-center gap-1">
-                        APPLIED <Check size={14}/>
-                      </button>
-                    ) : (
-                      <button onClick={() => setApplyModalItem(c)} className="px-4 py-1.5 bg-transparent border border-white text-white hover:bg-white hover:text-black transition-colors text-xs font-bold rounded-lg tracking-wider">
-                        APPLY
-                      </button>
-                    )}
+                  <div className="absolute bottom-[25%] right-[55%] bg-[var(--bg-card)] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-3 rotate-[-10deg]">
+                    <span className="font-black text-[#00A859] tracking-tighter text-lg">mCaffeine</span>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                  <div className="absolute bottom-[35%] right-[30%] bg-[var(--bg-card)] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-3 rotate-[5deg]">
+                    <span className="font-bold text-[#00AFEF] tracking-tight">mamaearth</span>
+                  </div>
+                  <div className="absolute bottom-[10%] right-[45%] bg-[#E23744] text-[var(--text-primary)] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-3 rotate-[-5deg] z-10">
+                    <span className="font-black tracking-tighter">zomato</span>
+                  </div>
+                  <div className="absolute top-[40%] right-[5%] bg-[#E80071] text-[var(--text-primary)] rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-3 rotate-[15deg]">
+                    <span className="font-black tracking-widest text-sm">NYKAA</span>
+                  </div>
+                  
+                  {/* Creator Portraits */}
+                  <div className="absolute bottom-0 right-[10%] w-48 h-64 overflow-hidden z-0">
+                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover rounded-t-[2rem]" alt="Creator" />
+                  </div>
+               </div>
+               
+               {/* Dots */}
+               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+                 <div className="h-1.5 w-6 bg-[var(--violet)] rounded-full"></div>
+                 <div className="h-1.5 w-6 bg-[var(--border-default)] rounded-full"></div>
+                 <div className="h-1.5 w-6 bg-[var(--border-default)] rounded-full"></div>
+               </div>
+             </div>
+           )}
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="space-y-6">
+        {/* Right Column: Pending Tasks & Inbox */}
+        <div className="flex flex-col gap-6">
           
-          {/* ROTATING WIDGETS */}
-          <div className="bg-gradient-to-br from-[#7C3AED]/10 to-[#1A1A2E] border border-[#7C3AED]/20 shadow-[inset_0_0_20px_rgba(124,58,237,0.05),_0_0_15px_rgba(124,58,237,0.1)] rounded-2xl px-6 pt-5 pb-6 overflow-hidden relative" style={{ minHeight: '190px' }}>
-            <div className="flex justify-center gap-1.5 mb-5 relative z-20">
-              {[0,1,2].map(i => (
-                <button key={i} onClick={() => setWidgetIndex(i)} className={`h-1.5 rounded-full transition-all ${widgetIndex === i ? 'w-6 bg-[#7C3AED]' : 'w-2 bg-[#9CA3AF]/40'}`} />
-              ))}
-            </div>
-            <AnimatePresence mode="wait">
-              {widgetIndex === 0 && (
-                <motion.div key="w1" initial={{opacity:0, x:20}} animate={{opacity:1, x:0}} exit={{opacity:0, x:-20}} transition={{duration:0.3}} className="relative">
-                  <div className="text-sm font-bold text-[#9CA3AF] mb-4">Impact Metric</div>
-                  <div className="text-[#9CA3AF] text-sm mb-1">Avg. Engagement</div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-4xl font-black text-white">4.8%</span>
-                    <span className="text-[#10B981] flex items-center font-bold text-sm">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
-                      1.2%
-                    </span>
-                  </div>
-                  <div className="text-sm text-[#9CA3AF] mt-1">Above average</div>
-                  <button onClick={() => { navigator.clipboard.writeText(window.location.origin + '/creator/' + user.id); toast.success('Link copied!') }} className="absolute bottom-0 right-0 w-12 h-12 bg-[#7C3AED] rounded-full flex items-center justify-center text-white hover:scale-105 transition-transform shadow-lg shadow-[#7C3AED]/30">
-                    <Share2 size={20} />
-                  </button>
-                </motion.div>
-              )}
-              {widgetIndex === 1 && (
-                <motion.div key="w2" initial={{opacity:0, x:20}} animate={{opacity:1, x:0}} exit={{opacity:0, x:-20}} transition={{duration:0.3}} className="relative">
-                  <div className="text-sm font-bold text-[#9CA3AF] mb-4">Active Opportunities</div>
-                  <div className="text-[#9CA3AF] text-sm mb-1">Ongoing Collabs</div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-4xl font-black text-white">{collabCount}</span>
-                    <span className="text-[#10B981] font-bold">
-                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-                    </span>
-                  </div>
-                  <div className="text-sm text-[#9CA3AF] mt-1">Active right now</div>
-                  <button onClick={() => navigate('/collabs')} className="absolute bottom-0 right-0 w-12 h-12 bg-[#7C3AED] rounded-full flex items-center justify-center text-white hover:scale-105 transition-transform shadow-lg shadow-[#7C3AED]/30">
-                    <ArrowRight size={20} />
-                  </button>
-                </motion.div>
-              )}
-              {widgetIndex === 2 && (
-                <motion.div key="w3" initial={{opacity:0, x:20}} animate={{opacity:1, x:0}} exit={{opacity:0, x:-20}} transition={{duration:0.3}} className="relative">
-                  <span className="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-[10px] font-bold rounded-lg uppercase tracking-wider mb-2 inline-block">REFERRAL BONUS</span>
-                  <h4 className="text-xl font-bold text-white mb-2">Earn ₹2,500 Cash</h4>
-                  <p className="text-[11px] text-[#9CA3AF] mb-4 leading-relaxed line-clamp-2">Refer creator friends to Ybex. Earn directly upon their first successful brand payout settlement!</p>
-                  <button onClick={() => { navigator.clipboard.writeText('https://ybex.io/invite'); toast.success('Invite link copied!') }} className="w-full py-2.5 bg-white text-black font-bold text-xs uppercase tracking-wider rounded-xl transition-transform hover:scale-[1.02]">
-                    COPY INVITE LINK
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          {/* Pending Tasks (Important for you) */}
+          <div className="bg-[var(--bg-card)] rounded-[1.5rem] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[var(--border-default)] flex flex-col aspect-square relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-3xl"></div>
+             <div className="absolute bottom-0 left-0 w-32 h-32 bg-[var(--violet)]/5 rounded-full blur-3xl"></div>
+             
+             <div className="relative z-10 flex-1 flex flex-col">
+               <div className="mb-4">
+                 <span className="inline-block bg-orange-100 text-orange-600 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 animate-pulse border border-orange-200">
+                   Action Required
+                 </span>
+                 <h4 className="text-xl font-bold text-[var(--text-primary)] tracking-tight">Important For You</h4>
+                 <p className="text-xs text-[var(--text-secondary)] mt-1">Complete these steps to boost your reach</p>
+               </div>
+               
+               <div className="flex flex-col gap-3 flex-1 overflow-y-auto custom-scrollbar pr-1 mt-2">
+                 {(() => {
+                   const tasks = [];
+                   if (!user?.kyc_verified) {
+                     tasks.push({ 
+                       id: 'kyc', 
+                       icon: AlertTriangle, 
+                       iconColor: 'text-orange-500',
+                       title: 'Complete Financial KYC', 
+                       desc: 'Compliance regulations require active Identity and Bank verification before applying to campaign orders. Unlock high-paying contracts!', 
+                       btnText: 'Complete Verification',
+                       link: '/settings' 
+                     });
+                   }
+                   if (!user?.has_previous_collabs) {
+                     tasks.push({ 
+                       id: 'portfolio', 
+                       icon: Briefcase, 
+                       iconColor: 'text-orange-400',
+                       title: 'Update Portfolio', 
+                       desc: 'Your previous collaborations section is empty. Adding past brand work increases selection chance by 40%.', 
+                       btnText: 'Add Details',
+                       link: '/profile/public',
+                       dot: true
+                     });
+                   }
+                   if (!user?.profile_completed) {
+                     tasks.push({ 
+                       id: 'profile', 
+                       icon: User, 
+                       iconColor: 'text-blue-500',
+                       title: 'Complete your profile', 
+                       desc: 'Finish onboarding to attract top brands', 
+                       btnText: 'Complete Profile',
+                       link: '/profile/public' 
+                     });
+                   }
+                   if (!user?.rate_card_added) {
+                     tasks.push({ 
+                       id: 'rate', 
+                       icon: FileText, 
+                       iconColor: 'text-rose-500',
+                       title: 'Add your charges and prices',
+                        desc: 'Add your rate card so the brand can view your pricing.', 
+                       btnText: 'Add Rates',
+                       link: '/settings' 
+                     });
+                   }
+                   if (!user?.bank_details_added) {
+                     tasks.push({ 
+                       id: 'bank', 
+                       icon: Wallet, 
+                       iconColor: 'text-emerald-500',
+                       title: 'Add Bank Details',
+                        desc: 'Add your bank details to receive payments and credit your account.', 
+                       btnText: 'Add Bank',
+                       link: '/settings' 
+                     });
+                   }
+                   if (tasks.length < 3) {
+                     tasks.push({ 
+                       id: 'campaign', 
+                       icon: Megaphone, 
+                       iconColor: 'text-[var(--violet)]',
+                       title: 'Apply to a Campaign',
+                        desc: 'You have not applied for any campaigns yet. Start earning by applying to your first campaign!', 
+                       btnText: 'Explore',
+                       link: '/explore' 
+                     });
+                   }
+                   
+                   if (tasks.length === 0) {
+                     return (
+                       <div className="flex-1 flex flex-col items-center justify-center text-center text-[var(--text-tertiary)]">
+                          <span className="text-2xl mb-2">🎉</span>
+                          <p className="text-sm font-medium">You are all caught up!</p>
+                       </div>
+                     );
+                   }
+                   
+                   return tasks.map(task => {
+                     const Icon = task.icon;
+                     return (
+                       <Link to={task.link} key={task.id} className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-2xl p-4 cursor-pointer hover:bg-[var(--bg-card)] hover:shadow-sm transition-all group relative shrink-0">
+                         {task.dot && <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-orange-400"></div>}
+                         <div className="flex items-center gap-2 mb-1.5">
+                           <Icon size={14} className={task.iconColor} />
+                           <h5 className="font-bold text-sm text-[var(--text-primary)]">{task.title}</h5>
+                         </div>
+                         <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed mb-3">
+                           {task.desc}
+                         </p>
+                         <span className="text-[10px] font-bold text-[var(--violet)] uppercase tracking-wider group-hover:text-[#4a35d4] transition-colors flex items-center gap-1">
+                           {task.btnText} <ChevronRight size={12} />
+                         </span>
+                       </Link>
+                     );
+                   });
+                 })()}
+               </div>
+             </div>
           </div>
 
-          {/* PENDING TASKS */}
-          <div className="bg-gradient-to-br from-[#7C3AED]/10 to-[#1A1A2E] border border-[#7C3AED]/20 shadow-[inset_0_0_20px_rgba(124,58,237,0.05),_0_0_15px_rgba(124,58,237,0.1)] rounded-2xl p-6">
-            <span className="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-[10px] font-bold rounded-lg uppercase tracking-wider mb-4 inline-block">ACTION REQUIRED</span>
-            <h3 className="text-xl font-bold text-white mb-1">Pending Tasks</h3>
-            <p className="text-sm text-[#9CA3AF] mb-5">Complete these steps to boost your reach</p>
+          {/* Inbox Box */}
+          <div className="bg-[var(--bg-card)] rounded-[1.5rem] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-[var(--border-default)] flex flex-col aspect-square relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--violet)]/5 rounded-full blur-3xl"></div>
+             
+             <div className="relative z-10 flex-1 flex flex-col">
+               <div className="flex justify-between items-center mb-4">
+                 <div>
+                   <h4 className="text-xl font-bold text-[var(--text-primary)] tracking-tight">Inbox</h4>
+                   <p className="text-xs text-[var(--text-secondary)] mt-1">Recent messages & updates</p>
+                 </div>
+                 <span className="w-6 h-6 rounded-full bg-[var(--violet)] flex items-center justify-center text-xs font-bold text-white animate-pulse">2</span>
+               </div>
+               
+               <div className="flex flex-col gap-0 flex-1 overflow-y-auto custom-scrollbar pr-1 mt-2 divide-y divide-[var(--border-default)]">
+                   <div className="py-3 flex items-start gap-3 cursor-pointer group">
+                     <div className="relative shrink-0">
+                       <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=100&auto=format&fit=crop" className="w-10 h-10 rounded-full object-cover border border-[var(--border-default)]" alt="Brand" />
+                       <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[var(--bg-card)]"></div>
+                     </div>
+                     <div className="flex-1 min-w-0 pt-0.5">
+                       <div className="flex justify-between items-center mb-0.5">
+                         <h5 className="font-bold text-sm text-[var(--text-primary)] truncate group-hover:text-[var(--violet)] transition-colors">Nike Sports</h5>
+                         <span className="text-[10px] font-medium text-[var(--violet)]">2m ago</span>
+                       </div>
+                       <p className="text-[11px] text-[var(--text-secondary)] truncate font-semibold group-hover:text-[var(--text-primary)] transition-colors">
+                         Hey, we loved your recent reel! Are you available...
+                       </p>
+                     </div>
+                   </div>
 
-            <div className="space-y-3">
-              {/* KYC Status banner */}
-              {(!kycObj || kycObj.status !== "approved") ? (
-                kycObj?.status === "pending" ? (
-                  <div className="bg-yellow-500/5 p-4 rounded-xl border border-yellow-500/20 shadow-md">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-bold text-white text-sm flex items-center gap-1.5 text-yellow-400">⏳ KYC Review in Progress</h4>
-                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse" />
-                    </div>
-                    <p className="text-xs text-[#9CA3AF] mb-3 leading-relaxed">Our compliance team is verifying your payment integrations and ID details. Standard manual review finishes in 24 hours.</p>
-                    <Link to="/settings#kyc-section" className="text-xs font-bold text-yellow-400 hover:underline flex items-center gap-1 uppercase tracking-wider">Document Checklist <ChevronRight size={14}/></Link>
-                  </div>
-                ) : kycObj?.status === "rejected" ? (
-                  <div className="bg-red-500/10 p-4 rounded-xl border border-red-500/25 shadow-md">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-bold text-white text-sm flex items-center gap-1.5 text-red-500">❌ KYC Discrepancy Alert</h4>
-                      <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                    </div>
-                    <p className="text-xs text-[#9CA3AF] mb-3 leading-relaxed">Your submitted KYC credentials were rejected. Correction: "{kycObj.review_note || "Invalid proof files."}". Please update immediately.</p>
-                    <Link to="/settings#kyc-section" className="text-xs font-bold text-red-400 hover:underline flex items-center gap-1 uppercase tracking-wider">Fix & Resubmit Details <ChevronRight size={14}/></Link>
+                   <div className="py-3 flex items-start gap-3 cursor-pointer group opacity-80 hover:opacity-100 transition-opacity">
+                     <div className="relative shrink-0">
+                       <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=100&auto=format&fit=crop" className="w-10 h-10 rounded-full object-cover border border-[var(--border-default)]" alt="Brand" />
+                     </div>
+                     <div className="flex-1 min-w-0 pt-0.5">
+                       <div className="flex justify-between items-center mb-0.5">
+                         <h5 className="font-bold text-sm text-[var(--text-primary)] truncate">Zomato</h5>
+                         <span className="text-[10px] font-medium text-[var(--text-tertiary)]">1h ago</span>
+                       </div>
+                       <p className="text-[11px] text-[var(--text-secondary)] truncate">
+                         Your content has been approved. Payment...
+                       </p>
+                     </div>
+                   </div>
+                   
+                   <div className="py-3 flex items-start gap-3 cursor-pointer group">
+                     <div className="relative shrink-0">
+                       <div className="w-10 h-10 rounded-full bg-[var(--violet)]/10 text-[var(--violet)] flex items-center justify-center font-bold text-sm border border-[var(--border-default)]">S</div>
+                       <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-[var(--bg-card)]"></div>
+                     </div>
+                     <div className="flex-1 min-w-0 pt-0.5">
+                       <div className="flex justify-between items-center mb-0.5">
+                         <h5 className="font-bold text-sm text-[var(--text-primary)] truncate group-hover:text-[var(--violet)] transition-colors">Support Team</h5>
+                         <span className="text-[10px] font-medium text-[var(--violet)]">3h ago</span>
+                       </div>
+                       <p className="text-[11px] text-[var(--text-secondary)] truncate font-semibold group-hover:text-[var(--text-primary)] transition-colors">
+                         We've upgraded your profile to Pro! 🚀
+                       </p>
+                     </div>
+                   </div>
+               </div>
+             </div>
+          </div>
+          
+        </div>
+      </div>
+
+      {/* 4 Compact Stats Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+         {[
+           { icon: Eye, label: "Profile Views", value: 1200, format: true, trend: "↑ 18% this week", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 25 L20 15 L40 20 L60 5 L80 15 L100 0", stroke: "var(--violet)" },
+           { icon: Heart, label: "Brand Interest", value: 32, trend: "↑ 12% this week", color: "text-rose-500", bg: "bg-rose-500/10", chartLine: "M0 20 L20 25 L40 10 L60 15 L80 5 L100 10", stroke: "#f43f5e" },
+           { icon: Briefcase, label: "Active Deals", value: 4, sub: "2 in review", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 10 L20 5 L40 15 L60 10 L80 20 L100 15", stroke: "var(--violet)" },
+           { icon: Wallet, label: "Earnings (This Month)", value: monthlyEarnings, prefix: "₹", format: true, trend: "↑ 22% vs last month", color: "text-[var(--violet)]", bg: "bg-[var(--violet)]/10", chartLine: "M0 25 L20 20 L40 15 L60 20 L80 5 L100 0", stroke: "var(--violet)" }
+         ].map((s, i) => (
+           <div key={i} className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-[1.5rem] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+             <div className="flex items-center gap-3 mb-4 z-10 relative">
+               <div className={`w-10 h-10 rounded-full ${s.bg} ${s.color} flex items-center justify-center`}>
+                 <s.icon size={18} />
+               </div>
+               <span className="text-xs font-bold text-[var(--text-secondary)]">{s.label}</span>
+             </div>
+             
+             <div className="flex flex-col z-10 relative">
+                <div className="text-[28px] font-bold text-[var(--text-primary)] tracking-tight mb-2">
+                  <AnimatedNumber value={s.value} format={s.format} prefix={s.prefix} />
+                </div>
+                {s.trend ? (
+                  <div className="text-[11px] font-bold text-emerald-500">
+                    {s.trend}
                   </div>
                 ) : (
-                  <div className="bg-gradient-to-r from-red-500/5 to-transparent p-4 rounded-xl border border-red-500/20 shadow-md">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-bold text-white text-sm flex items-center gap-1.5 text-red-400 animate-pulse">⚠️ Complete Financial KYC</h4>
-                      <div className="w-2 h-2 rounded-full bg-red-400 animate-ping" />
-                    </div>
-                    <p className="text-xs text-[#9CA3AF] mb-3 leading-relaxed">Compliance regulations require active Identity and Bank verification before applying to campaign orders. Unlock high-paying contracts!</p>
-                    <Link to="/settings?section=kyc#kyc-section" className="text-xs font-bold text-[#7C3AED] hover:text-[#9D7CFF] flex items-center gap-1 uppercase tracking-wider">Complete Verification <ChevronRight size={14}/></Link>
+                  <div className="text-[11px] font-bold text-[var(--text-tertiary)]">
+                    {s.sub}
                   </div>
-                )
-              ) : (
-                <div className="bg-emerald-500/5 p-4 rounded-xl border border-emerald-500/15 shadow-md">
-                  <div className="flex items-center justify-between mb-1">
-                    <h4 className="font-bold text-white text-sm flex items-center gap-1.5 text-emerald-400">✓ Compliance KYC Active</h4>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  </div>
-                  <p className="text-[11px] text-[#9CA3AF] leading-relaxed">Your ID, bank connection and credentials have been verified. Unlimited contract applications activated.</p>
-                </div>
-              )}
-
-              {(!profile.portfolio || profile.portfolio === "") && (
-                <div className="bg-black/20 p-4 rounded-xl border border-[rgba(255,255,255,0.05)]">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-bold text-white text-sm">Update Portfolio</h4>
-                    <div className="w-2 h-2 rounded-full bg-[#F59E0B]" />
-                  </div>
-                  <p className="text-xs text-[#9CA3AF] mb-3 leading-relaxed">Your previous collaborations section is empty. Adding past brand work increases selection chance by 40%.</p>
-                  <Link to="/settings/profile" className="text-xs font-bold text-[#7C3AED] flex items-center gap-1 uppercase tracking-wider">ADD DETAILS <ChevronRight size={14}/></Link>
-                </div>
-              )}
-              
-              <div className="bg-black/20 p-4 rounded-xl border border-[rgba(255,255,255,0.05)]">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-white text-sm">Apply to 3 New Briefs</h4>
-                  <div className="w-2 h-2 rounded-full bg-[#D9F111]" />
-                </div>
-                <p className="text-xs text-[#9CA3AF] mb-3 leading-relaxed">You match the requirements for top paying campaigns in your city. Don't miss out.</p>
-                <Link to="/campaigns" className="text-xs font-bold text-[#7C3AED] flex items-center gap-1 uppercase tracking-wider">VIEW MATCHES <ChevronRight size={14}/></Link>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
+                )}
+             </div>
+             
+             {/* Mini sparkline chart */}
+             <div className="absolute right-4 bottom-4 w-1/3 h-10 opacity-40">
+               <svg viewBox="0 0 100 30" className="w-full h-full fill-none stroke-[3px] stroke-linecap-round stroke-linejoin-round" preserveAspectRatio="none">
+                 <path d={s.chartLine} stroke={s.stroke} />
+               </svg>
+             </div>
+           </div>
+         ))}
       </div>
 
-      {/* FOOTER */}
-      <div className="pt-24 pb-8 mt-12 relative z-0 flex flex-col items-start justify-center text-left">
-        <h2 className="font-sans font-black tracking-tighter text-4xl sm:text-6xl text-white opacity-[0.06] mb-2 pointer-events-none select-none">
-          Your Next<br/>Collaboration<br/>Starts Here
-        </h2>
-        <p className="text-white/40 text-sm font-medium mb-12 pointer-events-none select-none">
-          Connecting creators and brands through meaningful partnerships.
-        </p>
-        <div className="text-[10px] text-white/30 font-bold tracking-widest uppercase flex flex-col sm:flex-row items-start sm:items-center justify-between w-full pt-8 border-t border-[rgba(255,255,255,0.05)]">
-          <div className="mb-4 sm:mb-0">
-            © 2024 Ybex Marketplace
+      {/* Main Content Area */}
+      <div className="flex flex-col gap-8">
+        
+        {/* Left Column (Recommended Campaigns) */}
+        <div className="w-full flex flex-col gap-6">
+          <div className="flex justify-between items-center mb-2">
+             <div className="flex flex-col">
+               <h3 className="text-xl font-bold text-[var(--text-primary)] tracking-tight">Recent campaigns</h3>
+               <span className="text-sm font-medium text-[var(--text-secondary)]">by Brands & Agencies</span>
+             </div>
+             <Link to="/explore" className="text-sm font-bold text-[var(--violet)] hover:underline flex items-center gap-1 bg-[var(--bg-elevated)] px-4 py-2 rounded-full transition-colors border border-[var(--border-default)]">View all <ArrowRight size={14}/></Link>
           </div>
-          <div className="flex items-center">
-            Crafted with <span className="text-red-500 mx-1">❤️</span> by 
-            <span className="text-[#7C5CFF] ml-1 transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(124,92,255,0.8)] cursor-pointer">Team YBEX</span>
+          
+          <div className="flex overflow-x-auto gap-4 pb-4 snap-x hide-scrollbar">
+             {(campaigns.length > 0 ? campaigns : [
+               { title: 'Fitness Creator Campaign', name: 'Avantika Pandey', role: 'Influencer Marketing Manager', company: 'Nike', price_range: '18,000 - 30,000', platform: 'Instagram', brand_logo: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop', views: 409, applied: 124, category: 'Fitness & Sports' },
+               { title: 'Skincare UGC Campaign', name: 'Mainak Das', role: 'Creative Head', company: 'Intuitive', price_range: '12,000 - 22,000', platform: 'YouTube', brand_logo: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300&auto=format&fit=crop', views: 245, applied: 86, category: 'Beauty & Skincare' },
+               { title: 'Food Creator Campaign', name: 'Taranjot Kaur', role: 'Influencer Marketing Manager', company: 'Zomato', price_range: '15,000 - 25,000', platform: 'Instagram', brand_logo: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=300&auto=format&fit=crop', views: 532, applied: 201, category: 'Food & Beverage' }
+             ]).map((c, i) => (
+                <div key={i} onClick={() => handleCampaignTap(c.campaign_id || i, i)} className="snap-start shrink-0 w-[85%] md:w-[400px] bg-[var(--bg-card)] rounded-[1.5rem] border border-[var(--border-default)] p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col justify-between cursor-pointer hover:border-[var(--violet)]/50 transition-colors">
+                   <div className="flex justify-between items-start mb-4">
+                      <div className="flex gap-3">
+                         <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-[var(--border-default)]">
+                            <img src={c.brand_logo || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=150&auto=format&fit=crop'} alt="Brand Profile" className="w-full h-full object-cover" />
+                         </div>
+                         <div>
+                            <h4 className="font-bold text-[var(--text-primary)] text-sm flex items-center gap-1">{c.brand_name || c.company || 'Brand Manager'} <CheckCircle size={12} className="text-emerald-500" /></h4>
+                            <p className="text-xs text-[var(--text-secondary)] font-medium mt-0.5 flex items-center gap-1"><Briefcase size={10} /> {c.targetAudience ? (c.targetAudience.split(',')[1] || c.targetAudience.split(',')[0]).trim() : (c.category || 'Campaign Category')}</p>
+                            <p className="text-[10px] text-[var(--text-tertiary)] mt-1">1d ago</p>
+                         </div>
+                      </div>
+                      <Link to={`/campaign/${c.campaign_id || i}`} className="w-8 h-8 rounded-full border border-[var(--border-default)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] transition-colors"><ArrowRight size={14}/></Link>
+                   </div>
+                   
+                   <p className="text-sm font-medium text-[var(--text-primary)] mb-4 line-clamp-2">Campaign Theme: <span className="font-normal text-[var(--text-secondary)]">{c.title} - The influencer buys a product from a local retail shop, then tracks its journey back...</span></p>
+                   
+                   <div className="flex items-center gap-4 text-xs mb-4">
+                      <div className="flex items-center gap-2">
+                         <span className="text-[var(--text-primary)] bg-[var(--bg-elevated)] p-1.5 rounded-lg border border-[var(--border-default)]"><IndianRupee size={14}/></span>
+                         <div>
+                            <div className="text-[10px] text-[var(--text-tertiary)]">Per Influencer</div>
+                            <div className="font-semibold text-[var(--text-primary)]">{c.price_range || `₹10,000`}</div>
+                         </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                         <span className="text-[var(--text-primary)] bg-[var(--bg-elevated)] p-1.5 rounded-lg border border-[var(--border-default)]"><Megaphone size={14}/></span>
+                         <div>
+                            <div className="text-[10px] text-[var(--text-tertiary)]">Brand collab with</div>
+                            <div className="font-semibold text-[var(--text-primary)]">{c.company || c.brand_name || 'Brand'}</div>
+                         </div>
+                      </div>
+                   </div>
+
+                   <div className="border-t border-[var(--border-default)] pt-3 flex items-center gap-2 text-xs font-semibold text-[var(--text-secondary)]">
+                      <span className="flex items-center gap-1.5"><Eye size={14} className="anim-blink"/> {c.views || 0} Views</span>
+                      <span className="w-1 h-1 bg-[var(--border-default)] rounded-full"></span>
+                      {(() => {
+                         const count = c.applied || (c.applicants ? c.applicants.length : 0) || 124;
+                         const mockAvatars = [
+                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop",
+                            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=64&h=64&fit=crop",
+                            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=64&h=64&fit=crop"
+                         ];
+                         let displayAvatars = mockAvatars;
+                         if (c.applicants && c.applicants.length > 0) {
+                            displayAvatars = c.applicants.slice(0, 3).map((a, idx) => a.creator_photo || mockAvatars[idx % mockAvatars.length]);
+                         }
+                         return (
+                            <div className="flex items-center gap-1.5 text-[var(--violet)] bg-[var(--violet)]/10 px-2 py-1 rounded-md">
+                               <div className="flex -space-x-1.5 mr-0.5">
+                                  {displayAvatars.map((src, idx) => (
+                                     <img key={idx} className="w-4 h-4 rounded-full border border-[var(--bg-card)] shadow-sm" src={src} alt="avatar" />
+                                  ))}
+                               </div>
+                               <span>{count}+ creators applied</span>
+                            </div>
+                         );
+                      })()}
+                   </div>
+                </div>
+             ))}
+          </div>
+
+          <div className="mt-8 flex justify-between items-center mb-2">
+             <h3 className="text-lg font-bold text-[var(--text-primary)] tracking-tight">Your Active Deals</h3>
+             <Link to="/creator/ugc/orders" className="text-sm font-bold text-[var(--violet)] hover:underline">View All</Link>
+          </div>
+          <div className="flex gap-2">
+            <button className="bg-[var(--violet)] text-white text-xs font-bold px-4 py-2 rounded-full shadow-sm">All</button>
+            <button className="bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-default)] text-xs font-bold px-4 py-2 rounded-full hover:bg-[var(--bg-elevated)] transition-colors">In Progress</button>
+            <button className="bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-default)] text-xs font-bold px-4 py-2 rounded-full hover:bg-[var(--bg-elevated)] transition-colors">Pending Review</button>
+            <button className="bg-[var(--bg-card)] text-[var(--text-secondary)] border border-[var(--border-default)] text-xs font-bold px-4 py-2 rounded-full hover:bg-[var(--bg-elevated)] transition-colors">Completed</button>
           </div>
         </div>
+
+
       </div>
-
-      {/* NOTIFICATION SLIDE PANEL */}
-      <AnimatePresence>
-        {showNotifPanel && (
-          <>
-            <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={() => setShowNotifPanel(false)} className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm" />
-            <motion.div initial={{x:400}} animate={{x:0}} exit={{x:400}} transition={{type:'spring', damping:25, stiffness:200}} className="fixed top-0 right-0 w-full max-w-sm h-full bg-card z-50 border-l border-border shadow-2xl flex flex-col">
-              <div className="flex items-center justify-between p-6 border-b border-[rgba(255,255,255,0.08)]">
-                <h2 className="text-xl font-bold text-white">Notifications</h2>
-                <button onClick={() => setShowNotifPanel(false)} className="p-2 -mr-2 text-[#9CA3AF] hover:text-white transition-colors"><X size={20}/></button>
-              </div>
-              <div className="p-4 flex justify-end">
-                <button onClick={handleMarkAllRead} className="text-[#7C3AED] text-sm font-bold hover:underline">Mark all read</button>
-              </div>
-              <div className="flex-1 overflow-y-auto px-4 pb-6 space-y-2">
-                {notifications.map(n => (
-                  <div key={n.id} onClick={() => setShowNotifPanel(false)} className={`p-4 rounded-xl cursor-pointer hover:bg-white/5 transition-colors relative border ${!n.read ? 'border-[#7C3AED]/30 bg-[#7C3AED]/5' : 'border-transparent'}`}>
-                    {!n.read && <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-[#7C3AED]" />}
-                    <h4 className="text-white font-bold text-sm pr-6">{n.title}</h4>
-                    <p className="text-xs text-[#9CA3AF] mt-1 leading-relaxed">{n.message}</p>
-                    <div className="text-[10px] text-[#9CA3AF] mt-3 font-semibold">Just now</div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* APPLY MODAL */}
-      <AnimatePresence>
-        {applyModalItem && (
-          <>
-            <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={() => setApplyModalItem(null)} className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm flex items-end justify-center pb-0 sm:items-center sm:p-4" />
-            <motion.div 
-              initial={{ y: "100%" }} 
-              animate={{ y: 0 }} 
-              exit={{ y: "100%" }} 
-              transition={{type:'spring', damping:25, stiffness:200}} 
-              className="fixed bottom-0 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 left-0 sm:left-1/2 sm:-translate-x-1/2 w-full sm:max-w-md bg-[#1A1A2E] z-50 rounded-t-3xl sm:rounded-3xl border sm:border-[rgba(255,255,255,0.08)] shadow-2xl p-6 sm:p-8"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-white truncate pr-4">{applyModalItem.title || applyModalItem.brand_name}</h2>
-                <button onClick={() => setApplyModalItem(null)} className="p-2 -mr-2 text-[#9CA3AF] hover:text-white transition-colors"><X size={20}/></button>
-              </div>
-              <div className="space-y-5">
-                <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] block mb-2">Your Proposed Rate (₹)</label>
-                  <input type="number" required value={applyForm.rate} onChange={(e) => setApplyForm({...applyForm, rate: e.target.value})} className="w-full bg-[#0D0D1A] border border-[rgba(255,255,255,0.15)] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#7C3AED]" placeholder="e.g. 15000" />
-                </div>
-                <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#9CA3AF] block mb-2">Message to Brand</label>
-                  <textarea maxLength={200} required rows={4} value={applyForm.message} onChange={(e) => setApplyForm({...applyForm, message: e.target.value})} className="w-full bg-[#0D0D1A] border border-[rgba(255,255,255,0.15)] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#7C3AED] resize-none" placeholder="Why are you a good fit?" />
-                  <div className="text-right text-[10px] text-[#9CA3AF] mt-2 font-mono">{applyForm.message.length}/200</div>
-                </div>
-                <button onClick={handleApplySubmit} className="w-full py-3.5 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold text-sm rounded-xl transition-colors shadow-lg shadow-[#7C3AED]/20">
-                  Send Application →
-                </button>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      
     </div>
   );
 }

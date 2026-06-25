@@ -17,8 +17,8 @@ export function CustomDatePicker({ date, setDate, placeholder = "Pick a date", c
         <Button
           variant={"outline"}
           className={cn(
-            "w-full justify-start text-left font-normal bg-white/5 border-white/5 hover:bg-white/10 hover:text-white text-white rounded-xl py-6 px-4 font-mono",
-            !date && "text-white/50",
+            "w-full justify-start text-left font-normal bg-[var(--bg-elevated)] border-[var(--border-default)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] text-[var(--text-primary)] rounded-xl py-6 px-4 font-mono",
+            !date && "text-[var(--text-secondary)]",
             className
           )}
         >
@@ -40,20 +40,20 @@ export function CustomDatePicker({ date, setDate, placeholder = "Pick a date", c
             months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
             month: "space-y-4",
             month_caption: "flex justify-center pt-2 pb-2 relative items-center",
-            caption_label: "text-lg font-medium text-white",
+            caption_label: "text-lg font-medium text-[var(--text-primary)]",
             nav: "space-x-1 flex items-center",
             button_previous: cn(
-              "absolute left-4 top-8 h-8 w-8 bg-black/20 text-white hover:bg-white/10 flex items-center justify-center transition-colors border border-white/5 rounded-full z-10"
+              "absolute left-4 top-8 h-8 w-8 bg-[var(--bg-elevated)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] flex items-center justify-center transition-colors border border-[var(--border-default)] rounded-full z-10"
             ),
             button_next: cn(
-              "absolute right-4 top-8 h-8 w-8 bg-black/20 text-white hover:bg-white/10 flex items-center justify-center transition-colors border border-white/5 rounded-full z-10"
+              "absolute right-4 top-8 h-8 w-8 bg-[var(--bg-elevated)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] flex items-center justify-center transition-colors border border-[var(--border-default)] rounded-full z-10"
             ),
             month_grid: "w-full border-collapse space-y-2 text-center mt-4",
             weekdays: "flex w-full mt-4",
             weekday: "text-[#8a8b94] font-semibold text-[11px] uppercase tracking-wider w-10 flex items-center justify-center pb-2",
             week: "flex w-full mt-2 gap-1",
-            day: "h-10 w-10 p-0 font-normal rounded-full text-white hover:bg-white/10 transition-colors flex items-center justify-center text-sm",
-            selected: "bg-[#8b5cf6] text-white hover:bg-[#8b5cf6] hover:text-white rounded-full shadow-[0_0_15px_rgba(139,92,246,0.6)] font-bold",
+            day: "h-10 w-10 p-0 font-normal rounded-full text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-colors flex items-center justify-center text-sm",
+            selected: "bg-[#8b5cf6] text-[var(--text-primary)] hover:bg-[#8b5cf6] hover:text-[var(--text-primary)] rounded-full shadow-[0_0_15px_rgba(139,92,246,0.6)] font-bold",
             today: "text-[#8b5cf6] font-bold bg-[#8b5cf6]/10",
             outside: "text-[#4a4b50] opacity-30",
             disabled: "text-[#4a4b50] opacity-30",

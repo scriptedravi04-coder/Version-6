@@ -51,10 +51,10 @@ export default function AdminAnalytics() {
        </div>
 
        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-card border border-foreground/10 rounded-2xl p-6">
+          <div className="lg:col-span-2 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6">
              <div className="flex justify-between items-center mb-6">
                 <h3 className="font-semibold text-lg">Revenue Trend (30 Days)</h3>
-                <select className="bg-black/40 border border-foreground/10 rounded-lg px-3 py-1.5 text-xs focus:outline-none">
+                <select className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg px-3 py-1.5 text-xs focus:outline-none">
                    <option>Last 7 Days</option>
                    <option>Last 30 Days</option>
                    <option>Year to Date</option>
@@ -81,8 +81,8 @@ export default function AdminAnalytics() {
 
           <div className="space-y-6">
              {/* 8.2 User Count Overview */}
-             <div className="bg-card border border-foreground/10 rounded-2xl p-6">
-                <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider text-foreground/50">User Distribution</h3>
+             <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6">
+                <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider text-[var(--text-secondary)]">User Distribution</h3>
                 <div className="space-y-4">
                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2"><Users size={16} className="text-blue-400"/> Creators</div>
@@ -99,16 +99,16 @@ export default function AdminAnalytics() {
              </div>
 
              {/* 8.3 Referral Analytics Summary */}
-             <div className="bg-card border border-foreground/10 rounded-2xl p-6">
-                <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider text-foreground/50 flex items-center gap-2"><LinkIcon size={16}/> Referral Program</h3>
+             <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6">
+                <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider text-[var(--text-secondary)] flex items-center gap-2"><LinkIcon size={16}/> Referral Program</h3>
                 <div className="grid grid-cols-2 gap-4">
                    <div>
                       <div className="text-2xl font-bold">12.5%</div>
-                      <div className="text-xs text-foreground/50 leading-tight">Conversion Rate</div>
+                      <div className="text-xs text-[var(--text-secondary)] leading-tight">Conversion Rate</div>
                    </div>
                    <div>
                       <div className="text-2xl font-bold text-green-400">₹84K</div>
-                      <div className="text-xs text-foreground/50 leading-tight">Paid in Commission</div>
+                      <div className="text-xs text-[var(--text-secondary)] leading-tight">Paid in Commission</div>
                    </div>
                 </div>
              </div>
@@ -116,7 +116,7 @@ export default function AdminAnalytics() {
        </div>
 
        {/* 8.4 Campaign Stats */}
-       <div className="bg-card border border-foreground/10 rounded-2xl p-6">
+       <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6">
           <h3 className="font-semibold text-lg mb-6 flex items-center gap-2"><Megaphone size={20} className="text-[#9D7CFF]"/> Campaign Lifecycle Pipeline</h3>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
              <PipelineBox label="Created" value={formatNumber(stats.campaigns)} sub="All time" />
@@ -132,11 +132,11 @@ export default function AdminAnalytics() {
 
 function StatCard({ title, value, desc, icon, trend }) {
    return (
-      <div className="bg-card border border-foreground/10 rounded-2xl p-5 hover:border-foreground/30 transition-colors">
-         <div className="w-10 h-10 rounded-xl bg-foreground/5 flex items-center justify-center text-foreground/60 mb-4">{icon}</div>
-         <div className="text-sm font-medium text-foreground/50 mb-1">{title}</div>
-         <div className="font-display text-3xl font-bold text-white mb-2">{value}</div>
-         <div className={`text-xs flex items-center gap-1 ${trend === 'up' ? 'text-green-400' : trend === 'down' ? 'text-red-400' : 'text-foreground/40'}`}>
+      <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-5 hover:border-foreground/30 transition-colors">
+         <div className="w-10 h-10 rounded-xl bg-foreground/5 flex items-center justify-center text-[var(--text-primary)]/60 mb-4">{icon}</div>
+         <div className="text-sm font-medium text-[var(--text-secondary)] mb-1">{title}</div>
+         <div className="font-display text-3xl font-bold text-[var(--text-primary)] mb-2">{value}</div>
+         <div className={`text-xs flex items-center gap-1 ${trend === 'up' ? 'text-green-400' : trend === 'down' ? 'text-red-400' : 'text-[var(--text-tertiary)]'}`}>
             {trend === 'up' ? <ArrowUpRight size={14}/> : trend === 'down' ? <ArrowDownRight size={14}/> : null}
             {desc}
          </div>
@@ -146,10 +146,10 @@ function StatCard({ title, value, desc, icon, trend }) {
 
 function PipelineBox({ label, value, sub, active, success }) {
    return (
-      <div className={`p-4 rounded-xl border ${active ? 'bg-[#9D7CFF]/10 border-[#9D7CFF]/50' : success ? 'bg-green-500/10 border-green-500/30' : 'bg-black/40 border-foreground/10'}`}>
+      <div className={`p-4 rounded-xl border ${active ? 'bg-[#9D7CFF]/10 border-[#9D7CFF]/50' : success ? 'bg-green-500/10 border-green-500/30' : 'bg-[var(--bg-elevated)] border-[var(--border-default)]'}`}>
          <div className="text-2xl font-bold mb-1">{value}</div>
-         <div className={`text-sm font-semibold ${active ? 'text-[#9D7CFF]' : success ? 'text-green-500' : 'text-foreground/70'}`}>{label}</div>
-         <div className="text-[10px] text-foreground/40 uppercase tracking-wider mt-2">{sub}</div>
+         <div className={`text-sm font-semibold ${active ? 'text-[#9D7CFF]' : success ? 'text-green-500' : 'text-[var(--text-secondary)]'}`}>{label}</div>
+         <div className="text-[10px] text-[var(--text-tertiary)] uppercase tracking-wider mt-2">{sub}</div>
       </div>
    );
 }

@@ -11,7 +11,7 @@ function Calendar({
   ...props
 }) {
   return (
-    <div className={cn("p-3 bg-white text-black rounded-lg shadow-lg dark:bg-zinc-900 dark:text-white", className)}>
+    <div className={cn("p-3 bg-white text-black rounded-lg shadow-lg  ", className)}>
       <DayPicker
         showOutsideDays={showOutsideDays}
         {...props} 

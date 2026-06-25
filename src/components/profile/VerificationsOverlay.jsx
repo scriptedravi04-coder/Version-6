@@ -188,12 +188,12 @@ export default function VerificationsOverlay() {
             initial={{ scale: 0.95, y: 15 }} 
             animate={{ scale: 1, y: 0 }} 
             exit={{ scale: 0.95, y: 15 }}
-            className="bg-[#141424] border border-white/10 w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden"
+            className="bg-[#141424] border border-[var(--border-default)] w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#7C5CFF]/10 rounded-full filter blur-3xl pointer-events-none" />
             <button 
               onClick={() => setShowCompletenessPopup(false)}
-              className="absolute top-5 right-5 text-white/50 hover:text-white p-1 rounded-full hover:bg-white/5 transition-colors"
+              className="absolute top-5 right-5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1 rounded-full hover:bg-[var(--bg-elevated)] transition-colors"
             >
               <X size={20} />
             </button>
@@ -203,24 +203,24 @@ export default function VerificationsOverlay() {
                 <AlertCircle size={24} />
               </span>
               <div>
-                <h3 className="font-display font-bold text-xl text-white">Complete Your Profile!</h3>
-                <p className="text-xs text-white/50 mt-1">Make your profile discoverable to start working</p>
+                <h3 className="font-display font-bold text-xl text-[var(--text-primary)]">Complete Your Profile!</h3>
+                <p className="text-xs text-[var(--text-secondary)] mt-1">Make your profile discoverable to start working</p>
               </div>
             </div>
 
-            <div className="mb-6 bg-white/5 rounded-2xl p-5 border border-white/5">
-              <div className="flex items-center justify-between text-xs font-bold text-white/70 mb-2">
+            <div className="mb-6 bg-[var(--bg-elevated)] rounded-2xl p-5 border border-[var(--border-default)]">
+              <div className="flex items-center justify-between text-xs font-bold text-[var(--text-secondary)] mb-2">
                 <span>Profile Completeness</span>
                 <span className="text-yellow-400 font-mono">{completeness.percent}%</span>
               </div>
-              <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden mb-4">
+              <div className="w-full bg-[var(--bg-elevated)] rounded-full h-2 overflow-hidden mb-4">
                 <div 
                   className="bg-yellow-400 h-full rounded-full transition-all duration-500" 
                   style={{ width: `${completeness.percent}%` }}
                 />
               </div>
 
-              <div className="text-xs font-semibold text-white/50 mb-2.5">FOLLOWING CORE FIELDS ARE MISSING:</div>
+              <div className="text-xs font-semibold text-[var(--text-secondary)] mb-2.5">FOLLOWING CORE FIELDS ARE MISSING:</div>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-red-400/90 font-medium">
                 {completeness.missingFields.slice(0, 6).map((item, id) => (
                   <li key={id} className="flex items-center gap-2 bg-red-400/5 px-3 py-1.5 rounded-lg border border-red-500/10">
@@ -231,20 +231,20 @@ export default function VerificationsOverlay() {
               </ul>
             </div>
 
-            <p className="text-xs text-white/60 leading-relaxed mb-6">
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6">
               <strong>💡 Why Complete Your Profile?</strong> Completing your profile credentials makes you fully compliant with our brand rules. It ensures you show up automatically in the explore list, letting other users connect and select you immediately!
             </p>
 
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => setShowCompletenessPopup(false)}
-                className="flex-1 py-3 text-sm font-semibold rounded-xl bg-white/5 border border-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-colors"
+                className="flex-1 py-3 text-sm font-semibold rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
               >
                 Skip For Now
               </button>
               <button 
                 onClick={handleGoToSettingsProfile}
-                className="flex-1 py-3 bg-[#7C5CFF] hover:bg-[#6D28D9] text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-[#7C5CFF]/20 flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-[#7C5CFF] hover:bg-[#6D28D9] text-[var(--text-primary)] text-sm font-bold rounded-xl transition-all shadow-lg shadow-[#7C5CFF]/20 flex items-center justify-center gap-2"
               >
                 Complete Profile <ArrowRight size={16} />
               </button>
@@ -265,12 +265,12 @@ export default function VerificationsOverlay() {
             initial={{ scale: 0.95, y: 15 }} 
             animate={{ scale: 1, y: 0 }} 
             exit={{ scale: 0.95, y: 15 }}
-            className="bg-[#141424] border border-white/10 w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden"
+            className="bg-[#141424] border border-[var(--border-default)] w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-48 h-48 bg-[#10B981]/10 rounded-full filter blur-3xl pointer-events-none" />
             <button 
               onClick={() => setShowKycPromoPopup(false)}
-              className="absolute top-5 right-5 text-white/50 hover:text-white p-1 rounded-full hover:bg-white/5 transition-colors"
+              className="absolute top-5 right-5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1 rounded-full hover:bg-[var(--bg-elevated)] transition-colors"
             >
               <X size={20} />
             </button>
@@ -283,35 +283,35 @@ export default function VerificationsOverlay() {
                 <div className="text-emerald-400 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
                   <Sparkles size={11} /> 100% profile completed
                 </div>
-                <h3 className="font-display font-bold text-xl text-white mt-0.5">Complete Account KYC</h3>
+                <h3 className="font-display font-bold text-xl text-[var(--text-primary)] mt-0.5">Complete Account KYC</h3>
               </div>
             </div>
 
-            <div className="text-sm font-semibold text-white/80 mb-3">🔒 Safe & Secured Payout Compliance</div>
-            <p className="text-xs text-white/60 leading-relaxed mb-6">
+            <div className="text-sm font-semibold text-[var(--text-primary)]/80 mb-3">🔒 Safe & Secured Payout Compliance</div>
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6">
               Your profile details are complete. To comply with local financial laws and unlock direct platform permissions, submit official verification details. It takes only 2-3 fields to register.
             </p>
 
-            <div className="bg-[#1A1A2E] border border-white/5 rounded-2xl p-4 space-y-3.5 mb-6">
+            <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-2xl p-4 space-y-3.5 mb-6">
               <div className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold">✓</div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white">Trust Verified Badge</h4>
-                  <p className="text-[11px] text-white/50 mt-0.5">Increases your premium acceptance chances by up to 5x.</p>
+                  <h4 className="text-xs font-semibold text-[var(--text-primary)]">Trust Verified Badge</h4>
+                  <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">Increases your premium acceptance chances by up to 5x.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold">✓</div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white">Direct Campaign Applications</h4>
-                  <p className="text-[11px] text-white/50 mt-0.5">Allows you to actively apply to the highest paying contracts instantly.</p>
+                  <h4 className="text-xs font-semibold text-[var(--text-primary)]">Direct Campaign Applications</h4>
+                  <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">Allows you to actively apply to the highest paying contracts instantly.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold">✓</div>
                 <div>
-                  <h4 className="text-xs font-semibold text-white">Instant Safe Escrow Payouts</h4>
-                  <p className="text-[11px] text-white/50 mt-0.5">Guarantees safe payment holding and direct penny-drop UPI payouts.</p>
+                  <h4 className="text-xs font-semibold text-[var(--text-primary)]">Instant Safe Escrow Payouts</h4>
+                  <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">Guarantees safe payment holding and direct penny-drop UPI payouts.</p>
                 </div>
               </div>
             </div>
@@ -319,7 +319,7 @@ export default function VerificationsOverlay() {
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => setShowKycPromoPopup(false)}
-                className="flex-1 py-3 text-sm font-semibold rounded-xl bg-white/5 border border-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-colors"
+                className="flex-1 py-3 text-sm font-semibold rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors"
               >
                 Decide Later
               </button>

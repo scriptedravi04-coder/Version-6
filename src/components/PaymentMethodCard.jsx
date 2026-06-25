@@ -21,8 +21,8 @@ export default function PaymentMethodCard({ method, onDelete }) {
             {method.method_type === 'UPI' ? <Smartphone size={20} /> : <Building2 size={20} />}
           </div>
           <div>
-            <h4 className="font-bold text-white uppercase tracking-wider text-sm">{method.method_type}</h4>
-            <p className="text-white/60 text-sm font-mono mt-0.5">
+            <h4 className="font-bold text-[var(--text-primary)] uppercase tracking-wider text-sm">{method.method_type}</h4>
+            <p className="text-[var(--text-secondary)] text-sm font-mono mt-0.5">
               {method.method_type === 'UPI' ? method.account_details.upi_id : formatAccount(method.account_details.account_no)}
             </p>
           </div>
@@ -37,7 +37,7 @@ export default function PaymentMethodCard({ method, onDelete }) {
       </div>
 
       {method.method_type === 'BANK' && (
-        <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-white/50">
+        <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-[var(--text-secondary)]">
           <div><span className="opacity-60">Bank:</span> {method.account_details.bank_name}</div>
           <div><span className="opacity-60">IFSC:</span> {method.account_details.ifsc}</div>
           <div className="col-span-2"><span className="opacity-60">Name:</span> {method.account_details.holder_name}</div>
@@ -54,7 +54,7 @@ export default function PaymentMethodCard({ method, onDelete }) {
       {onDelete && isPending && (
         <button 
           onClick={onDelete}
-          className="absolute top-4 right-4 text-white/30 hover:text-rose-400 transition-colors"
+          className="absolute top-4 right-4 text-[var(--text-tertiary)] hover:text-rose-400 transition-colors"
         >
           <Trash2 size={16} />
         </button>

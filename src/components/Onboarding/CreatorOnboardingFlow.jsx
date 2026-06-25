@@ -157,22 +157,22 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
       </section>
 
       {/* Right panel */}
-      <section className="w-full lg:col-span-5 flex flex-col justify-center pt-24 pb-12 px-6 sm:p-12 md:p-16 relative bg-background min-h-screen">
+      <section className="w-full lg:col-span-5 flex flex-col justify-center pt-24 pb-12 px-6 sm:p-12 md:p-16 relative bg-[var(--bg-base)] min-h-screen">
         <div className="w-full max-w-sm sm:max-w-md mx-auto relative mb-12">
         <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div key="s1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-3xl font-display font-bold text-white">Tell us who you are</h2>
-              <p className="text-gray-400 mt-2 mb-8">Your photo and primary content genre will display directly on the search grid.</p>
+              <h2 className="text-3xl font-display font-bold text-[var(--text-primary)]">Tell us who you are</h2>
+              <p className="text-[var(--text-tertiary)] mt-2 mb-8">Your photo and primary content genre will display directly on the search grid.</p>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Profile Photo (Highly Recommended)</label>
+                  <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">Profile Photo (Highly Recommended)</label>
                    <div className="flex items-center gap-4">
-                     <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                       {formData.photoUrl ? <img src={formData.photoUrl} className="w-full h-full object-cover" /> : <Instagram className="text-gray-500" />}
+                     <div className="w-16 h-16 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] flex items-center justify-center overflow-hidden">
+                       {formData.photoUrl ? <img src={formData.photoUrl} className="w-full h-full object-cover" /> : <Instagram className="text-[var(--text-secondary)]" />}
                      </div>
-                     <label className="text-sm bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl border border-white/10 transition cursor-pointer">
+                     <label className="text-sm bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] px-4 py-2 rounded-xl border border-[var(--border-default)] transition cursor-pointer">
                        Upload Photo
                        <input 
                          type="file" 
@@ -186,13 +186,13 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                        />
                      </label>
                    </div>
-                   <p className="text-xs text-gray-400 mt-2">ⓘ A professional friendly face photo increases CTR by 140%.</p>
+                   <p className="text-xs text-[var(--text-tertiary)] mt-2">ⓘ A professional friendly face photo increases CTR by 140%.</p>
                 </div>
 
                 <div>
-                   <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Biography / Elevator Pitch</label>
+                   <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">Biography / Elevator Pitch</label>
                    <textarea 
-                     className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#7C5CFF]/50 focus:outline-none transition min-h-[100px]"
+                     className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#7C5CFF]/50 focus:outline-none transition min-h-[100px]"
                      placeholder="Write 2-3 sentences..."
                      value={formData.bio}
                      onChange={e => setFormData({...formData, bio: e.target.value})}
@@ -201,9 +201,9 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
 
                 <div className="flex gap-4">
                   <div className="flex-1 relative">
-                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Primary Category *</label>
+                     <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">Primary Category *</label>
                      <input 
-                       className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#7C5CFF]/50 focus:outline-none"
+                       className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#7C5CFF]/50 focus:outline-none"
                        placeholder="e.g., Tech"
                        value={nicheSearch}
                        onChange={e => {
@@ -213,11 +213,11 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                        onFocus={() => setShowNicheDropdown(true)}
                      />
                      {showNicheDropdown && nicheSearch && (
-                       <div className="absolute top-full left-0 right-0 mt-2 bg-[#1A1A2E] border border-[#7C5CFF]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
+                       <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-elevated)] border border-[#7C5CFF]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
                          {filteredNiches.length > 0 ? filteredNiches.map(n => (
                            <button 
                              key={n} 
-                             className="w-full text-left px-4 py-3 text-white hover:bg-[#7C5CFF]/20 flex justify-between group"
+                             className="w-full text-left px-4 py-3 text-[var(--text-primary)] hover:bg-[#7C5CFF]/20 flex justify-between group"
                              onClick={() => {
                                setFormData({...formData, category: n});
                                setNicheSearch(n);
@@ -226,14 +226,14 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                            >
                              {n} <span className="text-[#7C5CFF] opacity-0 group-hover:opacity-100 uppercase text-[10px] font-bold">Select ↓</span>
                            </button>
-                         )) : <div className="p-4 text-gray-500 text-sm">No matching niche found</div>}
+                         )) : <div className="p-4 text-[var(--text-secondary)] text-sm">No matching niche found</div>}
                        </div>
                      )}
                   </div>
                   <div className="flex-1">
-                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Gender Identity</label>
+                     <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">Gender Identity</label>
                      <select 
-                       className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#7C5CFF]/50 focus:outline-none appearance-none"
+                       className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#7C5CFF]/50 focus:outline-none appearance-none"
                        value={formData.gender}
                        onChange={e => setFormData({...formData, gender: e.target.value})}
                      >
@@ -243,7 +243,7 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div className="pt-4 flex justify-end">
-                   <button onClick={() => setStep(2)} className="bg-[#7C5CFF] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-[#6D4AE5] transition">
+                   <button onClick={() => setStep(2)} className="bg-[var(--violet)] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-[#6D4AE5] transition">
                      Continue <ArrowRight size={18} />
                    </button>
                 </div>
@@ -253,15 +253,15 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
 
           {step === 2 && (
             <motion.div key="s2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-3xl font-display font-bold text-white">Local Reach & Languages</h2>
-              <p className="text-gray-400 mt-2 mb-8">Brands search geographically and prioritize native local content delivery.</p>
+              <h2 className="text-3xl font-display font-bold text-[var(--text-primary)]">Local Reach & Languages</h2>
+              <p className="text-[var(--text-tertiary)] mt-2 mb-8">Brands search geographically and prioritize native local content delivery.</p>
 
               <div className="space-y-6">
                  <div className="flex gap-4">
                    <div className="flex-1 relative">
-                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">City Location *</label>
+                     <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">City Location *</label>
                      <input 
-                       className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#7C5CFF]/50 focus:outline-none"
+                       className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#7C5CFF]/50 focus:outline-none"
                        placeholder="e.g. Jaipur"
                        value={citySearch}
                        onChange={e => {
@@ -271,11 +271,11 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                        onFocus={() => setShowCityDropdown(true)}
                      />
                      {showCityDropdown && citySearch && (
-                       <div className="absolute top-full left-0 right-0 mt-2 bg-[#1A1A2E] border border-[#7C5CFF]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
+                       <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-elevated)] border border-[#7C5CFF]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
                          {filteredCities.map(c => (
                            <button 
                              key={c} 
-                             className="w-full text-left px-4 py-3 text-white hover:bg-[#7C5CFF]/20"
+                             className="w-full text-left px-4 py-3 text-[var(--text-primary)] hover:bg-[#7C5CFF]/20"
                              onClick={() => {
                                setFormData({...formData, city: c, state: CITY_TO_STATE[c] || ""});
                                setCitySearch(c);
@@ -289,9 +289,9 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                      )}
                    </div>
                    <div className="flex-1">
-                     <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">State *</label>
+                     <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">State *</label>
                      <input 
-                       className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#7C5CFF]/50 focus:outline-none"
+                       className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#7C5CFF]/50 focus:outline-none"
                        readOnly
                        value={formData.state}
                        placeholder="e.g. Rajasthan"
@@ -300,9 +300,9 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div>
-                   <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Pin Code</label>
+                   <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">Pin Code</label>
                    <input 
-                     className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-[#7C5CFF]/50 focus:outline-none"
+                     className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-[#7C5CFF]/50 focus:outline-none"
                      placeholder="e.g. 302001"
                      value={formData.pinCode}
                      onChange={e => handlePincodeChange(e.target.value)}
@@ -312,7 +312,7 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
 
                 <div>
                    <div className="flex justify-between mb-2">
-                     <label className="block text-xs font-bold text-gray-500 uppercase">Languages</label>
+                     <label className="block text-xs font-bold text-[var(--text-secondary)] uppercase">Languages</label>
                      <span className="text-xs text-[#7C5CFF] font-bold">{formData.languages.length} SELECTED</span>
                    </div>
                    <div className="flex flex-wrap gap-2">
@@ -326,7 +326,7 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                              setFormData({...formData, languages: [...formData.languages, lang]});
                            }
                          }}
-                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.languages.includes(lang) ? 'bg-[#7C5CFF] border-[#7C5CFF] text-white' : 'bg-transparent border-white/10 text-gray-400 hover:border-white/30'}`}
+                         className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${formData.languages.includes(lang) ? 'bg-[#7C5CFF] border-[#7C5CFF] text-[var(--text-primary)]' : 'bg-transparent border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-white/30'}`}
                        >
                          {lang}
                        </button>
@@ -335,10 +335,10 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div className="pt-4 flex justify-between">
-                   <button onClick={() => setStep(1)} className="text-gray-400 hover:text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
+                   <button onClick={() => setStep(1)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
                      <ArrowLeft size={18} /> Back
                    </button>
-                   <button onClick={() => setStep(3)} className="bg-[#7C5CFF] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-[#6D4AE5] transition">
+                   <button onClick={() => setStep(3)} className="bg-[var(--violet)] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-[#6D4AE5] transition">
                      Continue <ArrowRight size={18} />
                    </button>
                 </div>
@@ -348,17 +348,17 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
 
           {step === 3 && (
             <motion.div key="s3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-3xl font-display font-bold text-white">Social Channel</h2>
-              <p className="text-gray-400 mt-2 mb-8">Verify profile metrics & establish secure connections.</p>
+              <h2 className="text-3xl font-display font-bold text-[var(--text-primary)]">Social Channel</h2>
+              <p className="text-[var(--text-tertiary)] mt-2 mb-8">Verify profile metrics & establish secure connections.</p>
 
               {!fetchingMeta ? (
                 <div className="space-y-6">
-                  <div className="bg-[#12121A] border border-[#3B82F6]/30 p-5 rounded-2xl">
-                    <p className="text-sm text-gray-300 font-medium mb-4">Enter Instagram Handle<br/><span className="text-xs text-gray-500 font-normal">Provide your handle. Ybex will automatically lookup public metrics from Meta graphs.</span></p>
+                  <div className="bg-[var(--bg-card)] border border-[#3B82F6]/30 p-5 rounded-2xl">
+                    <p className="text-sm text-[var(--text-tertiary)] font-medium mb-4">Enter Instagram Handle<br/><span className="text-xs text-[var(--text-secondary)] font-normal">Provide your handle. Ybex will automatically lookup public metrics from Meta graphs.</span></p>
                     <div className="relative">
-                      <span className="absolute left-4 top-4 text-gray-500">@</span>
+                      <span className="absolute left-4 top-4 text-[var(--text-secondary)]">@</span>
                       <input 
-                        className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl p-4 pl-8 text-white focus:border-[#3B82F6]/50 focus:outline-none"
+                        className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 pl-8 text-[var(--text-primary)] focus:border-[#3B82F6]/50 focus:outline-none"
                         placeholder="your_handle"
                         value={formData.instagramHandle}
                         onChange={e => setFormData({...formData, instagramHandle: e.target.value.replace('@', '')})}
@@ -368,18 +368,18 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
 
                   <div className="flex gap-4">
                     <div className="flex-1">
-                       <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Real Followers (Optional Override)</label>
+                       <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">Real Followers (Optional Override)</label>
                        <input 
-                         className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-white/30 outline-none"
+                         className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-white/30 outline-none"
                          type="number"
                          value={formData.followers || ''}
                          onChange={e => setFormData({...formData, followers: parseInt(e.target.value) || 0})}
                        />
                     </div>
                     <div className="flex-1">
-                       <label className="block text-xs font-bold text-gray-500 mb-2 uppercase">Avg Reach (Optional Override)</label>
+                       <label className="block text-xs font-bold text-[var(--text-secondary)] mb-2 uppercase">Avg Reach (Optional Override)</label>
                        <input 
-                         className="w-full bg-[#12121A] border border-white/10 rounded-xl p-4 text-white focus:border-white/30 outline-none"
+                         className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-[var(--text-primary)] focus:border-white/30 outline-none"
                          type="number"
                          value={formData.avgReach || ''}
                          onChange={e => setFormData({...formData, avgReach: parseInt(e.target.value) || 0})}
@@ -395,10 +395,10 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                   </div>
 
                   <div className="pt-4 flex justify-between">
-                     <button onClick={() => setStep(2)} className="text-gray-400 hover:text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
+                     <button onClick={() => setStep(2)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
                        <ArrowLeft size={18} /> Back
                      </button>
-                     <button onClick={handleFetchMetrics} className="bg-[#3B82F6] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-600 transition shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                     <button onClick={handleFetchMetrics} className="bg-[#3B82F6] text-[var(--text-primary)] px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-600 transition shadow-[0_0_15px_rgba(59,130,246,0.3)]">
                        FETCH & VERIFY METRICS <ArrowRight size={18} />
                      </button>
                   </div>
@@ -410,12 +410,12 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                     <Instagram className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-500" />
                   </div>
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-white uppercase tracking-wider mb-2">Scanning Profile Metrics</h3>
-                    <p className="text-gray-400 text-sm">Querying Meta API and validating public follower counts.<br/>Please hold...</p>
+                    <h3 className="text-xl font-bold text-[var(--text-primary)] uppercase tracking-wider mb-2">Scanning Profile Metrics</h3>
+                    <p className="text-[var(--text-tertiary)] text-sm">Querying Meta API and validating public follower counts.<br/>Please hold...</p>
                   </div>
 
-                  <div className="bg-[#12121A] border border-blue-500/10 p-5 rounded-2xl w-full max-w-sm mt-4 text-xs font-mono text-left space-y-2">
-                    <p className="text-blue-400 font-bold mb-3 border-b border-white/5 pb-2">METRICS API STATUS</p>
+                  <div className="bg-[var(--bg-card)] border border-blue-500/10 p-5 rounded-2xl w-full max-w-sm mt-4 text-xs font-mono text-left space-y-2">
+                    <p className="text-blue-400 font-bold mb-3 border-b border-[var(--border-default)] pb-2">METRICS API STATUS</p>
                     <p className="text-green-400 flex items-center gap-2"><CheckCircle2 size={12}/> Connecting to Meta graph webhooks...</p>
                     <p className="text-green-400 flex items-center gap-2 opacity-80"><CheckCircle2 size={12}/> Endpoint active. Mapping user graph...</p>
                     <p className="text-green-400 flex items-center gap-2 opacity-60"><CheckCircle2 size={12}/> Audience metadata fetched successfully.</p>
@@ -425,7 +425,7 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
               )}
               {formData.followers > 0 && !fetchingMeta && (
                 <div className="mt-8 pt-4 flex justify-end">
-                   <button onClick={() => setStep(4)} className="bg-[#7C5CFF] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-[#6D4AE5] transition">
+                   <button onClick={() => setStep(4)} className="bg-[var(--violet)] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-[#6D4AE5] transition">
                      Continue <ArrowRight size={18} />
                    </button>
                 </div>
@@ -435,19 +435,19 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
 
           {step === 4 && (
             <motion.div key="s4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-              <h2 className="text-3xl font-display font-bold text-white">Rate Card & Commercials</h2>
-              <p className="text-gray-400 mt-2 mb-8">Determine what campaigns you're open to & specify baseline pricing quotes.</p>
+              <h2 className="text-3xl font-display font-bold text-[var(--text-primary)]">Rate Card & Commercials</h2>
+              <p className="text-[var(--text-tertiary)] mt-2 mb-8">Determine what campaigns you're open to & specify baseline pricing quotes.</p>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">$ Standard Platform Quotes (INR ₹)</label>
-                  <div className="space-y-4 bg-[#12121A] p-5 border border-white/5 rounded-2xl">
+                  <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">$ Standard Platform Quotes (INR ₹)</label>
+                  <div className="space-y-4 bg-[var(--bg-card)] p-5 border border-[var(--border-default)] rounded-2xl">
                     <div>
-                       <label className="block text-xs font-bold text-gray-300 mb-2 uppercase">Instagram Reel *</label>
+                       <label className="block text-xs font-bold text-[var(--text-tertiary)] mb-2 uppercase">Instagram Reel *</label>
                        <div className="relative">
-                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
+                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] font-bold">₹</span>
                          <input 
-                           className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl p-4 pl-8 text-white focus:border-[#7C5CFF]/50 focus:outline-none"
+                           className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 pl-8 text-[var(--text-primary)] focus:border-[#7C5CFF]/50 focus:outline-none"
                            type="number"
                            value={formData.rateReel}
                            onChange={e => setFormData({...formData, rateReel: e.target.value})}
@@ -460,11 +460,11 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                        )}
                     </div>
                     <div>
-                       <label className="block text-xs font-bold text-gray-300 mb-2 uppercase">Instagram Story *</label>
+                       <label className="block text-xs font-bold text-[var(--text-tertiary)] mb-2 uppercase">Instagram Story *</label>
                        <div className="relative">
-                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
+                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] font-bold">₹</span>
                          <input 
-                           className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl p-4 pl-8 text-white focus:border-[#7C5CFF]/50 focus:outline-none"
+                           className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 pl-8 text-[var(--text-primary)] focus:border-[#7C5CFF]/50 focus:outline-none"
                            type="number"
                            value={formData.rateStory}
                            onChange={e => setFormData({...formData, rateStory: e.target.value})}
@@ -480,13 +480,13 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div>
-                   <label className="block text-[11px] font-black text-gray-500 mb-2 uppercase tracking-widest">Barter Acceptability Mode</label>
+                   <label className="block text-[11px] font-black text-[var(--text-secondary)] mb-2 uppercase tracking-widest">Barter Acceptability Mode</label>
                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                      {["Cash Only", "Barter Friendly", "Partial Barter"].map(mode => (
                        <button
                          key={mode}
                          onClick={() => setFormData({...formData, barterMode: mode})}
-                         className={`p-4 rounded-xl text-sm font-bold border transition-all text-left flex flex-col gap-1 ${formData.barterMode === mode ? 'bg-[#7C5CFF]/10 border-[#7C5CFF] text-white shadow-[0_0_15px_rgba(124,92,255,0.15)]' : 'bg-[#12121A] border-white/10 text-gray-400 hover:border-white/30'}`}
+                         className={`p-4 rounded-xl text-sm font-bold border transition-all text-left flex flex-col gap-1 ${formData.barterMode === mode ? 'bg-[#7C5CFF]/10 border-[#7C5CFF] text-[var(--text-primary)] shadow-[0_0_15px_rgba(124,92,255,0.15)]' : 'bg-[var(--bg-card)] border-[var(--border-default)] text-[var(--text-tertiary)] hover:border-white/30'}`}
                        >
                          {mode}
                          <span className="text-[10px] font-normal opacity-70">
@@ -497,7 +497,7 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                    </div>
                 </div>
 
-                <div className="bg-[#12121A] border border-[#10B981]/20 p-4 rounded-xl flex items-start gap-4 text-xs text-gray-400 leading-relaxed group hover:border-[#10B981]/40 transition-colors">
+                <div className="bg-[var(--bg-card)] border border-[#10B981]/20 p-4 rounded-xl flex items-start gap-4 text-xs text-[var(--text-tertiary)] leading-relaxed group hover:border-[#10B981]/40 transition-colors">
                    <div className="w-10 h-10 rounded-full bg-[#10B981]/10 flex items-center justify-center shrink-0">
                      <Shield className="text-[#10B981]" size={18} />
                    </div>
@@ -508,7 +508,7 @@ export default function CreatorOnboardingFlow({ user, onComplete }) {
                 </div>
 
                 <div className="pt-4 flex justify-between">
-                   <button onClick={() => setStep(3)} className="text-gray-400 hover:text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
+                   <button onClick={() => setStep(3)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition">
                      <ArrowLeft size={18} /> Back
                    </button>
                    <button onClick={handleSaveAndComplete} disabled={loading} className="bg-gradient-to-r from-[#D9F111] to-[#cbe010] text-[#12121A] px-8 py-3 rounded-xl font-black uppercase tracking-wider hover:opacity-90 transition shadow-[0_0_20px_rgba(217,241,17,0.3)] disabled:opacity-50 flex items-center gap-2">

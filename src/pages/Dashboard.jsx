@@ -28,7 +28,7 @@ const GREETINGS = [
 const CATEGORIES = [
   { id: "Lifestyle", name: "Lifestyle & Living", icon: Sparkles, color: "from-pink-500/20 to-purple-500/20", textCol: "text-pink-400" },
   { id: "Tech", name: "Tech & Gadgets", icon: Cpu, color: "from-blue-500/20 to-indigo-500/20", textCol: "text-blue-400" },
-  { id: "Finance", name: "Finance & Invest", icon: Landmark, color: "from-emerald-500/20 to-teal-500/20", textCol: "text-emerald-400" },
+  { id: "Finance", name: "Finance & Invest", icon: Landmark, color: "from-emerald-500/20 to-teal-500/20", textCol: "text-emerald-600" },
   { id: "Education", name: "Education", icon: GraduationCap, color: "from-amber-500/20 to-orange-500/20", textCol: "text-amber-400" },
   { id: "Fashion", name: "Fashion & Style", icon: Glasses, color: "from-rose-500/20 to-red-500/20", textCol: "text-red-400" },
   { id: "Food", name: "Food & Cooking", icon: Utensils, color: "from-orange-500/20 to-yellow-500/20", textCol: "text-orange-400" },
@@ -97,39 +97,39 @@ const MarketTrendsSlider = ({ stats }) => {
     {
       title: "Growth Snapshot",
       subtitle: "Profile Visited",
-      value: stats?.profile_views ? `${stats.profile_views}` : "2.4k",
+      value: typeof stats?.profile_views === 'number' ? stats.profile_views : 0,
       trend: "up",
       subValue: "vs last week",
       icon: <TrendingUp size={16} color="#10B981" />,
       bgIcon: (
-        <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center text-white shadow-xl bg-emerald-500">
-          <Eye className="w-[24px] h-[24px] text-white" strokeWidth={1.5} />
+        <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center text-[var(--text-primary)] shadow-xl bg-emerald-500">
+          <Eye className="w-[24px] h-[24px] text-[var(--text-primary)]" strokeWidth={1.5} />
         </div>
       )
     },
     {
       title: "Active Opportunities",
       subtitle: "Ongoing Collabs",
-      value: stats?.collab_requests || "3",
+      value: typeof stats?.collab_requests === 'number' ? stats.collab_requests : 0,
       trend: "up",
       subValue: "Active right now",
       icon: <TrendingUp size={16} color="#10B981" />,
       bgIcon: (
-        <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center text-white shadow-xl bg-[#7C5CFF]">
-          <Package className="w-[24px] h-[24px] text-white" strokeWidth={1.5} />
+        <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center text-[var(--text-primary)] shadow-xl bg-[var(--violet)]">
+          <Package className="w-[24px] h-[24px] text-[var(--text-primary)]" strokeWidth={1.5} />
         </div>
       )
     },
     {
       title: "Impact Metric",
       subtitle: "Avg. Engagement",
-      value: "4.8%",
+      value: `${typeof stats?.engagement_rate === 'number' ? stats.engagement_rate : 0}%`,
       trend: "up",
       subValue: "Above average",
       icon: <TrendingUp size={16} color="#10B981" />,
       bgIcon: (
-        <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center text-white shadow-xl bg-blue-500">
-          <Share2 className="w-[24px] h-[24px] text-white" strokeWidth={1.5} />
+        <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center text-[var(--text-primary)] shadow-xl bg-blue-500">
+          <Share2 className="w-[24px] h-[24px] text-[var(--text-primary)]" strokeWidth={1.5} />
         </div>
       )
     }
@@ -183,7 +183,7 @@ const MarketTrendsSlider = ({ stats }) => {
         {slides.map((_, idx) => (
           <div 
             key={idx}
-            className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentIndex ? "w-4 bg-[#7C5CFF]" : "w-1.5 bg-[var(--text-tertiary)]"}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentIndex ? "w-4 bg-[var(--violet)]" : "w-1.5 bg-[var(--text-tertiary)]"}`}
           />
         ))}
       </div>
@@ -202,6 +202,8 @@ export default function Dashboard() {
   const [showPostRequestModal, setShowPostRequestModal] = useState(false);
   const [appliedPresets, setAppliedPresets] = useState([]); // presets applied to
   const [brandKyc, setBrandKyc] = useState(null);
+  const [banners, setBanners] = useState([]);
+  const [currentBannerIdx, setCurrentBannerIdx] = useState(0);
   
   // Pick random greeting
   const nativeGreeting = useMemo(() => {
@@ -212,6 +214,7 @@ export default function Dashboard() {
   useEffect(() => {
     api.get("/dashboard/stats").then(({data})=>setStats(data)).catch(()=>{});
     api.get("/collabs").then(({data})=>setCollabs(data)).catch(()=>{});
+    api.get("/banners").then(({data})=>setBanners(data || [])).catch(()=>{});
     
     // Fetch live creators for rich feed list
     api.get("/creators").then(({data}) => {
@@ -269,14 +272,19 @@ export default function Dashboard() {
     return [...displayCreators].reverse().slice(0, 4);
   }, [displayCreators]);
 
+  const heroBanners = banners.filter(b => b.placement === "Dashboard Hero Carousel" && b.status === "Live" && b.type === (user?.role === "creator" ? "Influencer" : "Brand")).slice(0, 3);
+
+  useEffect(() => {
+    if (heroBanners.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentBannerIdx(prev => (prev + 1) % heroBanners.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [heroBanners.length]);
+
   // RENDER CREATOR DASHBOARD
   if (isCreator) {
     return <CreatorDashboard user={user} />;
-  }
-
-  // RENDER COMPLETE BRAND DASHBOARD
-  if (user?.role === "brand") {
-    return <BrandDashboard user={user} stats={stats} />;
   }
 
   // RENDER BRAND DASHBOARD (MATCHES THE BRAND VISUAL INTERFACE COMPITITOR EXACTLY WITH ADDED UGC INTEGRATION!)
@@ -284,6 +292,38 @@ export default function Dashboard() {
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] transition-colors duration-200 relative pb-16">
       {/* Decorative radial gradients on top */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] bg-gradient-to-b from-[#7C5CFF]/10 to-transparent rounded-full filter blur-[120px] pointer-events-none" />
+
+      {/* Hero Carousel Section */}
+      {heroBanners.length > 0 && (
+        <section className="relative max-w-6xl mx-auto px-4 pt-4 z-10 w-full mb-6">
+          <div className="relative w-full aspect-[21/9] sm:aspect-[24/7] rounded-3xl overflow-hidden shadow-2xl border border-[var(--border-default)] group">
+            {heroBanners.map((banner, idx) => (
+              <a 
+                key={banner.id} 
+                href={banner.link || "#"} 
+                target={banner.link ? "_blank" : "_self"} 
+                rel="noreferrer"
+                className={`absolute inset-0 transition-opacity duration-1000 cursor-pointer ${idx === currentBannerIdx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+              >
+                <img src={banner.imgUrl} alt="Hero Banner" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+              </a>
+            ))}
+            
+            {heroBanners.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+                {heroBanners.map((_, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={(e) => { e.preventDefault(); setCurrentBannerIdx(idx); }}
+                    className={`h-2 rounded-full transition-all duration-300 ${idx === currentBannerIdx ? "w-6 bg-[#D9F111]" : "w-2 bg-white/50 hover:bg-white/80"}`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Hero Header bar */}
       <header className="relative max-w-6xl ml-0 mr-auto px-4 pt-6 sm:pt-10 flex items-center justify-between z-10">
@@ -297,7 +337,7 @@ export default function Dashboard() {
           </div>
           <div className="text-left">
             <div className="text-sm font-semibold tracking-wide text-[var(--text-secondary)] flex items-center gap-1 leading-none">
-              <span className="text-[#9D7CFF] font-black">{nativeGreeting.text}</span>
+              <span className="text-[var(--violet)] font-black">{nativeGreeting.text}</span>
             </div>
             <div className="text-lg font-bold font-display text-[var(--text-primary)] mt-1">{user?.name}</div>
           </div>
@@ -311,7 +351,7 @@ export default function Dashboard() {
           </div>
           <div>
             <div className="text-[9px] text-[#D9F111] font-black uppercase tracking-wider">Invite & Earn</div>
-            <div className="text-xs sm:text-sm font-black text-foreground">₹2,500<span className="text-[#D9F111]">+</span></div>
+            <div className="text-xs sm:text-sm font-black text-[var(--text-primary)]">₹2,500<span className="text-[#D9F111]">+</span></div>
           </div>
         </div>
       </header>
@@ -324,8 +364,8 @@ export default function Dashboard() {
               <div className="flex items-start gap-3">
                 <span className="p-2 rounded-xl bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 shrink-0">⏳</span>
                 <div>
-                  <h4 className="text-sm font-bold text-white">Brand Certification Review Pending</h4>
-                  <p className="text-xs text-white/50 mt-1">Our compliance team is verifying your business GST Certificate, authorization liaison, and company credentials manually. Standard duration is 24-48 hours.</p>
+                  <h4 className="text-sm font-bold text-[var(--text-primary)]">Brand Certification Review Pending</h4>
+                  <p className="text-xs text-[var(--text-secondary)] mt-1">Our compliance team is verifying your business GST Certificate, authorization liaison, and company credentials manually. Standard duration is 24-48 hours.</p>
                 </div>
               </div>
               <Link to="/settings?section=kyc#kyc-section" className="px-4 py-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 font-bold text-xs rounded-xl uppercase border border-yellow-500/20 transition-all shrink-0">Track Review</Link>
@@ -336,7 +376,7 @@ export default function Dashboard() {
                 <span className="p-2 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 shrink-0">❌</span>
                 <div>
                   <h4 className="text-sm font-bold text-red-400">Compliance Verification Corrective Fix Required</h4>
-                  <p className="text-xs text-white/50 mt-1">Reason: "{brandKyc.review_note || "Documents were blurry or invalid."}". Please edit and resubmit correct brand details to activate listing capabilities.</p>
+                  <p className="text-xs text-[var(--text-secondary)] mt-1">Reason: "{brandKyc.review_note || "Documents were blurry or invalid."}". Please edit and resubmit correct brand details to activate listing capabilities.</p>
                 </div>
               </div>
               <Link to="/settings?section=kyc#kyc-section" className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold text-xs rounded-xl uppercase border border-red-500/20 transition-all shrink-0">Fix & Resubmit</Link>
@@ -346,11 +386,11 @@ export default function Dashboard() {
               <div className="flex items-start gap-3">
                 <span className="p-2 rounded-xl bg-red-500/10 text-red-100 border border-red-500/20 shrink-0 animate-pulse">⚠️</span>
                 <div>
-                  <h4 className="text-sm font-bold text-white uppercase tracking-wider text-red-400">Corporate KYC Compliance Required</h4>
-                  <p className="text-xs text-white/50 mt-1">To protect transparent escrow interactions, brands are restricted from publishing campaigns or vertical UGC brief orders until GST and PAN credentials are submitted & approved.</p>
+                  <h4 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wider text-red-400">Corporate KYC Compliance Required</h4>
+                  <p className="text-xs text-[var(--text-secondary)] mt-1">To protect transparent escrow interactions, brands are restricted from publishing campaigns or vertical UGC brief orders until GST and PAN credentials are submitted & approved.</p>
                 </div>
               </div>
-              <Link to="/settings?section=kyc#kyc-section" className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs rounded-xl uppercase shadow-lg shadow-red-900/40 transition-all shrink-0">Add Credentials</Link>
+              <Link to="/settings?section=kyc#kyc-section" className="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-[var(--text-primary)] font-bold text-xs rounded-xl uppercase shadow-lg shadow-red-900/40 transition-all shrink-0">Add Credentials</Link>
             </div>
           )}
         </div>
@@ -375,13 +415,13 @@ export default function Dashboard() {
         <div className="mt-8 bg-[var(--bg-surface)] border border-[var(--border-default)] hover:border-[var(--border-strong)] p-1.5 rounded-2xl flex flex-col sm:flex-row gap-2 max-w-lg w-full backdrop-blur-md shadow-2xl transition-all duration-300">
           <Link 
             to="/explore"
-            className="flex-1 filter hover:brightness-110 flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-indigo-600 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all transform hover:scale-[1.01]"
+            className="flex-1 filter hover:brightness-110 flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-indigo-600 text-[var(--text-primary)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all transform hover:scale-[1.01]"
           >
             <Search size={14} /> Browse Creators
           </Link>
           <button 
             onClick={() => setShowPostRequestModal(true)}
-            className="flex-1 filter hover:brightness-110 flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-700 text-white text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all transform hover:scale-[1.01] shadow-lg shadow-purple-900/10"
+            className="flex-1 filter hover:brightness-110 flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-700 text-[var(--text-primary)] text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all transform hover:scale-[1.01] shadow-lg shadow-purple-900/10"
           >
             <PlusCircle size={14} /> Post a request
           </button>
@@ -409,7 +449,7 @@ export default function Dashboard() {
             <button 
               key={cat.id}
               onClick={() => handleCategoryClick(cat.id)}
-              className="p-4 bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[#7C5CFF]/40 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all hover:bg-[var(--bg-elevated)] transform hover:scale-[1.03]"
+              className="p-4 bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[var(--violet)]/20 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all hover:bg-[var(--bg-elevated)] transform hover:scale-[1.03]"
             >
               <div className={`p-3 rounded-2xl bg-gradient-to-br ${cat.color} ${cat.textCol}`}>
                 <cat.icon size={20} />
@@ -459,15 +499,15 @@ export default function Dashboard() {
         {/* Creator List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
           {recentCreators.map((c, i) => (
-            <div key={c.user_id || i} className="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[#7C5CFF]/30 p-3.5 rounded-2xl flex flex-col items-center text-center transition-all shadow-sm">
+            <div key={c.user_id || i} className="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[var(--violet)]/20 p-3.5 rounded-2xl flex flex-col items-center text-center transition-all shadow-sm">
               <div className="relative w-20 h-20 rounded-full border border-[var(--border-default)] overflow-hidden mb-3">
                 <img src={c.photo || c.picture} alt={c.name} className="w-full h-full object-cover" />
                 <div className="absolute bottom-0 right-0 bg-indigo-600 rounded-full p-1 border border-foreground/25">
-                  <CheckCircle2 size={10} className="text-foreground"/>
+                  <CheckCircle2 size={10} className="text-[var(--text-primary)]"/>
                 </div>
               </div>
               <h3 className="font-bold text-sm tracking-tight text-[var(--text-primary)] leading-tight">{c.name}</h3>
-              <p className="text-[10px] text-[#9D7CFF] font-semibold uppercase tracking-wider mt-0.5">{c.category}</p>
+              <p className="text-[10px] text-[var(--violet)] font-semibold uppercase tracking-wider mt-0.5">{c.category}</p>
               <div className="flex items-center gap-3 mt-3 w-full border-t border-[var(--border-default)] pt-2 justify-center text-[11px] text-[var(--text-secondary)]">
                 <div>
                   <div className="font-mono text-[var(--text-primary)] font-bold">{c.followers_total || "450K"}</div>
@@ -481,7 +521,7 @@ export default function Dashboard() {
               </div>
               <button 
                 onClick={() => startChatWithCreator(c.user_id)}
-                className="mt-4 px-4 py-1.5 bg-indigo-600/10 hover:bg-[#7C5CFF]/20 text-[var(--text-primary)] border border-[#7C5CFF]/40 hover:border-[#7C5CFF]/80 rounded-xl text-xs font-black uppercase tracking-wider transition-all w-full flex items-center justify-center gap-1"
+                className="mt-4 px-4 py-1.5 bg-indigo-600/10 hover:bg-[var(--violet)]/20 text-[var(--text-primary)] border border-[var(--violet)]/20 hover:border-[var(--violet)]/20 rounded-xl text-xs font-black uppercase tracking-wider transition-all w-full flex items-center justify-center gap-1"
               >
                 <MessageSquare size={13} /> Contact
               </button>
@@ -493,16 +533,16 @@ export default function Dashboard() {
       {/* CHANNELS SELECT+ BANNER */}
       <section className="max-w-6xl ml-0 mr-auto px-4 py-6 relative z-10 w-full">
         <div className="bg-gradient-to-r from-card via-background to-background border border-fuchsia-500/20 rounded-2xl p-6 relative overflow-hidden flex flex-col sm:flex-row justify-between items-center gap-6">
-          <div className="absolute top-0 right-0 w-44 h-44 bg-[#7C5CFF]/20 rounded-full filter blur-2xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-44 h-44 bg-[var(--violet)]/20 rounded-full filter blur-2xl pointer-events-none" />
           
           <div className="relative">
             <span className="px-2.5 py-1 bg-fuchsia-500/15 border border-fuchsia-500/30 text-fuchsia-300 rounded-full text-[10px] font-black uppercase tracking-widest">
               ✨ Select+ Priority Badge
             </span>
-            <h3 className="font-display text-xl sm:text-2xl font-black text-foreground leading-tight mt-3">
+            <h3 className="font-display text-xl sm:text-2xl font-black text-[var(--text-primary)] leading-tight mt-3">
               Get 3x faster response from verified creators
             </h3>
-            <p className="text-xs text-foreground/60 mt-1 max-w-md">
+            <p className="text-xs text-[var(--text-primary)]/60 mt-1 max-w-md">
               Select+ authenticated brands get instant auto-notified responses, dedicated agency protection, and safe payout reserves.
             </p>
           </div>
@@ -530,7 +570,7 @@ export default function Dashboard() {
         {/* Creator List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
           {economicCreators.map((c, i) => (
-            <div key={c.user_id || i} className="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[#7C5CFF]/30 p-3.5 rounded-2xl flex flex-col items-center text-center transition-all shadow-sm">
+            <div key={c.user_id || i} className="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[var(--violet)]/20 p-3.5 rounded-2xl flex flex-col items-center text-center transition-all shadow-sm">
               <div className="relative w-20 h-20 rounded-full border border-[var(--border-default)] overflow-hidden mb-3">
                 <img src={c.photo || c.picture} alt={c.name} className="w-full h-full object-cover" />
               </div>
@@ -568,7 +608,7 @@ export default function Dashboard() {
             <button
               key={city.name}
               onClick={() => handleCityClick(city.name)}
-              className="group relative h-28 rounded-2xl overflow-hidden border border-foreground/10 hover:border-[#7C5CFF]/50 transition-all transform hover:scale-[1.02]"
+              className="group relative h-28 rounded-2xl overflow-hidden border border-[var(--border-default)] hover:border-[var(--violet)]/20 transition-all transform hover:scale-[1.02]"
             >
               {/* Blur-overlay and image */}
               <div className="absolute inset-0 bg-black/55 group-hover:bg-black/45 transition-colors z-10" />
@@ -576,7 +616,7 @@ export default function Dashboard() {
               
               <div className="absolute inset-0 p-3.5 flex flex-col justify-end z-20 text-left">
                 <span className="text-xs text-[#D9F111]/90 font-bold tracking-wide uppercase">{city.tag}</span>
-                <span className="font-display font-black text-lg text-foreground leading-tight mt-0.5">{city.name}</span>
+                <span className="font-display font-black text-lg text-[var(--text-primary)] leading-tight mt-0.5">{city.name}</span>
               </div>
             </button>
           ))}
@@ -590,10 +630,10 @@ export default function Dashboard() {
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 text-left">
           {[
-            { name: "Celebs & Actors", tone: "bg-amber-500/10 border-amber-500/20 text-amber-500 dark:text-amber-300", emoji: "🎭" },
-            { name: "Publishers & Media", tone: "bg-purple-500/10 border-purple-500/20 text-purple-600 dark:text-purple-300", emoji: "📰" },
-            { name: "Talent Agencies", tone: "bg-cyan-500/10 border-cyan-500/20 text-cyan-600 dark:text-cyan-300", emoji: "🌟" },
-            { name: "Meme Pages & More", tone: "bg-rose-500/10 border-rose-500/20 text-rose-500 dark:text-rose-300", emoji: "🤪" }
+            { name: "Celebs & Actors", tone: "bg-amber-500/10 border-amber-500/20 text-amber-500 ", emoji: "🎭" },
+            { name: "Publishers & Media", tone: "bg-purple-500/10 border-purple-500/20 text-purple-600 ", emoji: "📰" },
+            { name: "Talent Agencies", tone: "bg-cyan-500/10 border-cyan-500/20 text-cyan-600 ", emoji: "🌟" },
+            { name: "Meme Pages & More", tone: "bg-rose-500/10 border-rose-500/20 text-rose-500 ", emoji: "🤪" }
           ].map((item, idx) => (
             <div 
               key={idx} 
@@ -610,18 +650,18 @@ export default function Dashboard() {
       {/* POPUP / MODAL CHOOSE CAMPAIGN TYPE (Standard Campaign vs Live UGC Order) */}
       {showPostRequestModal && (
         <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fade-in">
-          <div className="bg-elevated border border-foreground/10 rounded-3xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl">
+          <div className="bg-elevated border border-[var(--border-default)] rounded-3xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl">
             <button 
               onClick={() => setShowPostRequestModal(false)}
-              className="absolute top-4 right-4 text-foreground/50 hover:text-foreground p-2 rounded-full hover:bg-foreground/5 transition-all"
+              className="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-2 rounded-full hover:bg-foreground/5 transition-all"
             >
               <X size={20} />
             </button>
             
             <div className="text-center mb-6">
               <span className="text-3xl">🚀</span>
-              <h3 className="font-display text-2xl font-black text-foreground mt-3">Post a Request Brief</h3>
-              <p className="text-xs text-foreground/60 mt-1">Select the best workflow to meet your timeline and budget targets</p>
+              <h3 className="font-display text-2xl font-black text-[var(--text-primary)] mt-3">Post a Request Brief</h3>
+              <p className="text-xs text-[var(--text-primary)]/60 mt-1">Select the best workflow to meet your timeline and budget targets</p>
             </div>
 
             <div className="space-y-4 text-left">
@@ -640,7 +680,7 @@ export default function Dashboard() {
                   <div className="text-sm font-black text-[#D9F111] flex items-center gap-1.5">
                     Live UGC video orders <span className="text-[9px] bg-[#D9F111] text-black font-black px-1.5 py-0.5 rounded uppercase">24h Express</span>
                   </div>
-                  <div className="text-xs text-foreground/70 mt-1">
+                  <div className="text-xs text-[var(--text-secondary)] mt-1">
                     Post dynamic creator brief task requests. Local verified creators deliver mobile video assets within 24 hours via safe escrow holding.
                   </div>
                 </div>
@@ -652,23 +692,23 @@ export default function Dashboard() {
                   setShowPostRequestModal(false);
                   navigate("/campaigns?new=true");
                 }}
-                className="w-full p-4 bg-foreground/3 hover:bg-foreground/5 border border-foreground/10 hover:border-foreground/20 rounded-2xl text-left flex items-start gap-3 transition-all transform hover:scale-[1.02]"
+                className="w-full p-4 bg-foreground/3 hover:bg-foreground/5 border border-[var(--border-default)] hover:border-foreground/20 rounded-2xl text-left flex items-start gap-3 transition-all transform hover:scale-[1.02]"
               >
                 <div className="p-2.5 bg-indigo-600/10 text-indigo-400 rounded-xl">
                   <Megaphone size={20} />
                 </div>
                 <div>
-                  <div className="text-sm font-black text-foreground">
+                  <div className="text-sm font-black text-[var(--text-primary)]">
                     Standard brand Campaign 
                   </div>
-                  <div className="text-xs text-foreground/50 mt-1">
+                  <div className="text-xs text-[var(--text-secondary)] mt-1">
                     Detailed brand campaigns. Receive pitch proposals, milestones tracking, and build long-term relationships.
                   </div>
                 </div>
               </button>
             </div>
 
-            <p className="text-[10px] text-foreground/30 text-center mt-6">
+            <p className="text-[10px] text-[var(--text-primary)]/30 text-center mt-6">
               Authenticated securely via neutral escrow protection framework.
             </p>
           </div>
@@ -691,7 +731,7 @@ const NotificationSidebar = ({ isOpen, onClose }) => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
+          className="fixed inset-0 bg-[var(--bg-elevated)] backdrop-blur-sm z-[100]"
         />
       )}
       {isOpen && (
@@ -718,9 +758,9 @@ const NotificationSidebar = ({ isOpen, onClose }) => {
           
           <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 pb-8">
             {/* Dummy Notifications */}
-            <div className="p-4 bg-[var(--bg-elevated)] border border-[#7C5CFF]/30 rounded-xl">
+            <div className="p-4 bg-[var(--bg-elevated)] border border-[var(--violet)]/20 rounded-xl">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#7C5CFF]/20 text-[#7C5CFF] flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[var(--violet)]/20 text-[#7C5CFF] flex items-center justify-center shrink-0">
                   <span className="animate-pulse">🔔</span>
                 </div>
                 <div>
@@ -758,8 +798,8 @@ const NotificationSidebar = ({ isOpen, onClose }) => {
 };
 
 const StatBlock = ({ icon, label, value, accent }) => (
-  <div className={`p-4 sm:p-5 rounded-2xl border ${accent ? "bg-indigo-600/5 dark:bg-[#7C5CFF]/10 text-[var(--text-primary)] border-[#7C5CFF]/30" : "bg-[var(--bg-card)] border-[var(--border-default)]"} hover:-translate-y-0.5 transition-transform shadow-sm text-left`}>
-    <div className="flex items-center justify-between"><div className="text-[#9D7CFF]">{icon}</div></div>
+  <div className={`p-4 sm:p-5 rounded-2xl border ${accent ? "bg-indigo-600/5  text-[var(--text-primary)] border-[var(--violet)]/20" : "bg-[var(--bg-card)] border-[var(--border-default)]"} hover:-translate-y-0.5 transition-transform shadow-sm text-left`}>
+    <div className="flex items-center justify-between"><div className="text-[var(--violet)]">{icon}</div></div>
     <div className="font-display text-2xl sm:text-3xl mt-3 font-bold text-[var(--text-primary)]">{value}</div>
     <div className="text-[10px] tracking-wider uppercase text-[var(--text-secondary)] font-bold mt-1.5 leading-none">{label}</div>
   </div>

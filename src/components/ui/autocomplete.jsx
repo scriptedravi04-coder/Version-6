@@ -28,9 +28,9 @@ export function Autocomplete({ items, value, onChange, placeholder, className, o
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      {label && <label className="block text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider">{label}</label>}
+      {label && <label className="block text-xs font-semibold text-[var(--text-secondary)] mb-2 uppercase tracking-wider">{label}</label>}
       <input
-        className={cn("w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] text-white outline-none font-mono", className)}
+        className={cn("w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] text-[var(--text-primary)] outline-none font-mono", className)}
         placeholder={placeholder}
         value={search}
         onChange={e => {
@@ -41,13 +41,13 @@ export function Autocomplete({ items, value, onChange, placeholder, className, o
         onFocus={() => setShowDropdown(true)}
       />
       {showDropdown && search && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-[#1A1A2E] border border-[#7C5CFF]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-elevated)] border border-[#7C5CFF]/30 rounded-xl max-h-60 overflow-y-auto z-50 shadow-2xl">
           {filteredItems.length > 0 ? (
             filteredItems.map(item => (
               <button
                 key={item}
                 type="button"
-                className="w-full text-left px-4 py-3 text-white hover:bg-[#7C5CFF]/20"
+                className="w-full text-left px-4 py-3 text-[var(--text-primary)] hover:bg-[#7C5CFF]/20"
                 onClick={() => {
                   setSearch(item);
                   setShowDropdown(false);
@@ -59,7 +59,7 @@ export function Autocomplete({ items, value, onChange, placeholder, className, o
               </button>
             ))
           ) : (
-            <div className="p-4 text-gray-500 text-sm">No match found</div>
+            <div className="p-4 text-[var(--text-secondary)] text-sm">No match found</div>
           )}
         </div>
       )}

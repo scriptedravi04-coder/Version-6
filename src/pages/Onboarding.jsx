@@ -17,10 +17,10 @@ export default function Onboarding() {
     }
   }, [user, navigate]);
 
-  if (!user) return <div className="min-h-screen flex items-center justify-center bg-[#07070b] text-white">Loading...</div>;
+  if (!user) return <div className="min-h-screen flex items-center justify-center bg-[var(--bg-base)] text-[var(--text-primary)]">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] font-sans relative overflow-hidden">
       <div className="absolute top-6 left-6 md:left-8 font-display font-black text-2xl tracking-tighter cursor-pointer z-50 pointer-events-auto" onClick={() => navigate("/")}>
         ybex<span className="text-[#3B82F6]">.</span>
       </div>
@@ -29,7 +29,7 @@ export default function Onboarding() {
           await logout();
           navigate("/login");
         }}
-        className="absolute top-6 right-6 md:right-8 flex items-center gap-2 text-sm font-medium text-foreground/60 hover:text-foreground transition z-50 pointer-events-auto bg-foreground/5 px-4 py-2 rounded-xl border border-foreground/10"
+        className="absolute top-6 right-6 md:right-8 flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]/60 hover:text-[var(--text-primary)] transition z-50 pointer-events-auto bg-foreground/5 px-4 py-2 rounded-xl border border-[var(--border-default)]"
       >
         <LogOut size={16} /> Logout
       </button>

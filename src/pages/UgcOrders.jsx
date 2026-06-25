@@ -105,23 +105,23 @@ export default function UgcOrders() {
   return (
     <div className="w-full max-w-none px-4 sm:px-6 md:px-10 py-10" data-testid="ugc-orders-page">
       {/* SLA Hero Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-tr from-card via-background/80 to-card border border-foreground/10 xl:bg-gradient-to-r rounded-[28px] p-6 sm:p-10 md:p-12 mb-10 shadow-lg shadow-foreground/5 flex flex-col md:flex-row items-center justify-between gap-8">
+      <div className="relative overflow-hidden bg-gradient-to-tr from-card via-background/80 to-card border border-[var(--border-default)] xl:bg-gradient-to-r rounded-[28px] p-6 sm:p-10 md:p-12 mb-10 shadow-lg shadow-foreground/5 flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="relative z-10 max-w-2xl">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-foreground/10 text-foreground border border-foreground/20 text-xs font-black uppercase tracking-widest mb-4">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-foreground/10 text-[var(--text-primary)] border border-foreground/20 text-xs font-black uppercase tracking-widest mb-4">
             ⚡ 24-Hour Guaranteed Turnaround SLA
           </span>
-          <h1 className="font-display text-4xl sm:text-5xl font-black text-foreground leading-none tracking-tight">
+          <h1 className="font-display text-4xl sm:text-5xl font-black text-[var(--text-primary)] leading-none tracking-tight">
             Live UGC <br />
             <span className="text-[#a18bf1] font-black drop-shadow-sm">Video Orders</span>
           </h1>
-          <p className="text-foreground/70 mt-4 text-sm leading-relaxed">
+          <p className="text-[var(--text-secondary)] mt-4 text-sm leading-relaxed">
             Bridge the content gap instantly. Brands post high-priority product video briefs, and creators claim orders to produce original, mobile-optimized reviews within <span className="font-bold border-b-2 border-foreground/30 pb-0.5">24 hours</span>.
             {user?.role === "brand" && (
               <>
                 <br /><br />
-                <span className="text-foreground font-black">🤝 Secured Escrow protection:</span> Your payouts are safely held in Ybex neutral escrow prior to submission.
+                <span className="text-[var(--text-primary)] font-black">🤝 Secured Escrow protection:</span> Your payouts are safely held in Ybex neutral escrow prior to submission.
                 <br />
-                <span className="text-foreground font-black">🛡️ The Ybex SLA Guarantee:</span> If no local creator claims and starts your brief within <span className="font-bold">15 hours</span>, our dedicated in-house creative agency is instantly auto-notified to produce and hand over your assets on schedule!
+                <span className="text-[var(--text-primary)] font-black">🛡️ The Ybex SLA Guarantee:</span> If no local creator claims and starts your brief within <span className="font-bold">15 hours</span>, our dedicated in-house creative agency is instantly auto-notified to produce and hand over your assets on schedule!
               </>
             )}
           </p>
@@ -134,7 +134,7 @@ export default function UgcOrders() {
                 <PlusCircle size={15}/> Post UGC Requirement
               </button>
             ) : user?.role === "creator" ? (
-              <div className="text-xs text-foreground/50 bg-foreground/5 px-4 py-2 rounded-xl border border-foreground/5">
+              <div className="text-xs text-[var(--text-secondary)] bg-foreground/5 px-4 py-2 rounded-xl border border-foreground/5">
                 👋 You are logged in as a <span className="text-[#D9F111] font-bold">Creator</span>. Scroll below to claim live orders and start earning!
               </div>
             ) : (
@@ -147,7 +147,7 @@ export default function UgcOrders() {
                 </button>
                 <button
                   onClick={() => navigate("/signup?role=creator")}
-                  className="px-5 py-2.5 bg-foreground/10 hover:bg-foreground/15 text-foreground rounded-xl text-xs font-bold uppercase tracking-wider border border-foreground/10 transition-all"
+                  className="px-5 py-2.5 bg-foreground/10 hover:bg-foreground/15 text-[var(--text-primary)] rounded-xl text-xs font-bold uppercase tracking-wider border border-[var(--border-default)] transition-all"
                 >
                   Apply as Creator
                 </button>
@@ -157,7 +157,7 @@ export default function UgcOrders() {
         </div>
         
         {/* Dynamic decorative icon */}
-        <div className="relative flex justify-center items-center h-48 w-48 bg-[#7C5CFF]/10 border border-[#7C5CFF]/20 rounded-full shadow-[inset_0_0_30px_rgba(124,92,255,0.2)] animate-pulse hidden md:flex">
+        <div className="relative flex justify-center items-center h-48 w-48 bg-[var(--violet)]/10 border border-[var(--violet)]/20 rounded-full shadow-[inset_0_0_30px_rgba(124,92,255,0.2)] animate-pulse hidden md:flex">
           <Film size={60} className="text-[#D9F111] opacity-75"/>
         </div>
       </div>
@@ -168,13 +168,13 @@ export default function UgcOrders() {
           <h2 className="font-display text-xl font-bold flex items-center gap-2">
             <LayoutGrid size={18} className="text-[#7C5CFF]"/> Open UGC Video Briefs
           </h2>
-          <button onClick={load} className="text-xs font-black text-white/50 hover:text-[#D9F111]">Refresh List ↺</button>
+          <button onClick={load} className="text-xs font-black text-[var(--text-secondary)] hover:text-[#D9F111]">Refresh List ↺</button>
         </div>
 
         {loading ? (
-          <div className="py-24 text-center text-foreground/40">Loading digital requests...</div>
+          <div className="py-24 text-center text-[var(--text-tertiary)]">Loading digital requests...</div>
         ) : orders.length === 0 ? (
-          <div className="bg-card/60 border border-foreground/5 rounded-2xl p-16 text-center text-foreground/40">
+          <div className="bg-[var(--bg-card)]/60 border border-foreground/5 rounded-2xl p-16 text-center text-[var(--text-tertiary)]">
             No UGC orders are currently open. Check back shortly.
           </div>
         ) : (
@@ -195,7 +195,7 @@ export default function UgcOrders() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     whileHover={{ y: -4, scale: 1.01 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className={`card-dark p-6 flex flex-col justify-between border ${isSubmitted ? "border-emerald-500/30" : isAccepted ? "border-[#7C5CFF]/30" : "border-foreground/10"} hover:border-foreground/20 transition-all hover:shadow-[0_8px_32px_rgba(124,92,255,0.12)]`}
+                    className={`card-dark p-6 flex flex-col justify-between border ${isSubmitted ? "border-emerald-500/30" : isAccepted ? "border-[var(--violet)]/20" : "border-[var(--border-default)]"} hover:border-foreground/20 transition-all hover:shadow-[0_8px_32px_rgba(124,92,255,0.12)]`}
                   >
                   <div>
                     {/* Header: Company and Status */}
@@ -203,8 +203,8 @@ export default function UgcOrders() {
                       <div className="flex items-center gap-2.5">
                         <img src={o.brand_logo || "https://api.dicebear.com/7.x/initials/svg?seed=Brand"} alt="" className="w-8 h-8 rounded-lg bg-foreground/10 object-cover"/>
                         <div className="min-w-0">
-                          <div className="text-xs font-black text-foreground/50 truncate uppercase tracking-widest">{o.brand_name}</div>
-                          <div className="text-sm font-semibold text-foreground truncate">{o.product_name}</div>
+                          <div className="text-xs font-black text-[var(--text-secondary)] truncate uppercase tracking-widest">{o.brand_name}</div>
+                          <div className="text-sm font-semibold text-[var(--text-primary)] truncate">{o.product_name}</div>
                         </div>
                       </div>
                       
@@ -218,7 +218,7 @@ export default function UgcOrders() {
                           🔥 Ybex Studio SLA Backup Assigned
                         </span>
                       ) : isAccepted ? (
-                        <span className="px-2 py-0.5 rounded bg-[#4F46E5]/15 text-[#9D7CFF] border border-[#4F46E5]/35 text-[9px] font-black uppercase tracking-widest flex items-center gap-1 animate-pulse">
+                        <span className="px-2 py-0.5 rounded bg-[#4F46E5]/15 text-[var(--violet)] border border-[#4F46E5]/35 text-[9px] font-black uppercase tracking-widest flex items-center gap-1 animate-pulse">
                           <Clock size={11}/> Production (24h timer)
                         </span>
                       ) : (
@@ -228,14 +228,14 @@ export default function UgcOrders() {
                       )}
                     </div>
 
-                    <p className="text-xs text-foreground/70 leading-relaxed mb-4 font-sans line-clamp-3">
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-4 font-sans line-clamp-3">
                       {o.instructions}
                     </p>
 
                     {/* Metadata tags */}
                     <div className="flex flex-wrap gap-2 mb-5">
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-foreground/2 border border-foreground/5 text-foreground/50">{o.category}</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-foreground/2 border border-foreground/5 text-foreground/50">Length: {o.video_length}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-foreground/2 border border-foreground/5 text-[var(--text-secondary)]">{o.category}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-foreground/2 border border-foreground/5 text-[var(--text-secondary)]">Length: {o.video_length}</span>
                       {o.ref_link && (
                         <a href={o.ref_link} target="_blank" rel="noreferrer" className="text-[10px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 inline-flex items-center gap-1">
                           Reference <ExternalLink size={9}/>
@@ -247,8 +247,8 @@ export default function UgcOrders() {
                   {/* Pricing and Action Footer */}
                   <div className="pt-4 border-t border-foreground/5 flex items-center justify-between gap-4 mt-auto">
                     <div>
-                      <div className="text-[9px] uppercase tracking-wider font-bold text-foreground/40 leading-none mb-1">Payout Budget</div>
-                      <div className="text-lg font-display font-black text-foreground">
+                      <div className="text-[9px] uppercase tracking-wider font-bold text-[var(--text-tertiary)] leading-none mb-1">Payout Budget</div>
+                      <div className="text-lg font-display font-black text-[var(--text-primary)]">
                         ₹{new Intl.NumberFormat("en-IN").format(o.budget)}
                       </div>
                     </div>
@@ -280,7 +280,7 @@ export default function UgcOrders() {
                         user?.role === "creator" ? (
                           <button
                             onClick={() => handleAccept(o.order_id)}
-                            className="px-4 py-2 bg-[#7C5CFF] text-white font-black text-[10px] uppercase tracking-wider rounded-lg hover:bg-[#6849E0] transition-all flex items-center gap-1"
+                            className="px-4 py-2 bg-[var(--violet)] text-white font-black text-[10px] uppercase tracking-wider rounded-lg hover:bg-[#6849E0] transition-all flex items-center gap-1"
                           >
                             Claim Brief <ArrowRight size={11}/>
                           </button>
@@ -290,12 +290,12 @@ export default function UgcOrders() {
                               toast.info("Please sign up first to claim this live order brief!");
                               navigate("/signup?role=creator");
                             }}
-                            className="px-4 py-2 bg-[#7C5CFF] text-white font-black text-[10px] uppercase tracking-wider rounded-lg hover:bg-[#6849E0] transition-all flex items-center gap-1"
+                            className="px-4 py-2 bg-[var(--violet)] text-white font-black text-[10px] uppercase tracking-wider rounded-lg hover:bg-[#6849E0] transition-all flex items-center gap-1"
                           >
                             Claim Brief <ArrowRight size={11}/>
                           </button>
                         ) : user?.role === "brand" ? (
-                          <span className="text-[10px] text-foreground/40 italic font-medium pt-2">Open to Vetted Creators</span>
+                          <span className="text-[10px] text-[var(--text-tertiary)] italic font-medium pt-2">Open to Vetted Creators</span>
                         ) : null
                       )}
 
@@ -315,10 +315,10 @@ export default function UgcOrders() {
 
                   {/* Status subtitle info */}
                   {(isAccepted || isInHouse) && (
-                    <div className="mt-4 pt-2.5 border-t border-foreground/5 flex items-center gap-2 text-[10px] text-foreground/40">
+                    <div className="mt-4 pt-2.5 border-t border-foreground/5 flex items-center gap-2 text-[10px] text-[var(--text-tertiary)]">
                       <Clock size={11} className="text-[#D9F111]"/>
                       <span>
-                        Claimed by: <span className="text-foreground font-semibold">{o.accepted_by_creator_name || "Vetted Creator"}</span>
+                        Claimed by: <span className="text-[var(--text-primary)] font-semibold">{o.accepted_by_creator_name || "Vetted Creator"}</span>
                       </span>
                     </div>
                   )}
@@ -333,34 +333,34 @@ export default function UgcOrders() {
       {/* POST UGC ORDER MODAL */}
       {showPostModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-foreground/10 rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center pb-4 border-b border-foreground/10 mb-6">
-              <h3 className="font-display font-bold text-lg text-foreground flex items-center gap-2">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center pb-4 border-b border-[var(--border-default)] mb-6">
+              <h3 className="font-display font-bold text-lg text-[var(--text-primary)] flex items-center gap-2">
                 <Sparkles size={16} className="text-[#D9F111]"/> Create 24h UGC Brief
               </h3>
-              <button onClick={() => setShowPostModal(false)} className="text-foreground/40 hover:text-foreground font-bold p-1">&times;</button>
+              <button onClick={() => setShowPostModal(false)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] font-bold p-1">&times;</button>
             </div>
 
-            <form onSubmit={handlePost} className="space-y-4 text-sm text-foreground">
+            <form onSubmit={handlePost} className="space-y-4 text-sm text-[var(--text-primary)]">
               <div>
-                <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-foreground/50">Product Name *</label>
+                <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-[var(--text-secondary)]">Product Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Wireless Noise-Cancelling Earbuds Max"
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
-                  className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2 text-foreground outline-none focus:border-[#7C5CFF]"
+                  className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[#7C5CFF]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-foreground/50">Product Category</label>
+                  <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-[var(--text-secondary)]">Product Category</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full bg-card border border-foreground/10 rounded-xl px-3 py-2 text-foreground outline-none focus:border-[#7C5CFF]"
+                    className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[#7C5CFF]"
                   >
                     <option value="Fashion">Fashion</option>
                     <option value="Beauty">Beauty</option>
@@ -370,11 +370,11 @@ export default function UgcOrders() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-foreground/50">Video Length</label>
+                  <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-[var(--text-secondary)]">Video Length</label>
                   <select
                     value={videoLength}
                     onChange={(e) => setVideoLength(e.target.value)}
-                    className="w-full bg-card border border-foreground/10 rounded-xl px-3 py-2 text-foreground outline-none focus:border-[#7C5CFF]"
+                    className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[#7C5CFF]"
                   >
                     <option value="15s">15s Short Hook</option>
                     <option value="30s">30s Key Features</option>
@@ -384,42 +384,42 @@ export default function UgcOrders() {
               </div>
 
               <div>
-                <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-foreground/50">Brief / Instructions *</label>
+                <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-[var(--text-secondary)]">Brief / Instructions *</label>
                 <textarea
                   required
                   rows={3}
                   placeholder="Clearly detail key talking points, hooks, the style of recording, or background aesthetic requirements."
                   value={instructions}
                   onChange={(e) => setInstructions(e.target.value)}
-                  className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2 text-foreground outline-none focus:border-[#7C5CFF]"
+                  className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[#7C5CFF]"
                 />
               </div>
 
               <div>
-                <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-foreground/50">Reference Product URL</label>
+                <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-[var(--text-secondary)]">Reference Product URL</label>
                 <input
                   type="url"
                   placeholder="https://amazon.in/product-page"
                   value={refLink}
                   onChange={(e) => setRefLink(e.target.value)}
-                  className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2 text-foreground outline-none focus:border-[#7C5CFF]"
+                  className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[#7C5CFF]"
                 />
               </div>
 
               <div>
-                <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-foreground/50">Offer Payout Budget (₹) *</label>
+                <label className="text-[10px] font-black uppercase tracking-wider block mb-1 text-[var(--text-secondary)]">Offer Payout Budget (₹) *</label>
                 <input
                   type="number"
                   required
                   placeholder="e.g. 4500"
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
-                  className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2 text-foreground outline-none focus:border-[#7C5CFF]"
+                  className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[#7C5CFF]"
                 />
               </div>
 
-              <div className="pt-4 border-t border-foreground/10 flex justify-end gap-3 mt-4">
-                <button type="button" onClick={() => setShowPostModal(false)} className="px-4 py-2 text-xs font-semibold text-foreground/40 hover:text-foreground">Cancel</button>
+              <div className="pt-4 border-t border-[var(--border-default)] flex justify-end gap-3 mt-4">
+                <button type="button" onClick={() => setShowPostModal(false)} className="px-4 py-2 text-xs font-semibold text-[var(--text-tertiary)] hover:text-[var(--text-primary)]">Cancel</button>
                 <button type="submit" className="px-5 py-2.5 bg-[#D9F111] text-black font-black text-xs uppercase tracking-wide rounded-xl">Create Live Order</button>
               </div>
             </form>
@@ -430,9 +430,9 @@ export default function UgcOrders() {
       {/* SUBMIT RECORDED LINK MODAL */}
       {submitOrderId && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-card border border-foreground/10 rounded-2xl w-full max-w-md p-6">
-            <h3 className="font-display font-black text-base uppercase text-foreground mb-3">Submit your Completed UGC Video</h3>
-            <p className="text-xs text-foreground/55 leading-relaxed mb-4">Paste the link where the brand or admin can download or review your raw or produced MP4 video file (e.g. Google Drive, YouTube link, Dropbox, Dropbox Replay, cloud storage, etc.).</p>
+          <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl w-full max-w-md p-6">
+            <h3 className="font-display font-black text-base uppercase text-[var(--text-primary)] mb-3">Submit your Completed UGC Video</h3>
+            <p className="text-xs text-[var(--text-primary)]/55 leading-relaxed mb-4">Paste the link where the brand or admin can download or review your raw or produced MP4 video file (e.g. Google Drive, YouTube link, Dropbox, Dropbox Replay, cloud storage, etc.).</p>
             <form onSubmit={submitVideo} className="space-y-4">
               <input
                 type="url"
@@ -440,10 +440,10 @@ export default function UgcOrders() {
                 placeholder="https://drive.google.com/your-drive-link-path"
                 value={deliveryUrl}
                 onChange={(e) => setDeliveryUrl(e.target.value)}
-                className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2 text-sm text-foreground outline-none focus:border-[#7C5CFF]"
+                className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#7C5CFF]"
               />
               <div className="flex justify-end gap-2 text-xs">
-                <button type="button" onClick={() => setSubmitOrderId(null)} className="px-4 py-2 text-foreground/50 hover:text-foreground">Cancel</button>
+                <button type="button" onClick={() => setSubmitOrderId(null)} className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]">Cancel</button>
                 <button type="submit" className="px-5 py-2.5 bg-[#D1F23F] text-black font-black uppercase tracking-wide rounded-xl">Deliver Video</button>
               </div>
             </form>

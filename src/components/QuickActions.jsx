@@ -37,8 +37,8 @@ export default function QuickActions() {
   ];
 
   return (
-    <div className="bg-[#131224]/90 border border-white/5 p-6 rounded-xl shadow-sm text-left relative overflow-hidden">
-      <h3 className="text-[11px] font-bold text-white/50 uppercase tracking-widest mb-4">Quick Gates</h3>
+    <div className="bg-[var(--bg-card)]/90 border border-[var(--border-default)] p-6 rounded-xl shadow-sm text-left relative overflow-hidden">
+      <h3 className="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-widest mb-4">Quick Gates</h3>
       <div className="grid grid-cols-2 gap-4">
         {actions.map((act, idx) => {
           const Icon = act.icon;
@@ -47,12 +47,12 @@ export default function QuickActions() {
               key={idx}
               id={`quick-action-${idx}`}
               onClick={() => navigate(act.route)}
-              className="p-4 rounded-xl bg-white/[0.02] border border-white/5 text-left transition-all hover:bg-[#7C5CFF]/10 hover:border-[#7C5CFF]/25 hover:shadow-[0_8px_30px_rgba(124,92,255,0.06)] group cursor-pointer"
+              className="p-4 rounded-xl bg-white/[0.02] border border-[var(--border-default)] text-left transition-all hover:bg-[#7C5CFF]/10 hover:border-[#7C5CFF]/25 hover:shadow-[0_8px_30px_rgba(124,92,255,0.06)] group cursor-pointer"
             >
               <Icon size={24} className={`${act.color} mb-3 group-hover:scale-110 transition-transform duration-200`} />
               <div>
-                <div className="text-xs font-bold text-white group-hover:text-[#9D7CFF] transition-colors">{act.label}</div>
-                <div className="text-[10px] text-white/40 mt-1 lines-clamp-1">{act.desc}</div>
+                <div className="text-xs font-bold text-[var(--text-primary)] group-hover:text-[#9D7CFF] transition-colors">{act.label}</div>
+                <div className="text-[10px] text-[var(--text-tertiary)] mt-1 lines-clamp-1">{act.desc}</div>
               </div>
             </button>
           );

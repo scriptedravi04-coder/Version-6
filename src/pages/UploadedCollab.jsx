@@ -75,7 +75,7 @@ export default function UploadedCollab() {
 
   if (!deal) {
     return (
-      <div className="w-full max-w-none px-6 py-16 text-center text-white/50 bg-[#09090e]">
+      <div className="w-full max-w-none px-6 py-16 text-center text-[var(--text-secondary)] bg-[var(--bg-base)]">
         Synchronizing live indicators...
       </div>
     );
@@ -95,16 +95,16 @@ export default function UploadedCollab() {
   const p = deal.proof || {};
 
   return (
-    <div className="w-full max-w-none px-4 sm:px-6 md:px-12 py-8 bg-[#09090e] text-white">
+    <div className="w-full max-w-none px-4 sm:px-6 md:px-12 py-8 bg-[var(--bg-base)] text-[var(--text-primary)]">
       
       {/* Title & Navigation Header */}
       <div className="max-w-4xl mx-auto mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <Link to={`/deals/${id}`} className="text-sm text-white/50 hover:text-[#9D7CFF] flex items-center gap-1.5 font-medium transition-colors mb-2">
+          <Link to={`/deals/${id}`} className="text-sm text-[var(--text-secondary)] hover:text-[var(--violet)] flex items-center gap-1.5 font-medium transition-colors mb-2">
             <ArrowLeft size={14} /> Back to Deal Tracker
           </Link>
           <div className="flex items-center gap-2">
-            <h1 className="font-display font-black text-2xl sm:text-3xl text-white tracking-tight">Post Analytics Sync</h1>
+            <h1 className="font-display font-black text-2xl sm:text-3xl text-[var(--text-primary)] tracking-tight">Post Analytics Sync</h1>
             <span className="text-[10px] bg-emerald-500/10 text-emerald-400 font-bold px-2 py-0.5 rounded uppercase border border-emerald-500/15">
               Live Verified
             </span>
@@ -114,9 +114,9 @@ export default function UploadedCollab() {
         <button 
           onClick={handleManualResync} 
           disabled={syncing}
-          className="bg-white/5 hover:bg-white/10 px-4 py-2.5 rounded-xl border border-white/10 text-xs font-bold text-white transition-all flex items-center gap-1.5 cursor-pointer"
+          className="bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] px-4 py-2.5 rounded-xl border border-[var(--border-default)] text-xs font-bold text-[var(--text-primary)] transition-all flex items-center gap-1.5 cursor-pointer"
         >
-          <RefreshCw size={12} className={syncing ? "animate-spin text-[#9D7CFF]" : "text-white/70"} />
+          <RefreshCw size={12} className={syncing ? "animate-spin text-[var(--violet)]" : "text-[var(--text-secondary)]"} />
           {syncing ? "Re-syncing with API..." : "Manual Metrics Refresh"}
         </button>
       </div>
@@ -126,40 +126,40 @@ export default function UploadedCollab() {
         {/* --- PERFORMANCE HIGHLIGHT COUNTS --- */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           
-          <div className="bg-[#131224]/50 border border-white/10 p-5 rounded-2xl text-left relative overflow-hidden">
-            <Eye size={16} className="text-[#9D7CFF] mb-2" />
-            <span className="text-[10px] text-white/40 font-bold uppercase block tracking-wide">Verified Impressions</span>
-            <span className="text-2xl font-black font-display text-white mt-1 block">
+          <div className="bg-[var(--bg-card)]/50 border border-[var(--border-default)] p-5 rounded-2xl text-left relative overflow-hidden">
+            <Eye size={16} className="text-[var(--violet)] mb-2" />
+            <span className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase block tracking-wide">Verified Impressions</span>
+            <span className="text-2xl font-black font-display text-[var(--text-primary)] mt-1 block">
               {(p.fetched_views || 25000).toLocaleString()}
             </span>
             <span className="text-[9px] text-[#D9F111] mt-1 block font-mono">Synced from Instagram</span>
           </div>
 
-          <div className="bg-[#131224]/50 border border-white/10 p-5 rounded-2xl text-left relative overflow-hidden">
+          <div className="bg-[var(--bg-card)]/50 border border-[var(--border-default)] p-5 rounded-2xl text-left relative overflow-hidden">
             <Heart size={16} className="text-rose-400 mb-2" />
-            <span className="text-[10px] text-white/40 font-bold uppercase block tracking-wide">Active Likes count</span>
-            <span className="text-2xl font-black font-display text-white mt-1 block">
+            <span className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase block tracking-wide">Active Likes count</span>
+            <span className="text-2xl font-black font-display text-[var(--text-primary)] mt-1 block">
               {(p.fetched_likes || 1200).toLocaleString()}
             </span>
             <span className="text-[9px] text-emerald-400 mt-1 block font-mono">+5.4% industry benchmark</span>
           </div>
 
-          <div className="bg-[#131224]/50 border border-white/10 p-5 rounded-2xl text-left relative overflow-hidden">
+          <div className="bg-[var(--bg-card)]/50 border border-[var(--border-default)] p-5 rounded-2xl text-left relative overflow-hidden">
             <BarChart3 size={16} className="text-emerald-400 mb-2" />
-            <span className="text-[10px] text-white/40 font-bold uppercase block tracking-wide">Demographic Reach</span>
-            <span className="text-2xl font-black font-display text-white mt-1 block">
+            <span className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase block tracking-wide">Demographic Reach</span>
+            <span className="text-2xl font-black font-display text-[var(--text-primary)] mt-1 block">
               {(p.fetched_reach || 32000).toLocaleString()}
             </span>
-            <span className="text-[9px] text-white/30 mt-1 block font-mono">Organic source coverage</span>
+            <span className="text-[9px] text-[var(--text-tertiary)] mt-1 block font-mono">Organic source coverage</span>
           </div>
 
-          <div className="bg-[#131224]/50 border border-white/10 p-5 rounded-2xl text-left relative overflow-hidden">
+          <div className="bg-[var(--bg-card)]/50 border border-[var(--border-default)] p-5 rounded-2xl text-left relative overflow-hidden">
             <DollarSign size={16} className="text-[#D9F111] mb-2" />
-            <span className="text-[10px] text-white/40 font-bold uppercase block tracking-wide">Payout Settlement</span>
+            <span className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase block tracking-wide">Payout Settlement</span>
             <span className="text-2xl font-black font-display text-[#D9F111] mt-1 block">
               ₹{(deal.proposed_amount || 0).toLocaleString("en-IN")}
             </span>
-            <span className="text-[9px] text-white/30 mt-1 block font-mono">{deal.stage || "PROOF_SUBMITTED"}</span>
+            <span className="text-[9px] text-[var(--text-tertiary)] mt-1 block font-mono">{deal.stage || "PROOF_SUBMITTED"}</span>
           </div>
 
         </div>
@@ -168,11 +168,11 @@ export default function UploadedCollab() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* Main charting widget left */}
-          <div className="lg:col-span-8 bg-[#131224]/30 border border-white/10 rounded-3xl p-6 text-left">
+          <div className="lg:col-span-8 bg-[var(--bg-card)]/30 border border-[var(--border-default)] rounded-3xl p-6 text-left">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-xs font-black text-white/40 uppercase tracking-widest">Reach Expansion Trend</h3>
-                <span className="text-[11px] text-white/60">Automated metrics tracking past five interval updates.</span>
+                <h3 className="text-xs font-black text-[var(--text-tertiary)] uppercase tracking-widest">Reach Expansion Trend</h3>
+                <span className="text-[11px] text-[var(--text-secondary)]">Automated metrics tracking past five interval updates.</span>
               </div>
               <TrendingUp size={16} className="text-emerald-400" />
             </div>
@@ -200,39 +200,39 @@ export default function UploadedCollab() {
           </div>
 
           {/* Connected Post details Sidebar right */}
-          <div className="lg:col-span-4 bg-[#131224]/50 border border-white/10 rounded-3xl p-6 text-left space-y-4">
-            <h3 className="text-xs font-black text-white/40 uppercase tracking-widest border-b border-white/5 pb-2">
+          <div className="lg:col-span-4 bg-[var(--bg-card)]/50 border border-[var(--border-default)] rounded-3xl p-6 text-left space-y-4">
+            <h3 className="text-xs font-black text-[var(--text-tertiary)] uppercase tracking-widest border-b border-[var(--border-default)] pb-2">
               Integrated Link Source
             </h3>
 
             <div>
-              <span className="text-[10px] text-white/40 font-bold uppercase block tracking-wider mb-1.5">Instagram Post Link</span>
+              <span className="text-[10px] text-[var(--text-tertiary)] font-bold uppercase block tracking-wider mb-1.5">Instagram Post Link</span>
               {p.instagram_post_url ? (
                 <a 
                   href={p.instagram_post_url} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="bg-white/5 border border-white/10 hover:border-[#7C5CFF] rounded-xl px-4 py-3 text-xs font-semibold text-white flex items-center justify-between transition-colors cursor-pointer select-text overflow-hidden"
+                  className="bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-[#7C5CFF] rounded-xl px-4 py-3 text-xs font-semibold text-[var(--text-primary)] flex items-center justify-between transition-colors cursor-pointer select-text overflow-hidden"
                 >
                   <span className="truncate flex-grow flex items-center gap-1.5">
-                    <ExternalLink size={12} className="text-[#9D7CFF] shrink-0" />
+                    <ExternalLink size={12} className="text-[var(--violet)] shrink-0" />
                     {p.instagram_post_url.slice(0, 32)}...
                   </span>
-                  <ExternalLink size={12} className="text-white/40 shrink-0" />
+                  <ExternalLink size={12} className="text-[var(--text-tertiary)] shrink-0" />
                 </a>
               ) : (
-                <span className="text-xs text-white/40 italic">No link synchronized yet</span>
+                <span className="text-xs text-[var(--text-tertiary)] italic">No link synchronized yet</span>
               )}
             </div>
 
-            <div className="space-y-2.5 text-xs text-white/60">
+            <div className="space-y-2.5 text-xs text-[var(--text-secondary)]">
               <div className="flex justify-between">
                 <span>Sync status:</span>
                 <span className="text-emerald-400 font-bold">STABLE CONNECTION</span>
               </div>
               <div className="flex justify-between">
                 <span>Last Synced Ref:</span>
-                <span className="text-white/80 font-mono font-bold">
+                <span className="text-[var(--text-primary)]/80 font-mono font-bold">
                   {p.last_synced_at ? new Date(p.last_synced_at).toLocaleTimeString() : "Just now"}
                 </span>
               </div>
@@ -245,10 +245,10 @@ export default function UploadedCollab() {
         {deal.stage !== "COMPLETED" ? (
           <div className="bg-indigo-500/5 border border-indigo-500/25 rounded-3xl p-6 text-left space-y-4 max-w-2xl">
             <div className="flex items-start gap-3">
-              <CheckCircle size={18} className="text-[#9D7CFF] shrink-0 mt-0.5" />
+              <CheckCircle size={18} className="text-[var(--violet)] shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-base font-bold text-white">Escrow Release Verification Panel</h3>
-                <p className="text-xs text-white/70 mt-1 leading-relaxed font-normal">
+                <h3 className="text-base font-bold text-[var(--text-primary)]">Escrow Release Verification Panel</h3>
+                <p className="text-xs text-[var(--text-secondary)] mt-1 leading-relaxed font-normal">
                   Upon clicking complete verification, matching settlement records will be permanently stamped on the platform ledgers.
                 </p>
               </div>
@@ -263,8 +263,8 @@ export default function UploadedCollab() {
                 {releasing ? "Verifying Settlement..." : "Approve Metrics & Disburse Escrow Funds"}
               </button>
             ) : (
-              <div className="bg-white/5 border border-white/5 p-4 rounded-xl text-left">
-                <p className="text-xs text-white/50 leading-relaxed font-normal">
+              <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] p-4 rounded-xl text-left">
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">
                   <span className="font-bold text-[#D9F111]">Settlement is Pending Review:</span> The matching brand reviewers will inspect these performance indicators to verify engagement accuracy before final escrow release.
                 </p>
               </div>
@@ -276,8 +276,8 @@ export default function UploadedCollab() {
               <Check size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider">Escrow Disbursed & Completed</h3>
-              <p className="text-xs text-white/60 font-normal mt-0.5 leading-relaxed">Funds worth ₹{(deal.proposed_amount || 0).toLocaleString("en-IN")} have completed verification and been dispersed to matching settlement cards.</p>
+              <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wider">Escrow Disbursed & Completed</h3>
+              <p className="text-xs text-[var(--text-secondary)] font-normal mt-0.5 leading-relaxed">Funds worth ₹{(deal.proposed_amount || 0).toLocaleString("en-IN")} have completed verification and been dispersed to matching settlement cards.</p>
             </div>
           </div>
         )}

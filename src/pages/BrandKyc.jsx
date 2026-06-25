@@ -106,10 +106,10 @@ export default function BrandKyc() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32 bg-[#09090e] min-h-screen">
+      <div className="flex items-center justify-center py-32 bg-[var(--bg-base)] min-h-screen">
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 rounded-full border-2 border-[#7C5CFF] border-t-transparent animate-spin"></div>
-          <div className="text-white/40 text-sm font-mono tracking-widest uppercase">Loading Compliance Panel...</div>
+          <div className="text-[var(--text-tertiary)] text-sm font-mono tracking-widest uppercase">Loading Compliance Panel...</div>
         </div>
       </div>
     );
@@ -118,17 +118,17 @@ export default function BrandKyc() {
   const isLocked = kycStatus?.status === "pending" || kycStatus?.status === "PENDING" || kycStatus?.status === "UNDER_REVIEW";
 
   return (
-    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-10 text-left min-h-screen bg-[#09090e] text-white">
+    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-10 text-left min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
       <div className="mb-8">
         <div className="flex items-center gap-3">
-          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">
+          <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[var(--text-primary)] mb-2">
             Compliance Validation Center
           </h1>
-          <span className="px-2.5 py-0.5 text-xs font-bold bg-[#7C5CFF]/20 text-[#a98eff] border border-[#7C5CFF]/30 rounded-full flex items-center gap-1">
+          <span className="px-2.5 py-0.5 text-xs font-bold bg-[var(--violet)]/20 text-[#a98eff] border border-[var(--violet)]/20 rounded-full flex items-center gap-1">
             <ShieldCheck size={12} /> Secure
           </span>
         </div>
-        <p className="text-white/50 text-xs sm:text-sm mt-1">
+        <p className="text-[var(--text-secondary)] text-xs sm:text-sm mt-1">
           Verify your business information to activate premium campaign postings, escrow protections, and real payouts.
         </p>
       </div>
@@ -138,61 +138,61 @@ export default function BrandKyc() {
         rejectReason={kycStatus?.rejected_reason || kycStatus?.note} 
       />
 
-      <div className="bg-[#131224] border border-white/5 p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#7C5CFF]/5 rounded-full filter blur-3xl pointer-events-none" />
+      <div className="bg-[var(--bg-card)] border border-[var(--border-default)] p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--violet)]/5 rounded-full filter blur-3xl pointer-events-none" />
         
         <form onSubmit={handleSubmit} className="space-y-8">
           
           {/* SECTION 1: Corporate Details */}
           <div>
-            <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-6">
-              <Building size={16} className="text-[#9D7CFF]" />
-              <h3 className="text-xs font-display font-extrabold text-white/90 uppercase tracking-widest">
+            <div className="flex items-center gap-2 border-b border-[var(--border-default)] pb-2 mb-6">
+              <Building size={16} className="text-[var(--violet)]" />
+              <h3 className="text-xs font-display font-extrabold text-[var(--text-primary)]/90 uppercase tracking-widest">
                 Business & Corporate Credentials
               </h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="text-xs font-semibold text-white/60 mb-2 block uppercase tracking-wider">
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">
                   Brand GSTIN Number *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-3 text-white/30"><Landmark size={16} /></span>
+                  <span className="absolute left-4 top-3 text-[var(--text-tertiary)]"><Landmark size={16} /></span>
                   <input
                     disabled={isLocked}
                     value={gstCert}
                     onChange={(e) => setGstCert(e.target.value.toUpperCase())}
-                    className="w-full pl-11 pr-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-white placeholder-white/30 uppercase"
+                    className="w-full pl-11 pr-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-[var(--text-primary)] placeholder-white/30 uppercase"
                     type="text"
                     required
                     maxLength={15}
                     placeholder="27AAAAA1111A1Z1"
                   />
                 </div>
-                <span className="text-[10px] text-white/30 block mt-1.5 leading-relaxed">
+                <span className="text-[10px] text-[var(--text-tertiary)] block mt-1.5 leading-relaxed">
                   Enter 15-character Goods & Services Tax identification number
                 </span>
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-white/60 mb-2 block uppercase tracking-wider">
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">
                   Brand Corporate PAN *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-3 text-white/30"><CreditCard size={16} /></span>
+                  <span className="absolute left-4 top-3 text-[var(--text-tertiary)]"><CreditCard size={16} /></span>
                   <input
                     disabled={isLocked}
                     value={brandPan}
                     onChange={(e) => setBrandPan(e.target.value.toUpperCase())}
-                    className="w-full pl-11 pr-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-white placeholder-white/30 uppercase"
+                    className="w-full pl-11 pr-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-[var(--text-primary)] placeholder-white/30 uppercase"
                     type="text"
                     required
                     maxLength={10}
                     placeholder="ABCDE1234F"
                   />
                 </div>
-                <span className="text-[10px] text-white/30 block mt-1.5 leading-relaxed">
+                <span className="text-[10px] text-[var(--text-tertiary)] block mt-1.5 leading-relaxed">
                   Enter 10-character Permanent Account Number registered directly with IT Department
                 </span>
               </div>
@@ -201,23 +201,23 @@ export default function BrandKyc() {
 
           {/* SECTION 2: Representative Info */}
           <div>
-            <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-6">
-              <User size={16} className="text-[#9D7CFF]" />
-              <h3 className="text-xs font-display font-extrabold text-white/90 uppercase tracking-widest">
+            <div className="flex items-center gap-2 border-b border-[var(--border-default)] pb-2 mb-6">
+              <User size={16} className="text-[var(--violet)]" />
+              <h3 className="text-xs font-display font-extrabold text-[var(--text-primary)]/90 uppercase tracking-widest">
                 Authorized Corporate Liaison Web
               </h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="text-xs font-semibold text-white/60 mb-2 block uppercase tracking-wider">
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">
                   Primary representative full name *
                 </label>
                 <input
                   disabled={isLocked}
                   value={pocName}
                   onChange={(e) => setPocName(e.target.value)}
-                  className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-white"
+                  className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-[var(--text-primary)]"
                   type="text"
                   required
                   placeholder="Karan Johar"
@@ -225,30 +225,30 @@ export default function BrandKyc() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-white/60 mb-2 block uppercase tracking-wider">
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">
                   Representative Designative Position
                 </label>
                 <input
                   disabled={isLocked}
                   value={pocDesignation}
                   onChange={(e) => setPocDesignation(e.target.value)}
-                  className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-white"
+                  className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-[var(--text-primary)]"
                   type="text"
                   placeholder="Marketing Director / Partnership Head"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-white/60 mb-2 block uppercase tracking-wider">
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">
                   Authorized Corporate Email ID *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-3 text-white/30"><Mail size={16} /></span>
+                  <span className="absolute left-4 top-3 text-[var(--text-tertiary)]"><Mail size={16} /></span>
                   <input
                     disabled={isLocked}
                     value={pocEmail}
                     onChange={(e) => setPocEmail(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-white placeholder-white/20"
+                    className="w-full pl-11 pr-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-[var(--text-primary)] placeholder-white/20"
                     type="email"
                     required
                     placeholder="partnerships@company.com"
@@ -257,16 +257,16 @@ export default function BrandKyc() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-white/60 mb-2 block uppercase tracking-wider">
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">
                   Direct Liaison Phone
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-3 text-white/30"><Phone size={16} /></span>
+                  <span className="absolute left-4 top-3 text-[var(--text-tertiary)]"><Phone size={16} /></span>
                   <input
                     disabled={isLocked}
                     value={pocPhone}
                     onChange={(e) => setPocPhone(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-white placeholder-white/20"
+                    className="w-full pl-11 pr-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-[var(--text-primary)] placeholder-white/20"
                     type="tel"
                     placeholder="+91 99999 55555"
                   />
@@ -277,39 +277,39 @@ export default function BrandKyc() {
 
           {/* SECTION 3: Web details */}
           <div>
-            <div className="flex items-center gap-2 border-b border-white/5 pb-2 mb-6">
-              <Globe size={16} className="text-[#9D7CFF]" />
-              <h3 className="text-xs font-display font-extrabold text-white/90 uppercase tracking-widest">
+            <div className="flex items-center gap-2 border-b border-[var(--border-default)] pb-2 mb-6">
+              <Globe size={16} className="text-[var(--violet)]" />
+              <h3 className="text-xs font-display font-extrabold text-[var(--text-primary)]/90 uppercase tracking-widest">
                 Business landing link & Uploads
               </h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="text-xs font-semibold text-white/60 mb-2 block uppercase tracking-wider">
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">
                   Official Landing Website URL
                 </label>
                 <input
                   disabled={isLocked}
                   value={siteUrl}
                   onChange={(e) => setSiteUrl(e.target.value)}
-                  className="w-full px-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-white placeholder-white/20"
+                  className="w-full px-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] outline-none shadow-sm transition-colors focus:ring-2 focus:ring-[#7C5CFF]/10 text-[var(--text-primary)] placeholder-white/20"
                   type="url"
                   placeholder="https://company.com"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-white/60 mb-2 block uppercase tracking-wider">
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">
                   Incorporation Certificate Proof (Optional PDF/JPG URL)
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-3 text-white/30"><UploadCloud size={16} /></span>
+                  <span className="absolute left-4 top-3 text-[var(--text-tertiary)]"><UploadCloud size={16} /></span>
                   <input
                     disabled={isLocked}
                     value={incProof}
                     onChange={(e) => setIncProof(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-white/5 rounded-xl text-sm bg-white/5 focus:border-[#7C5CFF] outline-none shadow-sm transition-colors text-white placeholder-white/20"
+                    className="w-full pl-11 pr-4 py-3 border border-[var(--border-default)] rounded-xl text-sm bg-[var(--bg-elevated)] focus:border-[#7C5CFF] outline-none shadow-sm transition-colors text-[var(--text-primary)] placeholder-white/20"
                     type="text"
                     placeholder="https://bucket.com/proof.pdf"
                   />
@@ -323,7 +323,7 @@ export default function BrandKyc() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-3 rounded-xl font-bold bg-[#7C5CFF] hover:bg-[#6B4AFF] text-white shadow-xl transition-all hover:scale-[1.02] flex items-center gap-2 cursor-pointer disabled:opacity-40"
+                className="px-6 py-3 rounded-xl font-bold bg-[var(--violet)] hover:bg-[#6B4AFF] text-[var(--text-primary)] shadow-xl transition-all hover:scale-[1.02] flex items-center gap-2 cursor-pointer disabled:opacity-40"
               >
                 {submitting ? (
                   <>

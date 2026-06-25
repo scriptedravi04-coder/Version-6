@@ -392,12 +392,12 @@ export default function Settings() {
         };
         return (
           <>
-            <h3 className="font-display font-bold text-xl mb-4 text-white">{labels[activeModal]}</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-[var(--text-primary)]">{labels[activeModal]}</h3>
             <input 
               type="text" 
               value={formData[activeModal]} 
               onChange={e => handleFormChange(activeModal, e.target.value)}
-              className="w-full bg-[#0a0a14] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] transition-colors mb-6 text-white"
+              className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] transition-colors mb-6 text-[var(--text-primary)]"
             />
           </>
         );
@@ -405,7 +405,7 @@ export default function Settings() {
       case 'location': {
         return (
           <>
-            <h3 className="font-display font-bold text-xl mb-4 text-white">Update Location</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-[var(--text-primary)]">Update Location</h3>
             <LocationAutocomplete 
               value={formData.location}
               onChange={val => handleFormChange('location', val)}
@@ -424,29 +424,29 @@ export default function Settings() {
         const destLabel = activeModal === 'phone' ? "Enter new phone number" : "Enter new business email";
         return (
           <>
-            <h3 className="font-display font-bold text-xl mb-4 text-white">{labels[activeModal]}</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-[var(--text-primary)]">{labels[activeModal]}</h3>
             {!otpSent ? (
               <div className="mb-6">
-                <label className="text-xs font-semibold text-white/50 mb-1.5 block uppercase tracking-wider">{destLabel}</label>
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">{destLabel}</label>
                 <input 
                   type="text" 
                   value={formData[activeModal]} 
                   onChange={e => handleFormChange(activeModal, e.target.value)}
-                  className="w-full bg-[#0a0a14] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] transition-colors text-white"
+                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] transition-colors text-[var(--text-primary)]"
                 />
               </div>
             ) : (
               <div className="mb-6">
-                <label className="text-xs font-semibold text-white/50 mb-1.5 block uppercase tracking-wider">Enter Verification Code</label>
+                <label className="text-xs font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">Enter Verification Code</label>
                 <input 
                   type="text" 
                   value={otpCode} 
                   placeholder="1234"
                   onChange={e => setOtpCode(e.target.value)}
-                  className="w-full bg-[#0a0a14] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] transition-colors text-white text-center font-mono tracking-[0.5em] text-xl"
+                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] transition-colors text-[var(--text-primary)] text-center font-mono tracking-[0.5em] text-xl"
                   maxLength={4}
                 />
-                <p className="text-xs text-white/40 mt-3 text-center">We've sent a 4-digit code to {formData[activeModal]}</p>
+                <p className="text-xs text-[var(--text-tertiary)] mt-3 text-center">We've sent a 4-digit code to {formData[activeModal]}</p>
               </div>
             )}
           </>
@@ -455,7 +455,7 @@ export default function Settings() {
       case 'niche':
         return (
           <>
-            <h3 className="font-display font-bold text-xl mb-4 text-white">Content Category</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-[var(--text-primary)]">Content Category</h3>
             <div className="mb-4">
               <CategoryAutocomplete
                 label="Primary Category"
@@ -465,12 +465,12 @@ export default function Settings() {
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-white/50 mb-1.5 block uppercase tracking-wider">Sub-categories (comma separated)</label>
+              <label className="text-xs font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">Sub-categories (comma separated)</label>
               <input 
                 type="text"
                 value={formData.subCategories.join(", ")}
                 onChange={e => handleFormChange('subCategories', e.target.value.split(",").map(s => s.trim()))}
-                className="w-full bg-[#0a0a14] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] text-white"
+                className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] text-[var(--text-primary)]"
               />
             </div>
             <div className="h-[120px]"></div>
@@ -479,7 +479,7 @@ export default function Settings() {
       case 'socials':
         return (
           <>
-            <h3 className="font-display font-bold text-xl mb-4 text-white">Edit Socials</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-[var(--text-primary)]">Edit Socials</h3>
             <div className="space-y-3 mb-6 max-h-[40vh] overflow-y-auto scroll-thin">
               {formData.socials.map((s, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -490,7 +490,7 @@ export default function Settings() {
                       newSocials[i].platform = e.target.value;
                       handleFormChange('socials', newSocials);
                     }}
-                    className="w-1/3 bg-[#0a0a14] border border-white/10 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#7C5CFF] text-white"
+                    className="w-1/3 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#7C5CFF] text-[var(--text-primary)]"
                   >
                     <option>Instagram</option><option>YouTube</option><option>Twitter</option><option>LinkedIn</option><option>TikTok</option>
                   </select>
@@ -502,19 +502,19 @@ export default function Settings() {
                       newSocials[i].url = e.target.value;
                       handleFormChange('socials', newSocials);
                     }}
-                    className="flex-1 bg-[#0a0a14] border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#7C5CFF] text-white"
+                    className="flex-1 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#7C5CFF] text-[var(--text-primary)]"
                   />
                   <button onClick={() => {
                     const newSocials = formData.socials.filter((_, idx) => idx !== i);
                     handleFormChange('socials', newSocials);
-                  }} className="p-2 text-white/40 hover:text-red-500 transition-colors">
+                  }} className="p-2 text-[var(--text-tertiary)] hover:text-red-500 transition-colors">
                     <Trash2 size={18}/>
                   </button>
                 </div>
               ))}
               <button 
                 onClick={() => handleFormChange('socials', [...formData.socials, { id: Date.now(), platform: 'Instagram', url: '' }])}
-                className="w-full py-2.5 rounded-xl border border-dashed border-white/20 text-white/60 font-semibold text-sm hover:border-[#7C5CFF]/50 hover:text-[#7C5CFF] transition-all flex items-center justify-center gap-2 mt-2"
+                className="w-full py-2.5 rounded-xl border border-dashed border-white/20 text-[var(--text-secondary)] font-semibold text-sm hover:border-[var(--violet)]/20 hover:text-[#7C5CFF] transition-all flex items-center justify-center gap-2 mt-2"
               >
                 <Plus size={16}/> Add another profile
               </button>
@@ -524,12 +524,12 @@ export default function Settings() {
       case 'collabPrefs':
         return (
           <>
-            <h3 className="font-display font-bold text-xl mb-4 text-white">Collaboration Preferences</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-[var(--text-primary)]">Collaboration Preferences</h3>
             <div className="mb-5">
-               <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Barter Preferences</label>
+               <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Barter Preferences</label>
                <div className="space-y-2">
                  {["High-end Products", "Travel Experiences", "Service Exchange", "Food & Dining"].map((opt) => (
-                   <label key={opt} className="flex items-center gap-3 bg-[#0a0a14] border border-white/5 rounded-xl p-3 cursor-pointer hover:border-white/20 transition-all">
+                   <label key={opt} className="flex items-center gap-3 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-3 cursor-pointer hover:border-white/20 transition-all">
                      <input type="checkbox" className="w-4 h-4 rounded accent-[#7C5CFF]"
                        checked={formData.barterPrefs.includes(opt)}
                        onChange={(e) => {
@@ -539,17 +539,17 @@ export default function Settings() {
                          handleFormChange('barterPrefs', newPrefs);
                        }}
                      />
-                     <span className="text-sm font-medium text-white">{opt}</span>
+                     <span className="text-sm font-medium text-[var(--text-primary)]">{opt}</span>
                    </label>
                  ))}
                </div>
             </div>
             <div>
-              <label className="text-xs font-semibold text-white/50 mb-2 block uppercase tracking-wider">Payment Timelines</label>
+              <label className="text-xs font-semibold text-[var(--text-secondary)] mb-2 block uppercase tracking-wider">Payment Timelines</label>
                <select 
                   value={formData.paymentTimeline}
                   onChange={e => handleFormChange('paymentTimeline', e.target.value)}
-                  className="w-full bg-[#0a0a14] border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] text-white"
+                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#7C5CFF] text-[var(--text-primary)]"
                 >
                   <option>Advance Payment</option>
                   <option>Within 7 Days</option>
@@ -582,12 +582,12 @@ export default function Settings() {
 
         return (
           <div className="flex flex-col items-center py-4">
-            <h3 className="font-display font-bold text-xl mb-6 text-white w-full">Your Profile QR</h3>
+            <h3 className="font-display font-bold text-xl mb-6 text-[var(--text-primary)] w-full">Your Profile QR</h3>
             <div className="bg-white p-4 rounded-3xl shadow-xl mb-6">
               <QRCodeSVG id="profile-qr-code" value={profileUrl} size={180} bgColor={"#ffffff"} fgColor={"#000000"} level={"H"} />
             </div>
-            <p className="text-sm text-white/70 mb-6 text-center">Scan this code to view your Ybex Creator Profile.</p>
-            <button onClick={downloadQR} className="w-full py-3 bg-[#7C5CFF] hover:bg-[#6B4AFF] text-white font-bold rounded-xl transition-all shadow-lg shadow-[#7C5CFF]/20 flex items-center justify-center gap-2">
+            <p className="text-sm text-[var(--text-secondary)] mb-6 text-center">Scan this code to view your Ybex Creator Profile.</p>
+            <button onClick={downloadQR} className="w-full py-3 bg-[var(--violet)] hover:bg-[#6B4AFF] text-[var(--text-primary)] font-bold rounded-xl transition-all shadow-lg shadow-[#7C5CFF]/20 flex items-center justify-center gap-2">
               <Download size={18}/> Download QR Code
             </button>
           </div>
@@ -596,19 +596,19 @@ export default function Settings() {
       case 'activeSessions':
         return (
           <>
-            <h3 className="font-display font-bold text-xl mb-4 text-white">Active Sessions</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-[var(--text-primary)]">Active Sessions</h3>
             <div className="space-y-3 mb-6">
-              <div className="bg-[#0a0a14] border border-white/5 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 flex items-center justify-between">
                 <div>
-                  <div className="font-semibold text-white text-sm">MacBook Pro (Chrome)</div>
-                  <div className="text-white/50 text-xs mt-1">Mumbai, India • Active Now</div>
+                  <div className="font-semibold text-[var(--text-primary)] text-sm">MacBook Pro (Chrome)</div>
+                  <div className="text-[var(--text-secondary)] text-xs mt-1">Mumbai, India • Active Now</div>
                 </div>
                 <div className="px-2 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-bold uppercase rounded">Current</div>
               </div>
-              <div className="bg-[#0a0a14] border border-white/5 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 flex items-center justify-between">
                 <div>
-                  <div className="font-semibold text-white text-sm">iPhone 14 Pro (Safari)</div>
-                  <div className="text-white/50 text-xs mt-1">Mumbai, India • 2 hours ago</div>
+                  <div className="font-semibold text-[var(--text-primary)] text-sm">iPhone 14 Pro (Safari)</div>
+                  <div className="text-[var(--text-secondary)] text-xs mt-1">Mumbai, India • 2 hours ago</div>
                 </div>
                 <button className="text-red-500 text-xs font-semibold hover:underline">Log Out</button>
               </div>
@@ -635,16 +635,16 @@ export default function Settings() {
             >
               <motion.div 
                 initial={{ scale: 0.95, opacity: 0, y: 10 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 10 }}
-                className="bg-[#1A1A2E] border border-white/10 w-full max-w-md rounded-2xl p-6 shadow-2xl relative"
+                className="bg-[var(--bg-elevated)] border border-[var(--border-default)] w-full max-w-md rounded-2xl p-6 shadow-2xl relative"
               >
-                <button onClick={closeModal} className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"><X size={20}/></button>
+                <button onClick={closeModal} className="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"><X size={20}/></button>
                 
                 {renderModalContent()}
 
                 {['name', 'profession', 'language', 'location', 'phone', 'businessEmail', 'niche', 'socials', 'collabPrefs'].includes(activeModal) && (
                   <div className="flex items-center gap-3 mt-6">
-                    <button onClick={closeModal} className="flex-1 py-3 rounded-xl font-semibold text-sm bg-white/5 border border-white/10 hover:bg-white/10 text-white transition-colors" disabled={isSaving}>Cancel</button>
-                    <button onClick={handleSave} disabled={isSaving} className="flex-1 py-3 rounded-xl font-bold text-sm bg-[#7C3AED] hover:bg-[#6D28D9] text-white transition-colors shadow-[0_0_15px_rgba(124,58,237,0.3)] flex items-center justify-center gap-2">
+                    <button onClick={closeModal} className="flex-1 py-3 rounded-xl font-semibold text-sm bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] transition-colors" disabled={isSaving}>Cancel</button>
+                    <button onClick={handleSave} disabled={isSaving} className="flex-1 py-3 rounded-xl font-bold text-sm bg-[var(--violet)] hover:bg-[var(--violet-hover)] text-white transition-colors shadow-[0_0_15px_rgba(124,58,237,0.3)] flex items-center justify-center gap-2">
                       {isSaving ? <><Loader2 size={18} className="animate-spin" /> {otpSent ? 'Updating...' : 'Sending...'}</> : 
                        (['phone', 'businessEmail'].includes(activeModal) && !otpSent) ? 'Send Verification Code' : 
                        (['phone', 'businessEmail'].includes(activeModal) && otpSent) ? 'Verify & Save' : 'Save Changes'}
@@ -659,12 +659,12 @@ export default function Settings() {
       )}
 
       {/* NEW PROFILE HEADER */}
-      <div className="bg-[#12121A] border border-white/10 rounded-3xl overflow-hidden shadow-2xl mb-8 relative">
-        <div className="relative w-full h-32 md:h-48 group bg-[#0A0A0B]">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl overflow-hidden shadow-2xl mb-8 relative">
+        <div className="relative w-full h-32 md:h-48 group bg-[var(--bg-card)]">
           <div className="absolute inset-0 bg-gradient-to-r from-[#7C3AED]/40 via-[#3B82F6]/20 to-[#D9F111]/10"></div>
           {/* Banner pattern or image */}
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center md:bg-[center_top_-200px] opacity-30 mix-blend-overlay"></div>
-          <button className="absolute top-4 right-4 bg-black/40 hover:bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl text-white text-xs font-bold transition-all opacity-0 group-hover:opacity-100 flex items-center gap-2 z-10">
+          <button className="absolute top-4 right-4 bg-[var(--bg-elevated)] hover:bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl text-[var(--text-primary)] text-xs font-bold transition-all opacity-0 group-hover:opacity-100 flex items-center gap-2 z-10">
             <Camera size={14} /> Change Cover
           </button>
         </div>
@@ -672,29 +672,29 @@ export default function Settings() {
         <div className="p-6 md:p-8 relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 w-full">
             <div className="relative -mt-16 md:-mt-20 shrink-0 z-20">
-               <img src={user?.avatar || "https://ui-avatars.com/api/?name="+encodeURIComponent(profile.name)+"&background=7C3AED&color=fff"} className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-[#12121A] object-cover bg-[#12121A]" alt="Avatar"/>
-               <button className="absolute bottom-1 right-1 bg-[#D9F111] hover:bg-[#c4da0f] p-2 rounded-full text-black ring-4 ring-[#12121A] transition-transform hover:scale-105">
+               <img src={user?.avatar || "https://ui-avatars.com/api/?name="+encodeURIComponent(profile.name)+"&background=7C3AED&color=fff"} className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-[var(--bg-card)] object-cover bg-[var(--bg-card)]" alt="Avatar"/>
+               <button className="absolute bottom-1 right-1 bg-[#D9F111] hover:bg-[#c4da0f] p-2 rounded-full text-black ring-4 ring-[var(--bg-card)] transition-transform hover:scale-105">
                   <Camera size={14} />
                </button>
             </div>
             <div className="mt-2 md:mt-0 flex-1">
-              <h1 className="font-display text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
+              <h1 className="font-display text-2xl md:text-3xl font-bold text-[var(--text-primary)] flex items-center gap-2">
                 {profile.name} 
                 {(kycObj?.status === "approved" || user?.verified) && <CheckCircle className="text-emerald-500" size={20} />}
               </h1>
-              <p className="text-[#9CA3AF] text-sm md:text-base mt-1 flex items-center gap-2">
+              <p className="text-[var(--text-secondary)] text-sm md:text-base mt-1 flex items-center gap-2">
                 {profile.profession} <span className="w-1 h-1 rounded-full bg-white/20"></span> <MapPin size={14}/> {profile.location}
               </p>
               <div className="flex flex-wrap gap-2 mt-4">
-                 {profile.subCategories.length > 0 ? profile.subCategories.map(s => <span key={s} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-white/80">{s}</span>) : <span className="px-3 py-1 bg-[#7C3AED]/20 border border-[#7C3AED]/30 text-[#7C3AED] rounded-full text-xs">{profile.niche}</span>}
+                 {profile.subCategories.length > 0 ? profile.subCategories.map(s => <span key={s} className="px-3 py-1 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-full text-xs text-[var(--text-primary)]/80">{s}</span>) : <span className="px-3 py-1 bg-[var(--violet)]/20 border border-[#7C3AED]/30 text-[var(--violet)] rounded-full text-xs">{profile.niche}</span>}
               </div>
             </div>
             
             <div className="flex flex-wrap gap-3 w-full md:w-auto mt-4 md:mt-0 shrink-0">
-              <button onClick={() => window.open(`/creator/${user?.id || 'demo'}`, '_blank')} className="flex-1 md:flex-none px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-semibold text-white transition-colors flex items-center justify-center gap-2">
+              <button onClick={() => window.open(`/creator/${user?.id || 'demo'}`, '_blank')} className="flex-1 md:flex-none px-5 py-2.5 bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl text-sm font-semibold text-[var(--text-primary)] transition-colors flex items-center justify-center gap-2">
                 <Eye size={16} /> Public View
               </button>
-              <button onClick={() => handleEdit('name')} className="flex-1 md:flex-none px-5 py-2.5 bg-[#7C3AED] hover:bg-[#6D28D9] shadow-[0_0_15px_rgba(124,58,237,0.3)] rounded-xl text-sm font-bold text-white transition-all flex items-center justify-center gap-2">
+              <button onClick={() => handleEdit('name')} className="flex-1 md:flex-none px-5 py-2.5 bg-[var(--violet)] hover:bg-[#6D28D9] shadow-[0_0_15px_rgba(124,58,237,0.3)] rounded-xl text-sm font-bold text-[var(--text-primary)] transition-all flex items-center justify-center gap-2">
                 <Edit2 size={16} /> Edit Profile
               </button>
             </div>
@@ -708,8 +708,8 @@ export default function Settings() {
         <div className="lg:col-span-2 space-y-8">
           
            {/* KYC WIDGET */}
-          <div className="bg-[#12121A] border border-white/10 rounded-3xl p-5 sm:p-6 shadow-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-5 transition-all duration-300">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#7C3AED]/10 rounded-full filter blur-[80px] pointer-events-none" />
+          <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-5 sm:p-6 shadow-2xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-5 transition-all duration-300">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--violet)]/10 rounded-full filter blur-[80px] pointer-events-none" />
             
             <div className="flex items-start gap-4">
               <span className={`p-3 rounded-2xl border shrink-0 ${
@@ -719,13 +719,13 @@ export default function Settings() {
                   ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20 animate-pulse shadow-sm"
                   : kycObj?.status === "rejected"
                   ? "bg-rose-500/10 text-rose-400 border-rose-500/20 shadow-sm"
-                  : "bg-[#7C3AED]/10 text-[#7C3AED] border-[#7C3AED]/20 shadow-sm"
+                  : "bg-[var(--violet)]/10 text-[var(--violet)] border-[#7C3AED]/20 shadow-sm"
               }`}>
                 <Shield size={22} />
               </span>
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="text-sm font-bold text-white font-sans">KYC Trust Verification</h2>
+                  <h2 className="text-sm font-bold text-[var(--text-primary)] font-sans">KYC Trust Verification</h2>
                   {(kycObj?.status === "approved" || user?.verified) ? (
                     <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold">Approved</span>
                   ) : kycObj?.status === "pending" ? (
@@ -733,11 +733,11 @@ export default function Settings() {
                   ) : kycObj?.status === "rejected" ? (
                     <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 font-bold">Action Required</span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/40 font-bold">Required</span>
+                    <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-tertiary)] font-bold">Required</span>
                   )}
                 </div>
                 
-                <p className="text-xs text-[#9CA3AF] mt-1 max-w-md leading-relaxed font-medium">
+                <p className="text-xs text-[var(--text-secondary)] mt-1 max-w-md leading-relaxed font-medium">
                   {(kycObj?.status === "approved" || user?.verified)
                     ? "Your document credentials are confirmed. Settlement routes are mapped."
                     : "Enter government identity number and settlement account to verify profile legitimacy."}
@@ -749,7 +749,7 @@ export default function Settings() {
               onClick={() => setShowKycVerificationModal(true)}
               className={`px-5 py-2.5 cursor-pointer rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 whitespace-nowrap text-black ${
                 (kycObj?.status === "approved" || user?.verified)
-                  ? "bg-[#10B981] hover:bg-emerald-500 shadow-lg shadow-emerald-500/15 text-white"
+                  ? "bg-[#10B981] hover:bg-emerald-500 shadow-lg shadow-emerald-500/15 text-[var(--text-primary)]"
                   : kycObj?.status === "pending"
                   ? "bg-yellow-500 hover:bg-yellow-400"
                   : "bg-[#D9F111] hover:bg-[#c4da0f] shadow-lg shadow-[#D9F111]/15 hover:-translate-y-0.5"
@@ -778,27 +778,27 @@ export default function Settings() {
           {/* BASIC INFO */}
           <section>
             <div className="flex items-center justify-between mb-4 px-1">
-               <h2 className="text-sm font-bold text-white tracking-wider flex items-center gap-2">
-                 <User size={16} className="text-[#9CA3AF]" /> Profile Information
+               <h2 className="text-sm font-bold text-[var(--text-primary)] tracking-wider flex items-center gap-2">
+                 <User size={16} className="text-[var(--text-secondary)]" /> Profile Information
                </h2>
-               <button onClick={() => handleEdit('name')} className="text-xs font-bold text-[#7C3AED] hover:text-[#6D28D9] flex items-center gap-1">
+               <button onClick={() => handleEdit('name')} className="text-xs font-bold text-[var(--violet)] hover:text-[#6D28D9] flex items-center gap-1">
                  <Edit2 size={12}/> EDIT ALL
                </button>
             </div>
-            <div className="bg-[#12121A] border border-white/10 rounded-3xl flex flex-col overflow-hidden">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl flex flex-col overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 divide-white/5">
-                 <EditableRow icon={Briefcase} label="Profession" value={profile.profession} onEdit={() => handleEdit('profession')} border className="md:border-r border-white/5 md:border-b border-b-white/5" />
+                 <EditableRow icon={Briefcase} label="Profession" value={profile.profession} onEdit={() => handleEdit('profession')} border className="md:border-r border-[var(--border-default)] md:border-b border-b-white/5" />
                  <EditableRow icon={MessageSquare} label="Primary Language" value={profile.language} onEdit={() => handleEdit('language')} border className="md:border-b border-b-white/5" />
-                 <EditableRow icon={MapPin} label="Current Location" value={profile.location} onEdit={() => handleEdit('location')} border className="md:border-r border-white/5" />
-                 <div className="flex items-center justify-between px-6 py-5 border-t md:border-t-0 border-white/5">
+                 <EditableRow icon={MapPin} label="Current Location" value={profile.location} onEdit={() => handleEdit('location')} border className="md:border-r border-[var(--border-default)]" />
+                 <div className="flex items-center justify-between px-6 py-5 border-t md:border-t-0 border-[var(--border-default)]">
                   <div className="flex gap-4">
-                    <div className="mt-0.5"><Grid size={20} className="text-[#9CA3AF]" /></div>
+                    <div className="mt-0.5"><Grid size={20} className="text-[var(--text-secondary)]" /></div>
                     <div>
-                      <div className="font-semibold text-white text-sm">Primary Niche</div>
+                      <div className="font-semibold text-[var(--text-primary)] text-sm">Primary Niche</div>
                       <div className="text-[#10B981] text-sm mt-0.5 font-medium">{profile.niche}</div>
                     </div>
                   </div>
-                  <button onClick={() => handleEdit('niche')} className="p-2 hover:bg-white/10 rounded-lg text-white/50 transition-colors bg-white/5"><Edit2 size={14}/></button>
+                  <button onClick={() => handleEdit('niche')} className="p-2 hover:bg-[var(--bg-elevated)] rounded-lg text-[var(--text-secondary)] transition-colors bg-[var(--bg-elevated)]"><Edit2 size={14}/></button>
                 </div>
               </div>
             </div>
@@ -807,26 +807,26 @@ export default function Settings() {
           {/* PARTNERSHIP STRATEGY */}
           <section>
              <div className="flex items-center justify-between mb-4 px-1">
-               <h2 className="text-sm font-bold text-white tracking-wider flex items-center gap-2">
-                 <Package size={16} className="text-[#9CA3AF]" /> Collaboration Terms
+               <h2 className="text-sm font-bold text-[var(--text-primary)] tracking-wider flex items-center gap-2">
+                 <Package size={16} className="text-[var(--text-secondary)]" /> Collaboration Terms
                </h2>
             </div>
-            <div className="bg-[#12121A] border border-white/10 rounded-3xl flex flex-col overflow-hidden p-6">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl flex flex-col overflow-hidden p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div>
-                    <div className="font-semibold text-white mb-2">Preferred Barter & Exchanges</div>
+                    <div className="font-semibold text-[var(--text-primary)] mb-2">Preferred Barter & Exchanges</div>
                     <div className="flex flex-wrap gap-2 mb-6">
                       {profile.barterPrefs.map(b => (
-                        <span key={b} className="bg-white/5 text-white/80 border border-white/10 px-3 py-1.5 rounded-lg text-xs font-medium">{b}</span>
+                        <span key={b} className="bg-[var(--bg-elevated)] text-[var(--text-primary)]/80 border border-[var(--border-default)] px-3 py-1.5 rounded-lg text-xs font-medium">{b}</span>
                       ))}
                     </div>
                     
-                    <div className="font-semibold text-white mb-2 flex items-center gap-2"><Calendar size={14} className="text-[#9CA3AF]"/> Standard Payment Timeline</div>
-                    <div className="text-[#9CA3AF] text-sm bg-[#0A0A0B] p-3 rounded-xl border border-white/5 inline-block">
+                    <div className="font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-2"><Calendar size={14} className="text-[var(--text-secondary)]"/> Standard Payment Timeline</div>
+                    <div className="text-[var(--text-secondary)] text-sm bg-[var(--bg-card)] p-3 rounded-xl border border-[var(--border-default)] inline-block">
                        {profile.paymentTimeline}
                     </div>
                   </div>
-                  <button onClick={() => handleEdit('collabPrefs')} className="shrink-0 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-white font-semibold text-sm transition-colors border border-white/10 flex items-center justify-center gap-2">
+                  <button onClick={() => handleEdit('collabPrefs')} className="shrink-0 px-4 py-2 bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] rounded-xl text-[var(--text-primary)] font-semibold text-sm transition-colors border border-[var(--border-default)] flex items-center justify-center gap-2">
                     <Edit2 size={14}/> Manage
                   </button>
               </div>
@@ -840,20 +840,20 @@ export default function Settings() {
            
            {/* GROWTH & SHARING */}
            <section>
-            <h2 className="text-sm font-bold text-white tracking-wider mb-4 px-1 flex items-center gap-2">
-               <Share2 size={16} className="text-[#9CA3AF]" /> Share Profile
+            <h2 className="text-sm font-bold text-[var(--text-primary)] tracking-wider mb-4 px-1 flex items-center gap-2">
+               <Share2 size={16} className="text-[var(--text-secondary)]" /> Share Profile
             </h2>
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => handleEdit('qr_code')} className="bg-[#12121A] border border-white/10 hover:border-[#7C3AED]/50 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all group">
-                <div className="w-10 h-10 rounded-full bg-white/5 text-white flex items-center justify-center group-hover:scale-110 group-hover:bg-[#7C3AED] transition-all"><Grid size={20}/></div>
-                <span className="font-medium text-xs text-white">QR Code</span>
+              <button onClick={() => handleEdit('qr_code')} className="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[#7C3AED]/50 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all group">
+                <div className="w-10 h-10 rounded-full bg-[var(--bg-elevated)] text-[var(--text-primary)] flex items-center justify-center group-hover:scale-110 group-hover:bg-[var(--violet)] transition-all"><Grid size={20}/></div>
+                <span className="font-medium text-xs text-[var(--text-primary)]">QR Code</span>
               </button>
               <button 
                 onClick={() => { navigator.clipboard.writeText(window.location.origin + "/creator/demo"); toast.success("Profile link copied!"); }}
-                className="bg-[#12121A] border border-white/10 hover:border-[#D9F111]/50 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all group"
+                className="bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[#D9F111]/50 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all group"
               >
-                <div className="w-10 h-10 rounded-full bg-white/5 text-white flex items-center justify-center group-hover:scale-110 group-hover:bg-[#D9F111] group-hover:text-black transition-all"><LinkIcon size={20}/></div>
-                <span className="font-medium text-xs text-white">Copy Link</span>
+                <div className="w-10 h-10 rounded-full bg-[var(--bg-elevated)] text-[var(--text-primary)] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#D9F111] group-hover:text-black transition-all"><LinkIcon size={20}/></div>
+                <span className="font-medium text-xs text-[var(--text-primary)]">Copy Link</span>
               </button>
             </div>
           </section>
@@ -861,28 +861,28 @@ export default function Settings() {
           {/* MY SOCIALS */}
           <section>
             <div className="flex items-center justify-between mb-4 px-1">
-               <h2 className="text-sm font-bold text-white tracking-wider flex items-center gap-2">
-                 <Globe size={16} className="text-[#9CA3AF]" /> Connected Socials
+               <h2 className="text-sm font-bold text-[var(--text-primary)] tracking-wider flex items-center gap-2">
+                 <Globe size={16} className="text-[var(--text-secondary)]" /> Connected Socials
                </h2>
-               <button onClick={() => handleEdit('socials')} className="text-[#7C3AED] p-1.5 hover:bg-[#7C3AED]/10 rounded-lg transition-colors"><Edit2 size={14}/></button>
+               <button onClick={() => handleEdit('socials')} className="text-[var(--violet)] p-1.5 hover:bg-[var(--violet)]/10 rounded-lg transition-colors"><Edit2 size={14}/></button>
             </div>
-            <div className="bg-[#12121A] border border-white/10 rounded-3xl p-3 space-y-2">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-3 space-y-2">
               {profile.socials.map((social, i) => (
-                 <div key={i} className="flex items-center justify-between p-3 bg-[#0A0A0B] rounded-2xl border border-white/5">
+                 <div key={i} className="flex items-center justify-between p-3 bg-[var(--bg-card)] rounded-2xl border border-[var(--border-default)]">
                    <div className="flex items-center gap-3">
-                     <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
+                     <div className="w-8 h-8 rounded-full bg-[var(--bg-elevated)] flex items-center justify-center">
                        {social.platform === 'Instagram' && <Instagram size={14} className="text-pink-500" />}
                        {social.platform === 'YouTube' && <Youtube size={14} className="text-red-500" />}
                        {social.platform === 'Twitter' && <Twitter size={14} className="text-blue-400" />}
                        {social.platform === 'LinkedIn' && <Linkedin size={14} className="text-blue-600" />}
-                       {!['Instagram', 'YouTube', 'Twitter', 'LinkedIn'].includes(social.platform) && <Globe size={14} className="text-white/70" />}
+                       {!['Instagram', 'YouTube', 'Twitter', 'LinkedIn'].includes(social.platform) && <Globe size={14} className="text-[var(--text-secondary)]" />}
                      </div>
-                     <span className="text-sm font-semibold text-white">{social.platform}</span>
+                     <span className="text-sm font-semibold text-[var(--text-primary)]">{social.platform}</span>
                    </div>
-                   <div className="text-xs text-[#9CA3AF] truncate max-w-[100px]">{social.url.replace('https://','')}</div>
+                   <div className="text-xs text-[var(--text-secondary)] truncate max-w-[100px]">{social.url.replace('https://','')}</div>
                  </div>
               ))}
-              <button onClick={() => handleEdit('socials')} className="w-full py-3 mt-2 rounded-2xl border border-dashed border-white/10 text-[#9CA3AF] text-xs font-bold hover:text-white hover:border-white/30 transition-all flex items-center justify-center gap-2">
+              <button onClick={() => handleEdit('socials')} className="w-full py-3 mt-2 rounded-2xl border border-dashed border-[var(--border-default)] text-[var(--text-secondary)] text-xs font-bold hover:text-[var(--text-primary)] hover:border-white/30 transition-all flex items-center justify-center gap-2">
                  <Plus size={14} /> Add Social Link
               </button>
             </div>
@@ -890,17 +890,17 @@ export default function Settings() {
 
           {/* SECURITY & ACCESS */}
           <section>
-            <h2 className="text-sm font-bold text-white tracking-wider mb-4 px-1 flex items-center gap-2">
-               <Shield size={16} className="text-[#9CA3AF]" /> Security & Access
+            <h2 className="text-sm font-bold text-[var(--text-primary)] tracking-wider mb-4 px-1 flex items-center gap-2">
+               <Shield size={16} className="text-[var(--text-secondary)]" /> Security & Access
             </h2>
-            <div className="bg-[#12121A] border border-white/10 rounded-3xl flex flex-col overflow-hidden">
+            <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl flex flex-col overflow-hidden">
                <EditableRow icon={Smartphone} label="Phone Number" value={profile.phone} onEdit={() => handleEdit('phone')} border />
                <EditableRow icon={Mail} label="Business Email" value={profile.businessEmail} onEdit={() => handleEdit('businessEmail')} border />
                <EditableRow icon={MonitorSmartphone} label="Active Sessions" value="2 active devices" onEdit={() => handleEdit('activeSessions')} />
             </div>
           </section>
 
-          <button onClick={logout} className="w-full bg-[#12121A] hover:bg-rose-500/10 border border-white/10 hover:border-rose-500/30 text-rose-500 font-bold rounded-2xl py-4 text-sm transition-all flex items-center justify-center gap-2 shadow-sm relative overflow-hidden group">
+          <button onClick={logout} className="w-full bg-[var(--bg-card)] hover:bg-rose-500/10 border border-[var(--border-default)] hover:border-rose-500/30 text-rose-500 font-bold rounded-2xl py-4 text-sm transition-all flex items-center justify-center gap-2 shadow-sm relative overflow-hidden group">
             <span className="relative z-10 flex items-center gap-2"><LogOut size={16}/> Log out of account</span>
           </button>
         </div>
@@ -911,15 +911,15 @@ export default function Settings() {
 
 function EditableRow({ icon: Icon, label, value, onEdit, border, className = "" }) {
   return (
-    <div className={`flex items-center justify-between px-6 py-5 ${border ? 'border-b border-white/5' : ''} ${className}`}>
+    <div className={`flex items-center justify-between px-6 py-5 ${border ? 'border-b border-[var(--border-default)]' : ''} ${className}`}>
       <div className="flex gap-4">
-        <div className="mt-0.5"><Icon size={20} className="text-[#9CA3AF]" /></div>
+        <div className="mt-0.5"><Icon size={20} className="text-[var(--text-secondary)]" /></div>
         <div>
-          <div className="font-semibold text-white text-sm">{label}</div>
-          <div className="text-[#9CA3AF] text-xs mt-1">{value}</div>
+          <div className="font-semibold text-[var(--text-primary)] text-sm">{label}</div>
+          <div className="text-[var(--text-secondary)] text-xs mt-1">{value}</div>
         </div>
       </div>
-      <button onClick={onEdit} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-white/70 transition-colors">
+      <button onClick={onEdit} className="p-2 bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] rounded-lg text-[var(--text-secondary)] transition-colors">
         <Edit2 size={14}/>
       </button>
     </div>

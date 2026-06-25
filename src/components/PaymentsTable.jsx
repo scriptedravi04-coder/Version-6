@@ -40,7 +40,7 @@ export default function PaymentsTable({ transactions = [], onRelease }) {
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold uppercase rounded-full bg-white/5 text-white/50 border border-white/10">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-extrabold uppercase rounded-full bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-default)]">
             {status}
           </span>
         );
@@ -48,25 +48,25 @@ export default function PaymentsTable({ transactions = [], onRelease }) {
   };
 
   return (
-    <div className="bg-[#131224]/80 border border-white/5 rounded-2xl overflow-hidden shadow-sm">
+    <div className="bg-[var(--bg-card)]/80 border border-[var(--border-default)] rounded-2xl overflow-hidden shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-white/5 bg-[#1b1935]/30">
-              <th className="p-4 px-6 text-xs font-bold text-white/40 uppercase tracking-wider">Campaign</th>
-              <th className="p-4 px-6 text-xs font-bold text-white/40 uppercase tracking-wider">Creator</th>
-              <th className="p-4 px-6 text-xs font-bold text-white/40 uppercase tracking-wider">Amount</th>
-              <th className="p-4 px-6 text-xs font-bold text-white/40 uppercase tracking-wider">Status</th>
-              <th className="p-4 px-6 text-xs font-bold text-white/40 uppercase tracking-wider">Date</th>
+            <tr className="border-b border-[var(--border-default)] bg-[#1b1935]/30">
+              <th className="p-4 px-6 text-xs font-bold text-[var(--text-tertiary)] uppercase tracking-wider">Campaign</th>
+              <th className="p-4 px-6 text-xs font-bold text-[var(--text-tertiary)] uppercase tracking-wider">Creator</th>
+              <th className="p-4 px-6 text-xs font-bold text-[var(--text-tertiary)] uppercase tracking-wider">Amount</th>
+              <th className="p-4 px-6 text-xs font-bold text-[var(--text-tertiary)] uppercase tracking-wider">Status</th>
+              <th className="p-4 px-6 text-xs font-bold text-[var(--text-tertiary)] uppercase tracking-wider">Date</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
             {list.map((tx, idx) => (
               <tr key={tx.transaction_id || idx} className="hover:bg-white/[0.02] transition-colors">
-                <td className="p-4 px-6 text-sm font-bold text-white">
+                <td className="p-4 px-6 text-sm font-bold text-[var(--text-primary)]">
                   {tx.campaign || tx.title || "Custom Brief Collab"}
                 </td>
-                <td className="p-4 px-6 text-sm font-sans font-semibold text-white/80">
+                <td className="p-4 px-6 text-sm font-sans font-semibold text-[var(--text-primary)]/80">
                   {tx.creator || tx.creator_name || "Creator Pro"}
                 </td>
                 <td className="p-4 px-6 text-sm font-mono font-bold text-emerald-400">
@@ -75,7 +75,7 @@ export default function PaymentsTable({ transactions = [], onRelease }) {
                 <td className="p-4 px-6">
                   {getStatusBadge(tx.status, tx)}
                 </td>
-                <td className="p-4 px-6 text-xs text-white/40 font-mono">
+                <td className="p-4 px-6 text-xs text-[var(--text-tertiary)] font-mono">
                   {tx.date || (tx.created_at ? new Date(tx.created_at).toLocaleDateString("en-IN") : "Recent")}
                 </td>
               </tr>

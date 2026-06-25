@@ -208,7 +208,7 @@ const phases = [
       {
         num: 11,
         title: "Payment Request / Milestone Mark",
-        icon: <IndianRupee size={24} className="text-[#9D7CFF]" />,
+        icon: <IndianRupee size={24} className="text-[var(--violet)]" />,
         points: [
           "Campaign section mein \"Mark as Complete\" ya \"Request Payment\" click karo",
           "Brand ko notification jayega ki creator ne deliver kar diya",
@@ -221,7 +221,7 @@ const phases = [
       {
         num: 12,
         title: "Invoice Auto-Generate",
-        icon: <FileCheck size={24} className="text-[#9D7CFF]" />,
+        icon: <FileCheck size={24} className="text-[var(--violet)]" />,
         points: [
           "App automatically invoice banata hai — Cashfree backend se",
           "Invoice mein hoga: Creator Name, Brand Name, Campaign Name, Amount, GST (agar applicable), Date",
@@ -234,7 +234,7 @@ const phases = [
       {
         num: 13,
         title: "Payment Processing — Cashfree Gateway",
-        icon: <Banknote size={24} className="text-[#9D7CFF]" />,
+        icon: <Banknote size={24} className="text-[var(--violet)]" />,
         points: [
           "Gateway: Cashfree (confirmed from APK)",
           "Methods: UPI, Direct Bank Transfer, Amazon Pay",
@@ -268,16 +268,16 @@ export default function CreatorCampaignFlow() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0F0F16] text-white selection:bg-[#7C3AED]/30 font-sans pb-24">
+    <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] selection:bg-[var(--violet)]/30 font-sans pb-24">
       {/* Background Ornaments */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[500px] bg-[#7C3AED]/10 blur-[150px] rounded-full"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[500px] bg-[var(--violet)]/10 blur-[150px] rounded-full"></div>
       </div>
 
       <div className="max-w-[900px] mx-auto px-4 sm:px-6 relative z-10 pt-12 md:pt-20">
         
         {/* Navigation */}
-        <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-white/50 hover:text-white mb-8 transition-colors">
+        <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-8 transition-colors">
           <ArrowLeft size={16} /> Back to Dashboard
         </Link>
         
@@ -286,7 +286,7 @@ export default function CreatorCampaignFlow() {
           <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tight mb-4 text-[#B19CFF]">
             Influish — Creator Campaign Flow
           </h1>
-          <p className="text-lg md:text-xl text-white/60 font-medium">
+          <p className="text-lg md:text-xl text-[var(--text-secondary)] font-medium">
             Starting se Leke Payment + Invoice Tak — Poora Process
           </p>
         </div>
@@ -339,7 +339,7 @@ export default function CreatorCampaignFlow() {
              <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle2 size={32} className="text-emerald-400" />
              </div>
-             <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-6">Campaign Successfully Complete!</h2>
+             <h2 className="text-2xl md:text-3xl font-display font-bold text-[var(--text-primary)] mb-6">Campaign Successfully Complete!</h2>
              
              <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-emerald-100/80 font-medium mb-8">
                <span>Brand ko rating do</span>
@@ -349,31 +349,31 @@ export default function CreatorCampaignFlow() {
                <span>Invoice save karo</span>
              </div>
 
-             <div className="inline-block bg-white/5 border border-white/10 rounded-xl px-6 py-3 text-sm text-emerald-200">
+             <div className="inline-block bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-6 py-3 text-sm text-emerald-200">
                Next campaign apply karo — ab experience hai, proposal aur strong hoga!
              </div>
           </div>
 
           {/* Quick Ref */}
-          <div className="mt-12 bg-[#161622] rounded-3xl p-8 border border-white/5">
+          <div className="mt-12 bg-[#161622] rounded-3xl p-8 border border-[var(--border-default)]">
             <h3 className="text-lg font-bold flex items-center gap-2 mb-6">
-               <HelpCircle size={20} className="text-[#9D7CFF]" />
+               <HelpCircle size={20} className="text-[var(--violet)]" />
                Quick Reference — Important Points
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-white/60">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-[var(--text-secondary)]">
               <ul className="space-y-3">
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Profile complete hona zaroori</li>
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Proposal personalize karo</li>
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Bina approval ke live mat karo</li>
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Invoice download karke save karo</li>
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Revision count pehle fix karo</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Profile complete hona zaroori</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Proposal personalize karo</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Bina approval ke live mat karo</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Invoice download karke save karo</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Revision count pehle fix karo</li>
               </ul>
               <ul className="space-y-3">
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Sab chat pe hi karo — no WhatsApp</li>
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Agreement ke baad kaam shuru karo</li>
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Analytics proof submit karo</li>
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> Cashfree se UPI/Bank payment aata hai</li>
-                <li className="flex items-start gap-2"><span className="text-[#9D7CFF] font-bold">·</span> TDS ₹30k+ pe applicable hai</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Sab chat pe hi karo — no WhatsApp</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Agreement ke baad kaam shuru karo</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Analytics proof submit karo</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> Cashfree se UPI/Bank payment aata hai</li>
+                <li className="flex items-start gap-2"><span className="text-[var(--violet)] font-bold">·</span> TDS ₹30k+ pe applicable hai</li>
               </ul>
             </div>
           </div>
@@ -388,34 +388,34 @@ function StepCard({ step }) {
   return (
     <div className="relative pl-6 md:pl-10 pb-8 last:pb-0">
       {/* Timeline line */}
-      <div className="absolute left-[26px] top-[40px] bottom-[-20px] w-px bg-white/10 hidden md:block"></div>
+      <div className="absolute left-[26px] top-[40px] bottom-[-20px] w-px bg-[var(--bg-elevated)] hidden md:block"></div>
       
-      <div className="bg-[#1A1A24] border border-white/5 rounded-3xl p-6 md:p-8 hover:border-white/10 transition-colors group">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-6 md:p-8 hover:border-[var(--border-default)] transition-colors group">
         <div className="flex flex-col md:flex-row gap-5">
           {/* Number & Icon */}
           <div className="flex-shrink-0 flex items-center md:items-start gap-4 md:flex-col md:w-12">
-            <div className="w-10 h-10 rounded-full bg-[#222230] text-lg font-display font-black flex items-center justify-center text-white/80 border border-white/5 group-hover:bg-[#7C3AED] group-hover:border-[#7C3AED] transition-all">
+            <div className="w-10 h-10 rounded-full bg-[#222230] text-lg font-display font-black flex items-center justify-center text-[var(--text-primary)]/80 border border-[var(--border-default)] group-hover:bg-[var(--violet)] group-hover:border-[#7C3AED] transition-all">
               {step.num}
             </div>
-            <div className="hidden md:flex w-10 h-10 rounded-xl bg-white/5 items-center justify-center">
+            <div className="hidden md:flex w-10 h-10 rounded-xl bg-[var(--bg-elevated)] items-center justify-center">
               {step.icon}
             </div>
           </div>
           
           {/* Content */}
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-white mb-5">{step.title}</h3>
+            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-5">{step.title}</h3>
             <ul className="space-y-3 mb-6">
               {step.points.map((pt, i) => (
-                <li key={i} className="text-white/70 text-sm leading-relaxed flex items-start gap-3">
-                  <span className="text-[#7C3AED] mt-1 shrink-0">{"→"}</span>
+                <li key={i} className="text-[var(--text-secondary)] text-sm leading-relaxed flex items-start gap-3">
+                  <span className="text-[var(--violet)] mt-1 shrink-0">{"→"}</span>
                   <span>{pt}</span>
                 </li>
               ))}
             </ul>
 
             {step.extra && (
-              <div className="bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-[#D9F111]/80 font-medium leading-relaxed flex flex-col md:flex-row md:items-center gap-2 md:gap-4 md:divide-x divide-white/10">
+              <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-3 text-xs text-[#D9F111]/80 font-medium leading-relaxed flex flex-col md:flex-row md:items-center gap-2 md:gap-4 md:divide-x divide-white/10">
                 {step.extra.split('|').map((part, index) => (
                    <span key={index} className={index > 0 ? "md:pl-4" : ""}>{part.trim()}</span>
                 ))}
@@ -433,13 +433,13 @@ function DecisionBox({ callout }) {
     <div className="border border-amber-500/30 border-dashed rounded-3xl p-6 bg-amber-500/5 my-8">
       <h3 className="text-center font-bold text-amber-400 mb-6">{callout.title}</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="bg-[#1A1A24] rounded-2xl p-5 border border-emerald-500/20">
+        <div className="bg-[var(--bg-card)] rounded-2xl p-5 border border-emerald-500/20">
           <h4 className="font-bold text-emerald-400 mb-2">{callout.left.title}</h4>
-          <p className="text-sm text-white/60">{callout.left.desc}</p>
+          <p className="text-sm text-[var(--text-secondary)]">{callout.left.desc}</p>
         </div>
-        <div className="bg-[#1A1A24] rounded-2xl p-5 border border-rose-500/20">
+        <div className="bg-[var(--bg-card)] rounded-2xl p-5 border border-rose-500/20">
           <h4 className="font-bold text-rose-400 mb-2">{callout.right.title}</h4>
-          <p className="text-sm text-white/60">{callout.right.desc}</p>
+          <p className="text-sm text-[var(--text-secondary)]">{callout.right.desc}</p>
         </div>
       </div>
     </div>

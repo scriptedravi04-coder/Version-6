@@ -20,12 +20,12 @@ export default function StatsCard({ label, value, prefix = "", suffix = "", icon
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="bg-[#131224]/90 border border-white/5 rounded-xl p-5 shadow-sm text-left relative overflow-hidden transition-all hover:border-[#7C5CFF]/30 hover:shadow-[0_8px_30px_rgba(124,92,255,0.05)]"
+      className="bg-[var(--bg-card)]/90 border border-[var(--border-default)] rounded-xl p-5 shadow-sm text-left relative overflow-hidden transition-all hover:border-[#7C5CFF]/30 hover:shadow-[0_8px_30px_rgba(124,92,255,0.05)]"
     >
-      <div className="absolute right-3 bottom-0 text-white/[0.02] pointer-events-none">
+      <div className="absolute right-3 bottom-0 text-[var(--text-primary)]/[0.02] pointer-events-none">
         {Icon && <Icon size={80} />}
       </div>
-      <div className="text-[11px] uppercase font-semibold text-white/50 tracking-wider">
+      <div className="text-[11px] uppercase font-semibold text-[var(--text-secondary)] tracking-wider">
         {label}
       </div>
       <div className={`text-3xl font-black font-display mt-2 ${colorClass}`}>

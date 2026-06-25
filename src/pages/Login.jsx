@@ -144,14 +144,14 @@ export default function Login() {
   const activeUSP = USPS[slideIdx];
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-background text-foreground" data-testid="login-page">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-[var(--bg-base)] text-[var(--text-primary)]" data-testid="login-page">
       {/* LEFT PANEL — Smooth horizontal gradient blending into deep black, wider span — Hidden on mobile / tablet for clean auth flow */}
       <section className="hidden lg:flex lg:col-span-7 bg-gradient-to-b lg:bg-gradient-to-r from-card via-background to-background p-10 md:p-14 flex-col justify-between relative overflow-hidden min-h-[50vh] lg:min-h-screen">
         {/* Subtle grid background accent */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
         {/* Ambient colored blobs to smooth out different container vibes */}
-        <div className="absolute bottom-1/4 -left-10 w-[450px] h-[450px] bg-[#7C5CFF]/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 -left-10 w-[450px] h-[450px] bg-[var(--violet)]/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute -top-10 right-10 w-[350px] h-[350px] bg-[#D9F111]/4 rounded-full blur-[100px] pointer-events-none" />
 
         {/* USP Slideshow container */}
@@ -165,11 +165,11 @@ export default function Login() {
               transition={{ duration: 0.5, ease: "easeOut" }}
               className="w-full"
             >
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-5xl xl:text-6xl text-foreground leading-tight font-bold tracking-tight">
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-5xl xl:text-6xl text-[var(--text-primary)] leading-tight font-bold tracking-tight">
                 {activeUSP.title} <br />
                 <span className="text-[#D9F111] font-black">{activeUSP.coloredTitle}</span>
               </h2>
-              <p className="text-foreground/85 mt-6 text-base sm:text-lg lg:text-xl leading-relaxed font-medium">
+              <p className="text-[var(--text-primary)] mt-6 text-base sm:text-lg lg:text-xl leading-relaxed font-medium">
                 {activeUSP.desc}
               </p>
 
@@ -180,7 +180,7 @@ export default function Login() {
                     <div className="font-display font-black text-3xl sm:text-4xl lg:text-4xl xl:text-5xl text-[#7C5CFF]" data-testid={`stat-num-${sId}`}>
                       {stat.num}
                     </div>
-                    <div className="text-xs sm:text-sm text-foreground/60 font-bold uppercase tracking-wider mt-2" data-testid={`stat-lbl-${sId}`}>
+                    <div className="text-xs sm:text-sm text-[var(--text-primary)]/60 font-bold uppercase tracking-wider mt-2" data-testid={`stat-lbl-${sId}`}>
                       {stat.text}
                     </div>
                   </div>
@@ -191,24 +191,24 @@ export default function Login() {
         </div>
 
         {/* Bottom copyright */}
-        <div className="text-xs text-foreground/30 font-semibold z-10 uppercase tracking-widest select-none pt-4 border-t border-foreground/5">
+        <div className="text-xs text-[var(--text-primary)]/30 font-semibold z-10 uppercase tracking-widest select-none pt-4 border-t border-foreground/5">
           2026 Ybex Media. All rights reserved.
         </div>
       </section>
 
       {/* RIGHT PANEL — Clean, spacious login screen matching mockup form spacing — Compact & centered for mobile */}
-      <section className="lg:col-span-5 flex flex-col justify-center items-center pt-24 sm:pt-12 pb-12 px-6 sm:p-12 md:p-16 lg:p-24 bg-background min-h-screen">
+      <section className="lg:col-span-5 flex flex-col justify-center items-center pt-24 sm:pt-12 pb-12 px-6 sm:p-12 md:p-16 lg:p-24 bg-[var(--bg-base)] min-h-screen">
         <div className="w-full max-w-sm sm:max-w-md mx-auto animate-in fade-in slide-in-from-right-4 duration-300">
           <div className="mb-6 sm:mb-8 text-center sm:text-left">
-            <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl text-foreground font-bold tracking-tight">Welcome back</h1>
-            <p className="text-foreground/60 mt-1.5 sm:mt-2 text-xs sm:text-sm font-medium">Sign in to continue to your dashboard</p>
+            <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl text-[var(--text-primary)] font-bold tracking-tight">Welcome back</h1>
+            <p className="text-[var(--text-primary)]/60 mt-1.5 sm:mt-2 text-xs sm:text-sm font-medium">Sign in to continue to your dashboard</p>
           </div>
 
           {/* Social Sign Up Option */}
           <button
             onClick={handleGoogle}
             data-testid="google-login-btn"
-            className="w-full bg-foreground/5 border border-foreground/10 py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-foreground hover:bg-foreground/10 hover:border-foreground/20 transition-all flex items-center justify-center gap-2 rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.2)] mb-3"
+            className="w-full bg-foreground/5 border border-[var(--border-default)] py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-[var(--text-primary)] hover:bg-foreground/10 hover:border-foreground/20 transition-all flex items-center justify-center gap-2 rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.2)] mb-3"
           >
             <svg className="w-4.5 h-4.5" viewBox="0 0 48 48">
               <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34 6.2 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/>
@@ -236,33 +236,33 @@ export default function Login() {
               toast.success("Bypassed login (Dev Mode)");
               navigate("/dashboard");
             }}
-            className="w-full bg-[#7C5CFF]/10 border border-[#7C5CFF]/30 py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-[#7C5CFF] hover:bg-[#7C5CFF]/20 transition-all rounded-xl shadow-sm"
+            className="w-full bg-[var(--violet)]/10 border border-[var(--violet)]/20 py-2.5 sm:py-3 text-xs sm:text-sm font-bold text-[#7C5CFF] hover:bg-[var(--violet)]/20 transition-all rounded-xl shadow-sm"
           >
             Developer Bypass (Creator Dashboard)
           </button>
 
           <div className="flex items-center gap-4 my-4 sm:my-6">
             <div className="flex-1 h-px bg-foreground/10"></div>
-            <span className="text-[10px] sm:text-xs text-foreground/40 font-black tracking-widest uppercase">OR</span>
+            <span className="text-[10px] sm:text-xs text-[var(--text-tertiary)] font-black tracking-widest uppercase">OR</span>
             <div className="flex-1 h-px bg-foreground/10"></div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
             <div>
-              <label className="text-[10px] sm:text-xs uppercase tracking-widest font-black text-foreground/60 block mb-1 sm:mb-1.5">Email</label>
+              <label className="text-[10px] sm:text-xs uppercase tracking-widest font-black text-[var(--text-primary)]/60 block mb-1 sm:mb-1.5">Email</label>
               <input
                 data-testid="login-email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm text-foreground placeholder-white/30 outline-none focus:border-[#7C5CFF]/60 focus:bg-foreground/10 transition-all shadow-[inset_0_1px_2px_rgba(255,255,255,0.01)]"
+                className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm text-[var(--text-primary)] placeholder-white/30 outline-none focus:border-[var(--violet)]/20 focus:bg-foreground/10 transition-all shadow-[inset_0_1px_2px_rgba(255,255,255,0.01)]"
                 placeholder="you@email.com"
               />
             </div>
             <div>
               <div className="flex justify-between items-center mb-1 sm:mb-1.5">
-                <label className="text-[10px] sm:text-xs uppercase tracking-widest font-black text-foreground/60">Password</label>
+                <label className="text-[10px] sm:text-xs uppercase tracking-widest font-black text-[var(--text-primary)]/60">Password</label>
                 <Link to="#" className="text-[10px] sm:text-xs text-[#7C5CFF] font-bold hover:underline">Forgot password?</Link>
               </div>
               <input
@@ -271,7 +271,7 @@ export default function Login() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm text-foreground placeholder-white/30 outline-none focus:border-[#7C5CFF]/60 focus:bg-foreground/10 transition-all shadow-[inset_0_1px_2px_rgba(255,255,255,0.01)]"
+                className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm text-[var(--text-primary)] placeholder-white/30 outline-none focus:border-[var(--violet)]/20 focus:bg-foreground/10 transition-all shadow-[inset_0_1px_2px_rgba(255,255,255,0.01)]"
                 placeholder="Enter your password"
               />
             </div>
@@ -280,13 +280,13 @@ export default function Login() {
               type="submit"
               data-testid="login-submit"
               disabled={loading}
-              className="w-full mt-2.5 sm:mt-3 py-2.5 sm:py-3 bg-[#7C5CFF] text-white font-semibold text-xs sm:text-sm rounded-xl hover:bg-[#6849E0] shadow-[0_4px_16px_rgba(124,92,255,0.3)] hover:shadow-[0_4px_20px_rgba(124,92,255,0.45)] transform active:scale-[0.99] transition-all flex items-center justify-center gap-2 duration-150 cursor-pointer"
+              className="w-full mt-2.5 sm:mt-3 py-2.5 sm:py-3 bg-[var(--violet)] text-white font-semibold text-xs sm:text-sm rounded-xl hover:bg-[#6849E0] shadow-[0_4px_16px_rgba(124,92,255,0.3)] hover:shadow-[0_4px_20px_rgba(124,92,255,0.45)] transform active:scale-[0.99] transition-all flex items-center justify-center gap-2 duration-150 cursor-pointer"
             >
               {loading ? "Signing In..." : "Sign In →"}
             </button>
           </form>
 
-          <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-foreground/60 font-medium">
+          <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-[var(--text-primary)]/60 font-medium">
             Don't have an account?{" "}
             <Link to={`/signup?role=${role}`} className="text-[#D9F111] font-black hover:underline animate-pulse">
               Sign up

@@ -136,9 +136,9 @@ export default function AllFiltersModal({ open, onClose, filters, setFilters, on
 
   return (
     <div className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-6" onClick={onClose} data-testid="all-filters-modal">
-      <div onClick={(e) => e.stopPropagation()} className="bg-surface w-full max-w-5xl rounded-t-3xl md:rounded-3xl border border-foreground/10 flex flex-col max-h-[92vh] overflow-hidden">
+      <div onClick={(e) => e.stopPropagation()} className="bg-surface w-full max-w-5xl rounded-t-3xl md:rounded-3xl border border-[var(--border-default)] flex flex-col max-h-[92vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 md:px-7 py-4 border-b border-foreground/10">
+        <div className="flex items-center justify-between px-5 md:px-7 py-4 border-b border-[var(--border-default)]">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-lg bg-[#7C5CFF]/15 border border-[#7C5CFF]/30 flex items-center justify-center text-[#9D7CFF]">
               <SearchIcon size={16}/>
@@ -151,13 +151,13 @@ export default function AllFiltersModal({ open, onClose, filters, setFilters, on
         {/* Two-column body */}
         <div className="flex-1 overflow-hidden grid grid-cols-[140px_1fr] md:grid-cols-[200px_1fr]">
           {/* LEFT — tab rail */}
-          <aside className="border-r border-foreground/10 overflow-y-auto scroll-thin py-2 bg-background">
+          <aside className="border-r border-[var(--border-default)] overflow-y-auto scroll-thin py-2 bg-[var(--bg-base)]">
             {TABS.map((t) => (
               <button
                 key={t}
                 onClick={() => setActiveTab(t)}
                 data-testid={`filter-tab-${t.replace(/\s+/g,'-').toLowerCase()}`}
-                className={`w-full text-left px-4 md:px-5 py-3.5 text-sm border-l-2 transition-colors ${activeTab === t ? "text-[#9D7CFF] font-semibold border-[#9D7CFF] bg-[#7C5CFF]/8" : "text-foreground/55 border-transparent hover:bg-foreground/3 hover:text-foreground/80"}`}
+                className={`w-full text-left px-4 md:px-5 py-3.5 text-sm border-l-2 transition-colors ${activeTab === t ? "text-[#9D7CFF] font-semibold border-[#9D7CFF] bg-[#7C5CFF]/8" : "text-[var(--text-primary)]/55 border-transparent hover:bg-foreground/3 hover:text-[var(--text-primary)]/80"}`}
               >
                 {t}
               </button>
@@ -166,7 +166,7 @@ export default function AllFiltersModal({ open, onClose, filters, setFilters, on
 
           {/* RIGHT — options */}
           <section className="overflow-y-auto scroll-thin px-5 md:px-8 py-5">
-            <h3 className="font-semibold text-lg mb-4 text-foreground">Filter by {activeTab.replace("Sort by", "Sort")}</h3>
+            <h3 className="font-semibold text-lg mb-4 text-[var(--text-primary)]">Filter by {activeTab.replace("Sort by", "Sort")}</h3>
 
             {activeTab === "Sort by" && (
               <RadioList options={SORT_OPTIONS} value={draft.sort_by} onChange={(v) => update("sort_by", v)} testIdPrefix="sort"/>
@@ -185,12 +185,12 @@ export default function AllFiltersModal({ open, onClose, filters, setFilters, on
                     onChange={(e) => setCatSearch(e.target.value)} 
                     placeholder="Search by Category or Sub-category" 
                     data-testid="category-search" 
-                    className="w-full pl-10 pr-3 py-2.5 bg-transparent border-b border-foreground/15 focus:border-[#7C5CFF] outline-none text-sm text-foreground"
+                    className="w-full pl-10 pr-3 py-2.5 bg-transparent border-b border-foreground/15 focus:border-[#7C5CFF] outline-none text-sm text-[var(--text-primary)]"
                   />
                   {catSearch && (
                     <button 
                       onClick={() => setCatSearch("")} 
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground text-xs font-bold"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)] text-xs font-bold"
                     >
                       Clear
                     </button>
@@ -207,25 +207,25 @@ export default function AllFiltersModal({ open, onClose, filters, setFilters, on
                     const visibleSubs = subs;
 
                     return (
-                      <div key={cat} className="border border-foreground/10 rounded-xl overflow-hidden bg-foreground/3">
+                      <div key={cat} className="border border-[var(--border-default)] rounded-xl overflow-hidden bg-foreground/3">
                         <button
                           onClick={() => setExpandedCat(expandedCat === cat ? null : cat)}
                           data-testid={`cat-${cat.replace(/\s+/g,'-').toLowerCase()}`}
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-foreground/5"
                         >
                           <CheckBox checked={checked} onChange={(e) => { e.stopPropagation(); toggleArr("categories", cat); }}/>
-                          <span className={`flex-1 text-left text-sm font-medium ${isSearching && cat.toLowerCase().includes(catSearch.toLowerCase()) ? "text-[#D9F111] font-bold" : "text-foreground"}`}>{cat}</span>
-                          <span className="text-xs text-foreground/40 mr-1">{subs.length} subs</span>
-                          <ChevronRight size={16} className={`text-foreground/40 transition-transform ${expanded ? "rotate-90" : ""}`}/>
+                          <span className={`flex-1 text-left text-sm font-medium ${isSearching && cat.toLowerCase().includes(catSearch.toLowerCase()) ? "text-[#D9F111] font-bold" : "text-[var(--text-primary)]"}`}>{cat}</span>
+                          <span className="text-xs text-[var(--text-tertiary)] mr-1">{subs.length} subs</span>
+                          <ChevronRight size={16} className={`text-[var(--text-tertiary)] transition-transform ${expanded ? "rotate-90" : ""}`}/>
                         </button>
                         {expanded && (
-                          <div className="px-4 pb-3 pt-1 grid grid-cols-1 md:grid-cols-2 gap-1 border-t border-foreground/5 bg-black/20">
+                          <div className="px-4 pb-3 pt-1 grid grid-cols-1 md:grid-cols-2 gap-1 border-t border-foreground/5 bg-[var(--bg-elevated)]">
                             {visibleSubs.map((s) => {
                               const sMatch = isSearching && s.toLowerCase().includes(catSearch.toLowerCase());
                               return (
                                 <label key={s} className="flex items-center gap-2.5 py-1.5 px-2 rounded hover:bg-foreground/5 cursor-pointer">
                                   <CheckBox checked={(draft.sub_categories || []).includes(s)} onChange={() => toggleArr("sub_categories", s)}/>
-                                  <span className={`text-sm transition-colors ${sMatch ? "text-[#D9F111] font-bold" : "text-foreground/75"}`}>{s}</span>
+                                  <span className={`text-sm transition-colors ${sMatch ? "text-[#D9F111] font-bold" : "text-[var(--text-primary)]/75"}`}>{s}</span>
                                 </label>
                               );
                             })}
@@ -235,7 +235,7 @@ export default function AllFiltersModal({ open, onClose, filters, setFilters, on
                     );
                   })}
                   {filteredCategories.length === 0 && (
-                    <div className="text-center py-8 text-foreground/40 text-xs">No matching categories or subcategories found.</div>
+                    <div className="text-center py-8 text-[var(--text-tertiary)] text-xs">No matching categories or subcategories found.</div>
                   )}
                 </div>
               </div>
@@ -282,10 +282,10 @@ export default function AllFiltersModal({ open, onClose, filters, setFilters, on
         </div>
 
         {/* Footer */}
-        <div className="flex items-center gap-3 px-5 md:px-7 py-4 border-t border-foreground/10">
-          <button onClick={clear} data-testid="filters-clear" className="flex-1 md:flex-none px-6 py-3 rounded-full bg-foreground/8 hover:bg-foreground/12 text-foreground/80 font-medium text-sm">Clear Filters</button>
+        <div className="flex items-center gap-3 px-5 md:px-7 py-4 border-t border-[var(--border-default)]">
+          <button onClick={clear} data-testid="filters-clear" className="flex-1 md:flex-none px-6 py-3 rounded-full bg-foreground/8 hover:bg-foreground/12 text-[var(--text-primary)]/80 font-medium text-sm">Clear Filters</button>
           <div className="flex-1"></div>
-          <button onClick={apply} data-testid="filters-apply" className="px-8 py-3 rounded-full bg-[#7C5CFF] text-white font-bold text-sm hover:bg-[#6849E0] transition-all duration-150 shadow-[0_4px_16px_rgba(124,92,255,0.3)] cursor-pointer">Done</button>
+          <button onClick={apply} data-testid="filters-apply" className="px-8 py-3 rounded-full bg-[var(--violet)] text-white font-bold text-sm hover:bg-[#6849E0] transition-all duration-150 shadow-[0_4px_16px_rgba(124,92,255,0.3)] cursor-pointer">Done</button>
         </div>
       </div>
     </div>
@@ -296,7 +296,7 @@ export default function AllFiltersModal({ open, onClose, filters, setFilters, on
 function CheckBox({ checked, onChange }) {
   return (
     <button type="button" onClick={onChange} className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${checked ? "bg-[#7C5CFF] border-[#7C5CFF]" : "border-foreground/25 hover:border-foreground/50"}`}>
-      {checked && <Check size={13} className="text-foreground"/>}
+      {checked && <Check size={13} className="text-[var(--text-primary)]"/>}
     </button>
   );
 }

@@ -21,7 +21,7 @@ const BrandProgressTracker = ({ brandStatus, qualityReviewEndsAt }) => {
     <div className="w-full py-4">
       <div className="flex items-center justify-between relative px-2">
         {/* Progress line */}
-        <div className="absolute top-5 left-8 right-8 h-1 bg-gray-800 z-0 rounded-full" />
+        <div className="absolute top-5 left-8 right-8 h-1 bg-[var(--border-default)] z-0 rounded-full" />
         <motion.div
           className="absolute top-5 left-8 h-1 bg-[#7c3aed] z-0 rounded-full"
           initial={{ width: '0%' }}
@@ -41,15 +41,15 @@ const BrandProgressTracker = ({ brandStatus, qualityReviewEndsAt }) => {
                 transition={{ repeat: isCurrent ? Infinity : 0, duration: 1.5 }}
                 className={`w-10 h-10 mb-2 rounded-full flex items-center justify-center text-lg border-2 ${
                   isDone    ? 'bg-[#7c3aed] border-[#7c3aed]' :
-                  isCurrent ? 'bg-[#0f0f1a] border-[#a78bfa]' :
-                              'bg-[#0f0f1a] border-gray-700'
+                  isCurrent ? 'bg-[var(--bg-elevated)] border-[#a78bfa]' :
+                              'bg-[var(--bg-elevated)] border-[var(--border-default)]'
                 }`}
               >
                 {isDone ? '✅' : step.icon}
               </motion.div>
               <span className={`text-[10px] text-center uppercase tracking-wider font-bold ${
                 isCurrent ? 'text-[#a78bfa]' :
-                isDone    ? 'text-gray-400' : 'text-gray-600'
+                isDone    ? 'text-[var(--text-tertiary)]' : 'text-[var(--text-secondary)]'
               }`}>
                 {step.label}
               </span>
@@ -59,7 +59,7 @@ const BrandProgressTracker = ({ brandStatus, qualityReviewEndsAt }) => {
       </div>
 
       {/* Status message */}
-      <div className="mt-6 text-center bg-white/5 p-4 rounded-xl border border-white/10">
+      <div className="mt-6 text-center bg-[var(--bg-elevated)] p-4 rounded-xl border border-[var(--border-default)]">
         {brandStatus === 'MATCHING_CREATOR' && (
           <p className="text-[#facc15] text-sm animate-pulse font-medium">
             🔍 Finding the best creator for your brief...
@@ -81,7 +81,7 @@ const BrandProgressTracker = ({ brandStatus, qualityReviewEndsAt }) => {
               🔍 Under Quality Review — our team is checking your video.
             </p>
             {qualityReviewEndsAt && (
-              <p className="text-gray-500 text-xs mt-1">
+              <p className="text-[var(--text-secondary)] text-xs mt-1">
                 Usually completes within 2 hours
               </p>
             )}

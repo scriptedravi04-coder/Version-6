@@ -97,21 +97,21 @@ export default function BrandCampaignApplicants() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32 bg-[#09090e] min-h-screen">
+      <div className="flex items-center justify-center py-32 bg-[var(--bg-base)] min-h-screen">
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 rounded-full border-2 border-[#7C5CFF] border-t-transparent animate-spin"></div>
-          <div className="text-white/40 text-sm font-mono tracking-widest uppercase">Fetching Applicants...</div>
+          <div className="text-[var(--text-tertiary)] text-sm font-mono tracking-widest uppercase">Fetching Applicants...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-10 text-left min-h-screen bg-[#09090e] text-white">
+    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-10 text-left min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
       <div className="mb-8">
         <button 
           onClick={() => navigate("/brand/campaigns")}
-          className="flex items-center gap-1.5 text-xs font-bold text-white/50 hover:text-white mb-4 transition-all"
+          className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-4 transition-all"
         >
           <ArrowLeft size={14} /> Back to My Campaigns
         </button>
@@ -119,24 +119,24 @@ export default function BrandCampaignApplicants() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <span className="p-1 px-2.5 rounded-lg bg-[#7C5CFF]/10 text-[#a98eff] border border-[#7C5CFF]/20 text-[10px] uppercase font-mono font-bold flex items-center gap-1">
+              <span className="p-1 px-2.5 rounded-lg bg-[var(--violet)]/10 text-[#a98eff] border border-[var(--violet)]/20 text-[10px] uppercase font-mono font-bold flex items-center gap-1">
                 <Megaphone size={10} /> Active Campaign Briefing
               </span>
-              <span className="text-white/20">•</span>
+              <span className="text-[var(--text-primary)]/20">•</span>
               <span className="text-emerald-400 text-xs font-semibold font-mono">
                 ₹{(campaign?.budget_min || 10000).toLocaleString("en-IN")} - ₹{(campaign?.budget_max || 15000).toLocaleString("en-IN")}
               </span>
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1.5">
+            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)] mt-1.5">
               {campaign?.title || "Campaign Applicants"}
             </h1>
           </div>
 
-          <div className="flex items-center gap-2 bg-[#131224] border border-white/5 px-4 py-2.5 rounded-2xl">
-            <Users size={16} className="text-[#9D7CFF]" />
+          <div className="flex items-center gap-2 bg-[var(--bg-card)] border border-[var(--border-default)] px-4 py-2.5 rounded-2xl">
+            <Users size={16} className="text-[var(--violet)]" />
             <div className="text-left font-sans">
-              <div className="text-[10px] text-white/40 uppercase font-semibold">Pitching pool</div>
-              <div className="text-sm font-bold text-white font-mono mt-0.5">{applicants.length} Creator Pits</div>
+              <div className="text-[10px] text-[var(--text-tertiary)] uppercase font-semibold">Pitching pool</div>
+              <div className="text-sm font-bold text-[var(--text-primary)] font-mono mt-0.5">{applicants.length} Creator Pits</div>
             </div>
           </div>
         </div>
@@ -144,12 +144,12 @@ export default function BrandCampaignApplicants() {
 
       <div className="grid grid-cols-1 gap-5">
         {applicants.length === 0 ? (
-          <div className="bg-[#131224] border border-white/5 rounded-3xl p-16 text-center max-w-2xl mx-auto flex flex-col items-center justify-center">
-            <div className="p-4 bg-white/5 text-white/30 rounded-full mb-3">
+          <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-16 text-center max-w-2xl mx-auto flex flex-col items-center justify-center">
+            <div className="p-4 bg-[var(--bg-elevated)] text-[var(--text-tertiary)] rounded-full mb-3">
               <HelpCircle size={28} />
             </div>
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">No applicant entries yet</h3>
-            <p className="text-xs text-white/40 mt-1.5 leading-relaxed max-w-md">
+            <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wider">No applicant entries yet</h3>
+            <p className="text-xs text-[var(--text-tertiary)] mt-1.5 leading-relaxed max-w-md">
               Pitches from creators will show up here as soon as verification completes. You can share your active campaign briefing URL to promote your listing!
             </p>
           </div>

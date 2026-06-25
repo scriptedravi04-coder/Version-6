@@ -33,8 +33,8 @@ async function startServer() {
 
   const DB_PATH = path.join(process.cwd(), "db_mock.json");
 
-  const supabaseUrl = process.env.SUPABASE_URL || 'https://ozqdefczzkkfekkjzikp.supabase.co';
-  const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_KEY || 'sb_publishable_1oXLPrlDJPss2sHdX2YetQ_pnad39Wy';
+  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL || 'https://ozqdefczzkkfekkjzikp.supabase.co';
+  const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || 'sb_publishable_1oXLPrlDJPss2sHdX2YetQ_pnad39Wy';
   let supabase: any = null;
 
   if (supabaseUrl && supabaseKey) {
@@ -131,6 +131,7 @@ async function startServer() {
     ugc_showcase?: any[];
     ugc_reviews?: any[];
     earnings?: any[];
+    banners?: any[];
   }
 
   function getInitialDbState(): DbState {
@@ -402,6 +403,7 @@ async function startServer() {
       if (!parsed.ugc_deliveries) parsed.ugc_deliveries = [];
       if (!parsed.ugc_showcase) parsed.ugc_showcase = [];
       if (!parsed.ugc_reviews) parsed.ugc_reviews = [];
+      if (!parsed.banners) parsed.banners = [];
       return parsed;
     } catch (e) {
       const dbState = getInitialDbState();
@@ -871,6 +873,7 @@ async function startServer() {
       db.ugc_briefs = db.ugc_briefs || [];
       db.ugc_orders = db.ugc_orders || [];
       db.earnings = db.earnings || [];
+      db.banners = db.banners || [];
 
       const hasCollabs = db.collabs.some(c => c.creator_id === user.user_id || c.to_user_id === user.user_id || c.from_user_id === user.user_id);
       if (!hasCollabs) {
@@ -2422,6 +2425,19 @@ async function startServer() {
     });
 
     res.json(processed.slice().reverse());
+  });
+
+  router.post("/campaigns/:id/track-view", (req, res) => {
+    const db = getDb();
+    db.campaigns = db.campaigns || [];
+    const idx = db.campaigns.findIndex(c => c.campaign_id === req.params.id);
+    if (idx >= 0) {
+      db.campaigns[idx].views = (db.campaigns[idx].views || 0) + 1;
+      saveDb(db);
+      res.json({ ok: true, views: db.campaigns[idx].views });
+    } else {
+      res.json({ ok: false, detail: "Campaign not found" });
+    }
   });
 
   router.get("/campaigns/:campaign_id", (req, res) => {
@@ -4995,6 +5011,54 @@ async function startServer() {
 
 
   // Mount API Router on parent app
+  // BANNERS API
+  router.get("/banners", (req, res) => {
+    const db = getDb();
+    res.json(db.banners || []);
+  });
+
+  router.post("/banners", upload.single("image"), (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user || user.role !== "admin") return res.status(403).json({ error: "Admin only" });
+
+    const db = getDb();
+    if (!db.banners) db.banners = [];
+
+    const { type, placement, link, status } = req.body;
+    let imgUrl = req.body.imgUrl;
+    
+    if (req.file) {
+      // In a real app we'd upload to Supabase storage, for now use a data URI or placeholder
+      const base64 = req.file.buffer.toString("base64");
+      imgUrl = `data:${req.file.mimetype};base64,${base64}`;
+    }
+
+    const newBanner = {
+      id: `ban_${Math.random().toString(36).substring(2, 9)}`,
+      type: type || 'Influencer',
+      placement: placement || 'Home Top',
+      imgUrl: imgUrl || 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80',
+      link: link || '',
+      status: status || 'Live',
+      clicks: 0,
+      created_at: getIsoNow(),
+    };
+
+    db.banners.push(newBanner);
+    saveDb(db);
+    res.json(newBanner);
+  });
+
+  router.delete("/banners/:id", (req, res) => {
+    const user = parseAuthUser(req);
+    if (!user || user.role !== "admin") return res.status(403).json({ error: "Admin only" });
+    const db = getDb();
+    if (!db.banners) db.banners = [];
+    db.banners = db.banners.filter(b => b.id !== req.params.id);
+    saveDb(db);
+    res.json({ success: true });
+  });
+
   app.use("/api", router);
 
   // Vite middleware setup for rendering React SPA in development or compiled files in production

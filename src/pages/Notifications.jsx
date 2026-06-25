@@ -98,7 +98,7 @@ export default function Notifications() {
     <div className="max-w-4xl mx-auto px-4 md:px-8 py-10" data-testid="notifications-page">
       <div className="flex items-center justify-between mb-8 border-b border-foreground/5 pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#7C5CFF]/10 text-[#9D7CFF] flex items-center justify-center shadow-inner">
+          <div className="w-10 h-10 rounded-xl bg-[var(--violet)]/10 text-[var(--violet)] flex items-center justify-center shadow-inner">
             <Bell size={22} />
           </div>
           <div>
@@ -110,7 +110,7 @@ export default function Notifications() {
           <button
             onClick={markAll}
             data-testid="mark-all-read"
-            className="text-xs text-[#9D7CFF] hover:text-[#7C5CFF] font-bold transition-all bg-[#7C5CFF]/5 hover:bg-[#7C5CFF]/10 px-3 py-1.5 rounded-lg border border-[#7C5CFF]/20 cursor-pointer"
+            className="text-xs text-[var(--violet)] hover:text-[#7C5CFF] font-bold transition-all bg-[var(--violet)]/5 hover:bg-[var(--violet)]/10 px-3 py-1.5 rounded-lg border border-[var(--violet)]/20 cursor-pointer"
           >
             Mark all read
           </button>
@@ -136,11 +136,11 @@ export default function Notifications() {
                   key={n.notif_id}
                   onClick={() => !isRead && markOneRead(n.notif_id)}
                   className={`flex items-start gap-4 p-5 transition-all select-none cursor-pointer hover:bg-foreground/5 ${
-                    !isRead ? "bg-[#7C5CFF]/5 border-l-2 border-l-[#7C5CFF]" : ""
+                    !isRead ? "bg-[var(--violet)]/5 border-l-2 border-l-[#7C5CFF]" : ""
                   }`}
                 >
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ${
-                    !isRead ? "bg-[#7C5CFF]/20 text-[#9D7CFF]" : "bg-foreground/5"
+                    !isRead ? "bg-[var(--violet)]/20 text-[var(--violet)]" : "bg-foreground/5"
                   }`}>
                     {icon}
                   </div>
@@ -151,7 +151,7 @@ export default function Notifications() {
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-[10px] text-[var(--text-tertiary)] font-mono">{timeAgo}</span>
                       {!isRead && (
-                        <span className="inline-block w-1.5 h-1.5 bg-[#7C5CFF] rounded-full" />
+                        <span className="inline-block w-1.5 h-1.5 bg-[var(--violet)] rounded-full" />
                       )}
                     </div>
                   </div>

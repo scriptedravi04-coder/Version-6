@@ -422,11 +422,11 @@ export default function Explore() {
     <div className="w-full max-w-none px-4 md:px-8 py-10" data-testid="explore-page">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-3">
         <div>
-          <div className="font-display text-[34px] font-bold tracking-tight leading-[1.1] mb-[10px] text-white">
+          <div className="font-display text-[34px] font-bold tracking-tight leading-[1.1] mb-[10px] text-[var(--text-primary)]">
             Meet the <span className="text-[#7C5CFF]">Creators</span> 🎬
           </div>
           <div className="flex items-center gap-2.5 flex-wrap">
-            <span className="text-xs sm:text-sm text-white/50">India's most influential voices — handpicked for brand impact.</span>
+            <span className="text-xs sm:text-sm text-[var(--text-secondary)]">India's most influential voices — handpicked for brand impact.</span>
             <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#D9F111] bg-[#D9F111]/10 border border-[#D9F111]/20 rounded-full px-2.5 py-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#D9F111] animate-pulse"></span>
               Live Network
@@ -435,28 +435,28 @@ export default function Explore() {
         </div>
       </div>
       
-      <div className="flex items-center gap-0 flex-wrap mt-[14px] mb-[22px] text-white/80">
+      <div className="flex items-center gap-0 flex-wrap mt-[14px] mb-[22px] text-[var(--text-primary)]/80">
         <div className="flex items-center gap-1.5 pr-4">
           <span className="font-display text-lg font-black text-[#7C5CFF]">80+</span>
-          <span className="text-xs text-white/50">Creators</span>
+          <span className="text-xs text-[var(--text-secondary)]">Creators</span>
         </div>
-        <div className="w-[1px] h-4 bg-white/10 mr-4"></div>
+        <div className="w-[1px] h-4 bg-[var(--bg-elevated)] mr-4"></div>
         <div className="flex items-center gap-1.5 pr-4">
-          <span className="font-display text-lg font-black text-white">18+</span>
-          <span className="text-xs text-white/50">Brand Partners</span>
+          <span className="font-display text-lg font-black text-[var(--text-primary)]">18+</span>
+          <span className="text-xs text-[var(--text-secondary)]">Brand Partners</span>
         </div>
-        <div className="w-[1px] h-4 bg-white/10 mr-4"></div>
+        <div className="w-[1px] h-4 bg-[var(--bg-elevated)] mr-4"></div>
         <div className="flex items-center gap-1.5 pr-4">
-          <span className="font-display text-lg font-black text-white">5K+</span>
-          <span className="text-xs text-white/50">Collabs Done</span>
+          <span className="font-display text-lg font-black text-[var(--text-primary)]">5K+</span>
+          <span className="text-xs text-[var(--text-secondary)]">Collabs Done</span>
         </div>
-        <div className="w-[1px] h-4 bg-white/10 mr-4"></div>
+        <div className="w-[1px] h-4 bg-[var(--bg-elevated)] mr-4"></div>
         <div className="flex items-center gap-1.5">
-          <span className="text-xs text-white/50">📍 Pan-India</span>
+          <span className="text-xs text-[var(--text-secondary)]">📍 Pan-India</span>
         </div>
       </div>
       
-      <div className="h-[1px] bg-white/5 mb-6"></div>
+      <div className="h-[1px] bg-[var(--bg-elevated)] mb-6"></div>
 
       {/* FILTER PARENT CONTAINER (z-30 ensures popovers render above everything) */}
       <div className="flex flex-col gap-2 mb-8 filter-container-block relative z-40">
@@ -464,9 +464,9 @@ export default function Explore() {
         {/* ROW: Search bar + Filter Compact Button (Exact Ek line me) */}
         <div className="flex gap-3 items-center w-full">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 w-4 h-4" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-tertiary)] w-4 h-4" />
             <input 
-              className="w-full pl-11 pr-4 py-3 bg-[#131224] border border-white/5 rounded-xl text-sm text-white bg-card outline-none focus:border-[#7C5CFF]/60 shadow-sm transition-all focus:ring-4 focus:ring-[#7C5CFF]/10 placeholder:text-white/30"
+              className="w-full pl-11 pr-4 py-3 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl text-sm text-[var(--text-primary)] bg-[var(--bg-card)] outline-none focus:border-[var(--violet)]/20 shadow-sm transition-all focus:ring-4 focus:ring-[#7C5CFF]/10 placeholder:text-[var(--text-tertiary)]"
               type="text" 
               placeholder="Search by name, handle, or city..." 
               value={search}
@@ -479,14 +479,14 @@ export default function Explore() {
             onClick={(e) => { e.stopPropagation(); setFilterOpen(!filterOpen); }}
             className={`px-5 py-3 rounded-xl border text-sm flex items-center gap-2 cursor-pointer transition-all shrink-0 select-none ${
               filterOpen || activeFilterCount > 0 
-                ? 'bg-[#7C5CFF]/15 border-[#7C5CFF] text-[#9D7CFF] font-semibold' 
-                : 'bg-[#131224] border-white/5 text-white/70 hover:bg-white/5'
+                ? 'bg-[var(--violet)]/15 border-[#7C5CFF] text-[var(--violet)] font-semibold' 
+                : 'bg-[var(--bg-card)] border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]'
             }`}
           >
             <SlidersHorizontal size={16} />
             <span>Filters</span>
             {activeFilterCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-[#7C5CFF] text-white text-[10px] font-black flex items-center justify-center animate-in scale-in duration-200">
+              <span className="w-5 h-5 rounded-full bg-[var(--violet)] text-white text-[10px] font-black flex items-center justify-center animate-in scale-in duration-200">
                 {activeFilterCount}
               </span>
             )}
@@ -503,7 +503,7 @@ export default function Explore() {
               transition={{ duration: 0.2, ease: "easeInOut" }}
               className="overflow-visible mt-2 w-full"
             >
-              <div className="p-4 sm:p-5 bg-[#131224] border border-white/10 rounded-2xl space-y-4 shadow-2xl relative">
+              <div className="p-4 sm:p-5 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl space-y-4 shadow-2xl relative">
                 
                 {/* Row 1 — Dropdowns (horizontal) */}
                 <div className="flex flex-wrap gap-2.5">
@@ -515,8 +515,8 @@ export default function Explore() {
                       onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === 'niche' ? null : 'niche'); }}
                       className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm border flex items-center justify-between gap-2 transition-all ${
                         selectedNiches.length > 0 
-                          ? 'bg-[#7C5CFF]/15 border-[#7C5CFF]/40 text-[#9D7CFF] font-medium' 
-                          : 'bg-[#09090e] border-white/5 text-white/70 hover:bg-white/5'
+                          ? 'bg-[var(--violet)]/15 border-[var(--violet)]/20 text-[var(--violet)] font-medium' 
+                          : 'bg-[var(--bg-base)] border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]'
                       }`}
                     >
                       <span>🎯 Niche {selectedNiches.length > 0 ? `(${selectedNiches.length})` : ''}</span>
@@ -529,7 +529,7 @@ export default function Explore() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute z-50 left-0 mt-2 w-72 max-h-[380px] bg-[#131224] border border-white/15 rounded-2xl p-3 shadow-2xl space-y-3 dropdown-popover"
+                          className="absolute z-50 left-0 mt-2 w-72 max-h-[380px] bg-[var(--bg-card)] border border-white/15 rounded-2xl p-3 shadow-2xl space-y-3 dropdown-popover"
                         >
                           <input 
                             type="text"
@@ -537,7 +537,7 @@ export default function Explore() {
                             value={nicheSearch}
                             onChange={(e) => setNicheSearch(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full px-3 py-2 text-xs bg-[#09090e] border border-white/5 rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#7C5CFF]"
+                            className="w-full px-3 py-2 text-xs bg-[var(--bg-base)] border border-[var(--border-default)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[#7C5CFF]"
                           />
                           <div className="space-y-3 max-h-[230px] overflow-y-auto select-none pr-1">
                             {NICHES.map((group) => {
@@ -545,7 +545,7 @@ export default function Explore() {
                               if (filteredItems.length === 0) return null;
                               return (
                                 <div key={group.group} className="space-y-1">
-                                  <div className="text-[10px] font-bold text-white/30 tracking-wider uppercase px-2 py-0.5">{group.group}</div>
+                                  <div className="text-[10px] font-bold text-[var(--text-tertiary)] tracking-wider uppercase px-2 py-0.5">{group.group}</div>
                                   {filteredItems.map(item => {
                                     const isSelected = selectedNiches.includes(item);
                                     return (
@@ -557,11 +557,11 @@ export default function Explore() {
                                           toggleNiche(item);
                                         }}
                                         className={`flex items-center justify-between w-full px-3 py-1.5 text-xs rounded-lg text-left transition-colors ${
-                                          isSelected ? 'bg-[#7C5CFF]/20 text-[#9D7CFF] font-medium' : 'text-white/70 hover:bg-[#09090e]'
+                                          isSelected ? 'bg-[var(--violet)]/20 text-[var(--violet)] font-medium' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-base)]'
                                         }`}
                                       >
                                         <span>{item}</span>
-                                        {isSelected && <Check size={12} className="text-[#9D7CFF]" />}
+                                        {isSelected && <Check size={12} className="text-[var(--violet)]" />}
                                       </button>
                                     );
                                   })}
@@ -581,8 +581,8 @@ export default function Explore() {
                       onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === 'platform' ? null : 'platform'); }}
                       className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm border flex items-center justify-between gap-2 transition-all ${
                         selectedPlatforms.length > 0 
-                          ? 'bg-[#7C5CFF]/15 border-[#7C5CFF]/40 text-[#9D7CFF] font-medium' 
-                          : 'bg-[#09090e] border-white/5 text-white/70 hover:bg-white/5'
+                          ? 'bg-[var(--violet)]/15 border-[var(--violet)]/20 text-[var(--violet)] font-medium' 
+                          : 'bg-[var(--bg-base)] border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]'
                       }`}
                     >
                       <span>📱 Platform {selectedPlatforms.length > 0 ? `(${selectedPlatforms.length})` : ''}</span>
@@ -595,7 +595,7 @@ export default function Explore() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute z-50 left-0 mt-2 w-56 bg-[#131224] border border-white/15 rounded-2xl p-3 shadow-2xl space-y-2 dropdown-popover"
+                          className="absolute z-50 left-0 mt-2 w-56 bg-[var(--bg-card)] border border-white/15 rounded-2xl p-3 shadow-2xl space-y-2 dropdown-popover"
                         >
                           <input 
                             type="text"
@@ -603,7 +603,7 @@ export default function Explore() {
                             value={platformSearch}
                             onChange={(e) => setPlatformSearch(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full px-3 py-1.5 text-xs bg-[#09090e] border border-white/5 rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#7C5CFF]"
+                            className="w-full px-3 py-1.5 text-xs bg-[var(--bg-base)] border border-[var(--border-default)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[#7C5CFF]"
                           />
                           <div className="space-y-1 select-none">
                             {PLATFORMS.filter(p => p.toLowerCase().includes(platformSearch.toLowerCase())).map(p => {
@@ -617,11 +617,11 @@ export default function Explore() {
                                     togglePlatform(p);
                                   }}
                                   className={`flex items-center justify-between w-full px-3 py-1.5 text-xs rounded-lg text-left transition-colors ${
-                                    isSelected ? 'bg-[#7C5CFF]/20 text-[#9D7CFF] font-medium' : 'text-white/70 hover:bg-[#09090e]'
+                                    isSelected ? 'bg-[var(--violet)]/20 text-[var(--violet)] font-medium' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-base)]'
                                   }`}
                                 >
                                   <span>{p}</span>
-                                  {isSelected && <Check size={12} className="text-[#9D7CFF]" />}
+                                  {isSelected && <Check size={12} className="text-[var(--violet)]" />}
                                 </button>
                               );
                             })}
@@ -638,8 +638,8 @@ export default function Explore() {
                       onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === 'location' ? null : 'location'); }}
                       className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm border flex items-center justify-between gap-2 transition-all ${
                         (selectedCities.length > 0 || selectedStates.length > 0)
-                          ? 'bg-[#7C5CFF]/15 border-[#7C5CFF]/40 text-[#9D7CFF] font-medium' 
-                          : 'bg-[#09090e] border-white/5 text-white/70 hover:bg-white/5'
+                          ? 'bg-[var(--violet)]/15 border-[var(--violet)]/20 text-[var(--violet)] font-medium' 
+                          : 'bg-[var(--bg-base)] border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]'
                       }`}
                     >
                       <span>📍 Location {(selectedCities.length + selectedStates.length) > 0 ? `(${selectedCities.length + selectedStates.length})` : ''}</span>
@@ -652,21 +652,21 @@ export default function Explore() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute z-50 left-0 mt-2 w-72 bg-[#131224] border border-white/15 rounded-2xl p-3 shadow-2xl space-y-3 dropdown-popover"
+                          className="absolute z-50 left-0 mt-2 w-72 bg-[var(--bg-card)] border border-white/15 rounded-2xl p-3 shadow-2xl space-y-3 dropdown-popover"
                         >
                           {/* Tabs */}
-                          <div className="grid grid-cols-2 gap-1 p-0.5 bg-[#09090e] rounded-xl text-xs">
+                          <div className="grid grid-cols-2 gap-1 p-0.5 bg-[var(--bg-base)] rounded-xl text-xs">
                             <button 
                               type="button"
                               onClick={(e) => { e.stopPropagation(); setLocationTab('cities'); }}
-                              className={`py-1.5 rounded-lg text-center transition-all ${locationTab === 'cities' ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-white/50 hover:text-white'}`}
+                              className={`py-1.5 rounded-lg text-center transition-all ${locationTab === 'cities' ? 'bg-[var(--violet)] text-white font-semibold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
                             >
                               Cities
                             </button>
                             <button 
                               type="button"
                               onClick={(e) => { e.stopPropagation(); setLocationTab('states'); }}
-                              className={`py-1.5 rounded-lg text-center transition-all ${locationTab === 'states' ? 'bg-[#7C5CFF] text-white font-semibold' : 'text-white/50 hover:text-white'}`}
+                              className={`py-1.5 rounded-lg text-center transition-all ${locationTab === 'states' ? 'bg-[var(--violet)] text-white font-semibold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
                             >
                               States
                             </button>
@@ -679,7 +679,7 @@ export default function Explore() {
                             value={locationSearch}
                             onChange={(e) => setLocationSearch(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full px-3 py-1.5 text-xs bg-[#09090e] border border-white/5 rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#7C5CFF]"
+                            className="w-full px-3 py-1.5 text-xs bg-[var(--bg-base)] border border-[var(--border-default)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[#7C5CFF]"
                           />
 
                           {/* List */}
@@ -696,11 +696,11 @@ export default function Explore() {
                                       toggleCity(city);
                                     }}
                                     className={`flex items-center justify-between w-full px-3 py-1.5 text-xs rounded-lg text-left transition-colors ${
-                                      isSelected ? 'bg-[#7C5CFF]/20 text-[#9D7CFF] font-medium' : 'text-white/70 hover:bg-[#09090e]'
+                                      isSelected ? 'bg-[var(--violet)]/20 text-[var(--violet)] font-medium' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-base)]'
                                     }`}
                                   >
                                     <span>{city}</span>
-                                    {isSelected && <Check size={12} className="text-[#9D7CFF]" />}
+                                    {isSelected && <Check size={12} className="text-[var(--violet)]" />}
                                   </button>
                                 );
                               })
@@ -716,11 +716,11 @@ export default function Explore() {
                                       toggleState(state);
                                     }}
                                     className={`flex items-center justify-between w-full px-3 py-1.5 text-xs rounded-lg text-left transition-colors ${
-                                      isSelected ? 'bg-[#7C5CFF]/20 text-[#9D7CFF] font-medium' : 'text-white/70 hover:bg-[#09090e]'
+                                      isSelected ? 'bg-[var(--violet)]/20 text-[var(--violet)] font-medium' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-base)]'
                                     }`}
                                   >
                                     <span>{state}</span>
-                                    {isSelected && <Check size={12} className="text-[#9D7CFF]" />}
+                                    {isSelected && <Check size={12} className="text-[var(--violet)]" />}
                                   </button>
                                 );
                               })
@@ -738,8 +738,8 @@ export default function Explore() {
                       onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === 'language' ? null : 'language'); }}
                       className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm border flex items-center justify-between gap-2 transition-all ${
                         selectedLanguages.length > 0 
-                          ? 'bg-[#7C5CFF]/15 border-[#7C5CFF]/40 text-[#9D7CFF] font-medium' 
-                          : 'bg-[#09090e] border-white/5 text-white/70 hover:bg-white/5'
+                          ? 'bg-[var(--violet)]/15 border-[var(--violet)]/20 text-[var(--violet)] font-medium' 
+                          : 'bg-[var(--bg-base)] border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]'
                       }`}
                     >
                       <span>🗣️ Language {selectedLanguages.length > 0 ? `(${selectedLanguages.length})` : ''}</span>
@@ -752,7 +752,7 @@ export default function Explore() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute z-50 left-0 mt-2 w-56 bg-[#131224] border border-white/15 rounded-2xl p-3 shadow-2xl space-y-2 dropdown-popover"
+                          className="absolute z-50 left-0 mt-2 w-56 bg-[var(--bg-card)] border border-white/15 rounded-2xl p-3 shadow-2xl space-y-2 dropdown-popover"
                         >
                           <input 
                             type="text"
@@ -760,7 +760,7 @@ export default function Explore() {
                             value={languageSearch}
                             onChange={(e) => setLanguageSearch(e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="w-full px-3 py-1.5 text-xs bg-[#09090e] border border-white/5 rounded-lg text-white placeholder:text-white/30 focus:outline-none focus:border-[#7C5CFF]"
+                            className="w-full px-3 py-1.5 text-xs bg-[var(--bg-base)] border border-[var(--border-default)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[#7C5CFF]"
                           />
                           <div className="space-y-1 select-none max-h-[160px] overflow-y-auto pr-1">
                             {LANGUAGES.filter(l => l.toLowerCase().includes(languageSearch.toLowerCase())).map(l => {
@@ -774,11 +774,11 @@ export default function Explore() {
                                     toggleLanguage(l);
                                   }}
                                   className={`flex items-center justify-between w-full px-3 py-1.5 text-xs rounded-lg text-left transition-colors ${
-                                    isSelected ? 'bg-[#7C5CFF]/20 text-[#9D7CFF] font-medium' : 'text-white/70 hover:bg-[#09090e]'
+                                    isSelected ? 'bg-[var(--violet)]/20 text-[var(--violet)] font-medium' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-base)]'
                                   }`}
                                 >
                                   <span>{l}</span>
-                                  {isSelected && <Check size={12} className="text-[#9D7CFF]" />}
+                                  {isSelected && <Check size={12} className="text-[var(--violet)]" />}
                                 </button>
                               );
                             })}
@@ -795,8 +795,8 @@ export default function Explore() {
                       onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === 'gender' ? null : 'gender'); }}
                       className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm border flex items-center justify-between gap-2 transition-all ${
                         gender !== 'Any'
-                          ? 'bg-[#7C5CFF]/15 border-[#7C5CFF]/40 text-[#9D7CFF] font-medium' 
-                          : 'bg-[#09090e] border-white/5 text-white/70 hover:bg-white/5'
+                          ? 'bg-[var(--violet)]/15 border-[var(--violet)]/20 text-[var(--violet)] font-medium' 
+                          : 'bg-[var(--bg-base)] border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]'
                       }`}
                     >
                       <span>👤 Gender {gender !== 'Any' ? `: ${gender}` : ''}</span>
@@ -809,7 +809,7 @@ export default function Explore() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute z-50 left-0 mt-2 w-44 bg-[#131224] border border-white/15 rounded-2xl p-2 shadow-2xl dropdown-popover"
+                          className="absolute z-50 left-0 mt-2 w-44 bg-[var(--bg-card)] border border-white/15 rounded-2xl p-2 shadow-2xl dropdown-popover"
                         >
                           <div className="space-y-0.5 select-none text-xs">
                             {GENDERS.map(g => {
@@ -824,11 +824,11 @@ export default function Explore() {
                                     setActiveDropdown(null);
                                   }}
                                   className={`flex items-center justify-between w-full px-3 py-2 rounded-lg text-left transition-colors ${
-                                    isSelected ? 'bg-[#7C5CFF]/20 text-[#9D7CFF] font-medium' : 'text-white/70 hover:bg-[#09090e]'
+                                    isSelected ? 'bg-[var(--violet)]/20 text-[var(--violet)] font-medium' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-base)]'
                                   }`}
                                 >
                                   <span>{g}</span>
-                                  {isSelected && <Check size={12} className="text-[#9D7CFF]" />}
+                                  {isSelected && <Check size={12} className="text-[var(--violet)]" />}
                                 </button>
                               );
                             })}
@@ -843,9 +843,9 @@ export default function Explore() {
                     <button 
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === 'sort' ? null : 'sort'); }}
-                      className="px-4 py-2.5 rounded-xl text-xs sm:text-sm border flex items-center justify-between gap-2 transition-all bg-[#09090e] border-white/5 text-white/70 hover:bg-white/5"
+                      className="px-4 py-2.5 rounded-xl text-xs sm:text-sm border flex items-center justify-between gap-2 transition-all bg-[var(--bg-base)] border-[var(--border-default)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
                     >
-                      <span>↕️ Sort: <strong className="text-white font-medium">{
+                      <span>↕️ Sort: <strong className="text-[var(--text-primary)] font-medium">{
                         sortBy === 'reach' ? 'Top Reach' : 
                         sortBy === 'followers' ? 'Most Followers' : 
                         sortBy === 'engagement' ? 'Engagement' : 
@@ -860,7 +860,7 @@ export default function Explore() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
-                          className="absolute z-50 right-0 mt-2 w-48 bg-[#131224] border border-white/15 rounded-2xl p-2 shadow-2xl dropdown-popover"
+                          className="absolute z-50 right-0 mt-2 w-48 bg-[var(--bg-card)] border border-white/15 rounded-2xl p-2 shadow-2xl dropdown-popover"
                         >
                           <div className="space-y-0.5 select-none text-xs">
                             {[
@@ -881,11 +881,11 @@ export default function Explore() {
                                     setActiveDropdown(null);
                                   }}
                                   className={`flex items-center justify-between w-full px-3 py-2 rounded-lg text-left transition-colors ${
-                                    isSelected ? 'bg-[#7C5CFF]/20 text-[#9D7CFF] font-medium' : 'text-white/70 hover:bg-[#09090e]'
+                                    isSelected ? 'bg-[var(--violet)]/20 text-[var(--violet)] font-medium' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-base)]'
                                   }`}
                                 >
                                   <span>{option.label}</span>
-                                  {isSelected && <Check size={12} className="text-[#9D7CFF]" />}
+                                  {isSelected && <Check size={12} className="text-[var(--violet)]" />}
                                 </button>
                               );
                             })}
@@ -898,8 +898,8 @@ export default function Explore() {
                 </div>
 
                 {/* Row 2 — Creator Size chips (always visible in panel) */}
-                <div className="flex flex-wrap items-center gap-3 py-2.5 border-t border-white/5">
-                  <span className="text-xs text-white/40 font-medium">Creator Size:</span>
+                <div className="flex flex-wrap items-center gap-3 py-2.5 border-t border-[var(--border-default)]">
+                  <span className="text-xs text-[var(--text-tertiary)] font-medium">Creator Size:</span>
                   <div className="flex flex-wrap gap-2">
                     {[
                       { key: 'nano', label: 'Nano 1K–10K' },
@@ -915,8 +915,8 @@ export default function Explore() {
                           onClick={() => toggleFollowerRange(tier.key)}
                           className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${
                             isSelected 
-                              ? 'bg-[#7C5CFF] text-white border border-[#7C5CFF]' 
-                              : 'bg-[#09090e] text-white/60 border border-white/5 hover:text-white hover:bg-white/5'
+                              ? 'bg-[var(--violet)] text-white border border-[#7C5CFF]' 
+                              : 'bg-[var(--bg-base)] text-[var(--text-secondary)] border border-[var(--border-default)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'
                           }`}
                         >
                           {tier.label}
@@ -927,10 +927,10 @@ export default function Explore() {
                 </div>
 
                 {/* Row 3 — More options (Collabs and Content type arrays) */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-10 py-3 border-t border-white/5">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-10 py-3 border-t border-[var(--border-default)]">
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="text-xs text-white/40 font-medium">Collab Mode:</span>
-                    <div className="flex gap-1 p-0.5 bg-[#09090e] rounded-lg border border-white/5">
+                    <span className="text-xs text-[var(--text-tertiary)] font-medium">Collab Mode:</span>
+                    <div className="flex gap-1 p-0.5 bg-[var(--bg-base)] rounded-lg border border-[var(--border-default)]">
                       {['Paid', 'Barter', 'Both'].map((mode) => (
                         <button
                           key={mode}
@@ -938,8 +938,8 @@ export default function Explore() {
                           onClick={() => setCollabMode(mode)}
                           className={`px-3 py-1 rounded-md text-[11px] font-semibold transition-all ${
                             collabMode === mode 
-                              ? 'bg-[#7C5CFF] text-white' 
-                              : 'text-white/50 hover:text-white'
+                              ? 'bg-[var(--violet)] text-white' 
+                              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                           }`}
                         >
                           {mode}
@@ -949,7 +949,7 @@ export default function Explore() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="text-xs text-white/40 font-medium font-sans">Content Type:</span>
+                    <span className="text-xs text-[var(--text-tertiary)] font-medium font-sans">Content Type:</span>
                     <div className="flex flex-wrap gap-1.5">
                       {['Reel', 'Post', 'Story', 'YT Video'].map((type) => {
                         const isSelected = selectedContentTypes.includes(type);
@@ -960,8 +960,8 @@ export default function Explore() {
                             onClick={() => toggleContentType(type)}
                             className={`px-3 py-1 rounded-lg text-[11px] font-medium transition-all ${
                               isSelected 
-                                ? 'bg-[#7C5CFF]/15 text-[#9D7CFF] border border-[#7C5CFF]/30' 
-                                : 'bg-[#09090e] text-white/60 border border-white/5 hover:text-white hover:bg-white/5'
+                                ? 'bg-[var(--violet)]/15 text-[var(--violet)] border border-[var(--violet)]/20' 
+                                : 'bg-[var(--bg-base)] text-[var(--text-secondary)] border border-[var(--border-default)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'
                             }`}
                           >
                             {type}
@@ -982,62 +982,62 @@ export default function Explore() {
                   selectedFollowerRanges.length > 0 || 
                   collabMode !== 'Both' || 
                   selectedContentTypes.length > 0) && (
-                  <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/5">
+                  <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border-default)]">
                     <div className="flex flex-wrap items-center gap-1.5 max-w-[80%]">
-                      <span className="text-xs text-white/30 mr-1">Active:</span>
+                      <span className="text-xs text-[var(--text-tertiary)] mr-1">Active:</span>
                       
                       {selectedNiches.map(n => (
-                        <span key={n} className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+                        <span key={n} className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {n}
-                          <button type="button" onClick={() => toggleNiche(n)} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => toggleNiche(n)} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       ))}
                       {selectedPlatforms.map(p => (
-                        <span key={p} className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+                        <span key={p} className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {p}
-                          <button type="button" onClick={() => togglePlatform(p)} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => togglePlatform(p)} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       ))}
                       {selectedCities.map(c => (
-                        <span key={c} className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+                        <span key={c} className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {c}
-                          <button type="button" onClick={() => toggleCity(c)} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => toggleCity(c)} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       ))}
                       {selectedStates.map(s => (
-                        <span key={s} className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+                        <span key={s} className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {s}
-                          <button type="button" onClick={() => toggleState(s)} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => toggleState(s)} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       ))}
                       {selectedLanguages.map(l => (
-                        <span key={l} className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+                        <span key={l} className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {l}
-                          <button type="button" onClick={() => toggleLanguage(l)} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => toggleLanguage(l)} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       ))}
                       {gender !== 'Any' && (
-                        <span className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+                        <span className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {gender}
-                          <button type="button" onClick={() => setGender('Any')} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => setGender('Any')} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       )}
                       {selectedFollowerRanges.map(r => (
-                        <span key={r} className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium capitalize">
+                        <span key={r} className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium capitalize">
                           {r} Size
-                          <button type="button" onClick={() => toggleFollowerRange(r)} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => toggleFollowerRange(r)} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       ))}
                       {collabMode !== 'Both' && (
-                        <span className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+                        <span className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {collabMode} Mode
-                          <button type="button" onClick={() => setCollabMode('Both')} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => setCollabMode('Both')} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       )}
                       {selectedContentTypes.map(t => (
-                        <span key={t} className="inline-flex items-center gap-1 bg-[#7C5CFF]/10 text-[#9D7CFF] border border-[#7C5CFF]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
+                        <span key={t} className="inline-flex items-center gap-1 bg-[var(--violet)]/10 text-[var(--violet)] border border-[var(--violet)]/20 px-2.5 py-0.5 rounded-full text-[11px] font-medium">
                           {t}
-                          <button type="button" onClick={() => toggleContentType(t)} className="hover:text-white text-white/40 font-bold ml-1">x</button>
+                          <button type="button" onClick={() => toggleContentType(t)} className="hover:text-[var(--text-primary)] text-[var(--text-tertiary)] font-bold ml-1">x</button>
                         </span>
                       ))}
                     </div>
@@ -1045,7 +1045,7 @@ export default function Explore() {
                     <button 
                       type="button"
                       onClick={handleClearAll}
-                      className="text-xs text-[#9D7CFF] hover:text-white font-medium underline transition-colors cursor-pointer block sm:inline-block ml-auto shrink-0 select-none pb-0.5"
+                      className="text-xs text-[var(--violet)] hover:text-[var(--text-primary)] font-medium underline transition-colors cursor-pointer block sm:inline-block ml-auto shrink-0 select-none pb-0.5"
                     >
                       Clear All
                     </button>
@@ -1064,11 +1064,11 @@ export default function Explore() {
           <div className="flex items-center justify-center py-24">
             <div className="flex flex-col items-center gap-4">
               <div className="w-8 h-8 rounded-full border-2 border-[#7C5CFF] border-t-transparent animate-spin"></div>
-              <div className="text-white/40 text-xs font-mono tracking-widest uppercase">Loading creators...</div>
+              <div className="text-[var(--text-tertiary)] text-xs font-mono tracking-widest uppercase">Loading creators...</div>
             </div>
           </div>
         ) : filteredCreators.length === 0 ? (
-          <div className="text-center py-24 text-white/40 text-sm bg-white/[0.01] rounded-2xl border border-white/5">
+          <div className="text-center py-24 text-[var(--text-tertiary)] text-sm bg-white/[0.02] rounded-2xl border border-[var(--border-default)]">
             <div className="text-4xl mb-4 opacity-55">📭</div>
             No creators found matching your selected filters.
           </div>

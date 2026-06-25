@@ -66,23 +66,23 @@ export default function BrandPayments() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32 bg-[#09090e] min-h-screen">
+      <div className="flex items-center justify-center py-32 bg-[var(--bg-base)] min-h-screen">
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 rounded-full border-2 border-[#7C5CFF] border-t-transparent animate-spin"></div>
-          <div className="text-white/40 text-sm font-mono tracking-widest uppercase">Loading Secure Settlements...</div>
+          <div className="text-[var(--text-tertiary)] text-sm font-mono tracking-widest uppercase">Loading Secure Settlements...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-10 text-left min-h-screen bg-[#09090e] text-white">
+    <div className="w-full max-w-none px-4 sm:px-6 md:px-8 py-10 text-left min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[var(--text-primary)] flex items-center gap-2">
             Secure Payouts Ledger
           </h1>
-          <p className="text-white/50 text-xs sm:text-sm">
+          <p className="text-[var(--text-secondary)] text-xs sm:text-sm">
             Control, deposit, and direct contract releases using our safe escrow frameworks.
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function BrandPayments() {
           value={totalSpentAmount} 
           prefix="₹" 
           icon={Wallet} 
-          colorClass="text-[#9D7CFF]"
+          colorClass="text-[var(--violet)]"
         />
         {/* Total Ledger Invoices */}
         <StatsCard 
@@ -118,14 +118,14 @@ export default function BrandPayments() {
         />
       </div>
 
-      <div className="bg-[#131224] border border-white/5 p-6 rounded-3xl mb-8 relative overflow-hidden">
-        <div className="flex items-start gap-4 mb-5 border-b border-white/5 pb-4">
-          <div className="p-2.5 bg-[#7C5CFF]/10 text-[#a38aff] rounded-xl self-start">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-default)] p-6 rounded-3xl mb-8 relative overflow-hidden">
+        <div className="flex items-start gap-4 mb-5 border-b border-[var(--border-default)] pb-4">
+          <div className="p-2.5 bg-[var(--violet)]/10 text-[#a38aff] rounded-xl self-start">
             <Coins size={20} />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white uppercase tracking-wider">How secure Escrow protection functions</h3>
-            <p className="text-xs text-white/50 mt-1 leading-relaxed">
+            <h3 className="text-base font-bold text-[var(--text-primary)] uppercase tracking-wider">How secure Escrow protection functions</h3>
+            <p className="text-xs text-[var(--text-secondary)] mt-1 leading-relaxed">
               When partnerships contracts are mapped, the campaign budget is deposited directly into our secure holding Escrow. This ensures the creator of performance coverage, while protecting the brand from payment disputes until final deliverable proof copies are fully submitted and approved by you.
             </p>
           </div>
@@ -133,7 +133,7 @@ export default function BrandPayments() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-white/60 mb-2">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-2">
           Secure Transactions Queue
         </h3>
         

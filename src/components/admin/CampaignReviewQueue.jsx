@@ -75,12 +75,12 @@ export default function CampaignReviewQueue() {
   return (
     <div className="space-y-6 flex flex-col h-full">
        <div className="flex flex-col md:flex-row justify-between gap-4">
-          <div className="flex bg-black/40 p-1 rounded-xl w-max overflow-x-auto border border-foreground/10">
+          <div className="flex bg-[var(--bg-elevated)] p-1 rounded-xl w-max overflow-x-auto border border-[var(--border-default)]">
              {['Draft', 'Under Review', 'Live', 'Rejected'].map(status => (
                 <button 
                   key={status}
                   onClick={() => setFilter(status)}
-                  className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors flex items-center gap-2 ${filter === status ? 'bg-[#9D7CFF] text-white' : 'text-foreground/60 hover:text-foreground'}`}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors flex items-center gap-2 ${filter === status ? 'bg-[#9D7CFF] text-[var(--text-primary)]' : 'text-[var(--text-primary)]/60 hover:text-[var(--text-primary)]'}`}
                 >
                   {status}
                   <span className={`px-1.5 py-0.5 rounded-full text-xs ${filter === status ? 'bg-white/20' : 'bg-foreground/10'}`}>
@@ -90,16 +90,16 @@ export default function CampaignReviewQueue() {
              ))}
           </div>
           <div className="flex gap-2">
-             <button onClick={() => setAiModalOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-black/40 border border-foreground/10 rounded-xl hover:bg-foreground/5 transition-colors text-sm font-semibold text-foreground/80">
+             <button onClick={() => setAiModalOpen(true)} className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl hover:bg-foreground/5 transition-colors text-sm font-semibold text-[var(--text-primary)]/80">
                 <BrainCircuit size={16} className={aiEnabled ? "text-green-400" : "text-[#9D7CFF]"} /> AI Review {aiEnabled ? 'Active' : 'Settings'}
              </button>
           </div>
        </div>
 
-       <div className="bg-card border border-foreground/10 rounded-2xl overflow-hidden flex-1">
+       <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl overflow-hidden flex-1">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-foreground/5 border-b border-foreground/10 text-xs text-foreground/50 uppercase tracking-wider">
+              <tr className="bg-foreground/5 border-b border-[var(--border-default)] text-xs text-[var(--text-secondary)] uppercase tracking-wider">
                 <th className="px-4 py-3 font-medium">Brand & Campaign</th>
                 <th className="px-4 py-3 font-medium">Budget</th>
                 <th className="px-4 py-3 font-medium">Deadline</th>
@@ -115,15 +115,15 @@ export default function CampaignReviewQueue() {
                       <img src={c.brand_logo} alt="" className="w-10 h-10 rounded-lg object-cover" />
                       <div>
                         <div className="font-semibold group-hover:text-[#9D7CFF] transition-colors">{c.title}</div>
-                        <div className="text-xs text-foreground/50">{c.brand_name}</div>
+                        <div className="text-xs text-[var(--text-secondary)]">{c.brand_name}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-4 font-medium">₹{c.budget_max?.toLocaleString()}</td>
-                  <td className="px-4 py-4 text-foreground/60">{c.deadline}</td>
+                  <td className="px-4 py-4 text-[var(--text-primary)]/60">{c.deadline}</td>
                   <td className="px-4 py-4">
                     <div className="flex flex-col gap-1 items-start">
-                       <span className="px-2.5 py-1 bg-foreground/10 border border-foreground/10 rounded-full text-[10px] font-bold uppercase">{c.stage || c.status}</span>
+                       <span className="px-2.5 py-1 bg-foreground/10 border border-[var(--border-default)] rounded-full text-[10px] font-bold uppercase">{c.stage || c.status}</span>
                        {(c.stage || c.status) === 'Under Review' && c.daysInReview >= 2 && (
                           <span className={`text-[10px] font-medium flex items-center gap-1 ${c.daysInReview >= 3 ? 'text-red-500' : 'text-amber-500'}`}>
                              <Clock size={12}/> {c.daysInReview} days in review
@@ -132,7 +132,7 @@ export default function CampaignReviewQueue() {
                     </div>
                   </td>
                   <td className="px-4 py-4 text-right">
-                    <button className="p-2 hover:bg-foreground/10 rounded-lg text-foreground/60 hover:text-foreground transition-colors">
+                    <button className="p-2 hover:bg-foreground/10 rounded-lg text-[var(--text-primary)]/60 hover:text-[var(--text-primary)] transition-colors">
                        <ArrowRight size={18} />
                     </button>
                   </td>
@@ -140,7 +140,7 @@ export default function CampaignReviewQueue() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                   <td colSpan="5" className="px-4 py-12 text-center text-foreground/40 italic">
+                   <td colSpan="5" className="px-4 py-12 text-center text-[var(--text-tertiary)] italic">
                       No campaigns currently in {filter}.
                    </td>
                 </tr>
@@ -153,41 +153,41 @@ export default function CampaignReviewQueue() {
        {selectedCampaign && (
           <div className="fixed inset-0 z-50 flex justify-end">
              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedCampaign(null)}></div>
-             <div className="relative z-10 w-full max-w-md bg-[#0A0A0F] border-l border-foreground/10 h-full flex flex-col animate-in slide-in-from-right shadow-2xl">
-                <div className="p-5 border-b border-foreground/10 flex items-center justify-between bg-card">
+             <div className="relative z-10 w-full max-w-md bg-[var(--bg-card)] border-l border-[var(--border-default)] h-full flex flex-col animate-in slide-in-from-right shadow-2xl">
+                <div className="p-5 border-b border-[var(--border-default)] flex items-center justify-between bg-[var(--bg-card)]">
                    <h2 className="font-display font-semibold text-lg">Campaign Review</h2>
                    <button onClick={() => setSelectedCampaign(null)} className="p-2 hover:bg-foreground/10 rounded-full"><X size={20}/></button>
                 </div>
                 
                 <div className="p-6 overflow-y-auto flex-1 space-y-6">
-                   <div className="flex items-center gap-4 pb-6 border-b border-foreground/10">
-                      <img src={selectedCampaign.brand_logo} className="w-16 h-16 rounded-xl object-cover border border-foreground/10" />
+                   <div className="flex items-center gap-4 pb-6 border-b border-[var(--border-default)]">
+                      <img src={selectedCampaign.brand_logo} className="w-16 h-16 rounded-xl object-cover border border-[var(--border-default)]" />
                       <div>
                          <h3 className="font-display font-bold text-xl">{selectedCampaign.title}</h3>
-                         <div className="text-sm text-foreground/50">{selectedCampaign.brand_name}</div>
+                         <div className="text-sm text-[var(--text-secondary)]">{selectedCampaign.brand_name}</div>
                       </div>
                    </div>
 
                    <div className="space-y-4">
                       <div>
-                         <label className="text-xs uppercase font-medium text-foreground/50 tracking-wider">Description</label>
-                         <p className="text-sm mt-1 text-foreground/80 leading-relaxed">{selectedCampaign.description}</p>
+                         <label className="text-xs uppercase font-medium text-[var(--text-secondary)] tracking-wider">Description</label>
+                         <p className="text-sm mt-1 text-[var(--text-primary)]/80 leading-relaxed">{selectedCampaign.description}</p>
                       </div>
                       <div>
-                         <label className="text-xs uppercase font-medium text-foreground/50 tracking-wider">Target Audience</label>
+                         <label className="text-xs uppercase font-medium text-[var(--text-secondary)] tracking-wider">Target Audience</label>
                          <div className="text-sm mt-1">{selectedCampaign.targetAudience}</div>
                       </div>
                       <div>
-                         <label className="text-xs uppercase font-medium text-foreground/50 tracking-wider">Deliverables</label>
-                         <div className="text-sm mt-1 p-3 bg-black/40 rounded-lg border border-foreground/10 font-mono text-foreground/80">{Array.isArray(selectedCampaign.deliverables) ? selectedCampaign.deliverables.join(', ') : selectedCampaign.deliverables}</div>
+                         <label className="text-xs uppercase font-medium text-[var(--text-secondary)] tracking-wider">Deliverables</label>
+                         <div className="text-sm mt-1 p-3 bg-[var(--bg-elevated)] rounded-lg border border-[var(--border-default)] font-mono text-[var(--text-primary)]/80">{Array.isArray(selectedCampaign.deliverables) ? selectedCampaign.deliverables.join(', ') : selectedCampaign.deliverables}</div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
-                         <div className="bg-foreground/5 p-3 rounded-xl border border-foreground/10">
-                            <label className="text-xs font-medium text-foreground/50">Budget</label>
+                         <div className="bg-foreground/5 p-3 rounded-xl border border-[var(--border-default)]">
+                            <label className="text-xs font-medium text-[var(--text-secondary)]">Budget</label>
                             <div className="font-bold text-lg mt-0.5">₹{selectedCampaign.budget_max?.toLocaleString() || selectedCampaign.budget?.toLocaleString()}</div>
                          </div>
-                         <div className="bg-foreground/5 p-3 rounded-xl border border-foreground/10">
-                            <label className="text-xs font-medium text-foreground/50">Deadline</label>
+                         <div className="bg-foreground/5 p-3 rounded-xl border border-[var(--border-default)]">
+                            <label className="text-xs font-medium text-[var(--text-secondary)]">Deadline</label>
                             <div className="font-semibold text-sm mt-1.5">{selectedCampaign.deadline}</div>
                          </div>
                       </div>
@@ -195,21 +195,21 @@ export default function CampaignReviewQueue() {
 
                    {/* Moderation section if already live */}
                    {(selectedCampaign.stage || selectedCampaign.status) === 'Live' && (
-                      <div className="pt-6 border-t border-foreground/10 space-y-4">
+                      <div className="pt-6 border-t border-[var(--border-default)] space-y-4">
                          <h4 className="font-semibold flex items-center gap-2"><AlertTriangle size={18} className="text-amber-500"/> Moderation Actions</h4>
                          <div className="flex flex-col gap-2">
-                            <button className="flex items-center gap-3 p-3 bg-black/40 hover:bg-amber-500/10 border border-foreground/10 hover:border-amber-500/30 rounded-xl text-left transition-colors text-sm">
+                            <button className="flex items-center gap-3 p-3 bg-[var(--bg-elevated)] hover:bg-amber-500/10 border border-[var(--border-default)] hover:border-amber-500/30 rounded-xl text-left transition-colors text-sm">
                                <AlertTriangle size={16} className="text-amber-500"/>
                                <div>
                                   <div className="font-medium">Flag Campaign</div>
-                                  <div className="text-xs text-foreground/50">Keep live but highlight for review</div>
+                                  <div className="text-xs text-[var(--text-secondary)]">Keep live but highlight for review</div>
                                </div>
                             </button>
-                            <button className="flex items-center gap-3 p-3 bg-black/40 hover:bg-red-500/10 border border-foreground/10 hover:border-red-500/30 rounded-xl text-left transition-colors text-sm">
+                            <button className="flex items-center gap-3 p-3 bg-[var(--bg-elevated)] hover:bg-red-500/10 border border-[var(--border-default)] hover:border-red-500/30 rounded-xl text-left transition-colors text-sm">
                                <XCircle size={16} className="text-red-500"/>
                                <div>
                                   <div className="font-medium text-red-400">Remove Campaign</div>
-                                  <div className="text-xs text-foreground/50">Unpublish immediately</div>
+                                  <div className="text-xs text-[var(--text-secondary)]">Unpublish immediately</div>
                                </div>
                             </button>
                          </div>
@@ -219,14 +219,14 @@ export default function CampaignReviewQueue() {
 
                 {/* Review Actions Footer */}
                 {(selectedCampaign.stage || selectedCampaign.status) === 'Under Review' && (
-                   <div className="p-5 border-t border-foreground/10 bg-card space-y-3">
+                   <div className="p-5 border-t border-[var(--border-default)] bg-[var(--bg-card)] space-y-3">
                       <div>
                          <input 
                             type="text" 
                             placeholder="Reason for rejection / draft return..." 
                             value={rejectReason}
                             onChange={(e) => setRejectReason(e.target.value)}
-                            className="w-full bg-black/40 border border-foreground/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-red-500"
+                            className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-red-500"
                          />
                       </div>
                       <div className="flex gap-2">
@@ -253,7 +253,7 @@ export default function CampaignReviewQueue() {
 
         {aiModalOpen && (
            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-              <div className="bg-[#12121A] border border-foreground/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl relative">
+              <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6 w-full max-w-lg shadow-2xl relative">
                  <button onClick={() => setAiModalOpen(false)} className="absolute top-4 right-4 p-2 hover:bg-foreground/10 rounded-full transition-colors">
                     <X size={20} />
                  </button>
@@ -263,17 +263,17 @@ export default function CampaignReviewQueue() {
                     </div>
                     <div>
                        <h3 className="font-display text-xl font-bold">AI Moderation Engine</h3>
-                       <p className="text-xs text-foreground/50">Gemini-powered automated campaign screening</p>
+                       <p className="text-xs text-[var(--text-secondary)]">Gemini-powered automated campaign screening</p>
                     </div>
                  </div>
 
                  <div className="space-y-4 mb-8">
-                    <div className="p-4 bg-foreground/5 rounded-xl border border-foreground/10">
+                    <div className="p-4 bg-foreground/5 rounded-xl border border-[var(--border-default)]">
                        <h4 className="font-semibold text-sm mb-2 flex items-center gap-2"><CheckCircle2 size={16} className="text-green-500"/> How it works</h4>
-                       <p className="text-sm text-foreground/70 leading-relaxed">
+                       <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                           When a brand submits a new campaign, the AI instantly scans the title, description, and deliverables for:
                        </p>
-                       <ul className="mt-3 space-y-2 text-sm text-foreground/60 list-disc list-inside">
+                       <ul className="mt-3 space-y-2 text-sm text-[var(--text-primary)]/60 list-disc list-inside">
                           <li>Prohibited content (gambling, adult, illegal substances)</li>
                           <li>Contact info sharing (bypassing platform fees)</li>
                           <li>Unrealistic deliverables vs. budget ratios</li>
@@ -281,10 +281,10 @@ export default function CampaignReviewQueue() {
                        </ul>
                     </div>
 
-                    <div className="flex items-center justify-between p-4 bg-black/40 rounded-xl border border-foreground/10">
+                    <div className="flex items-center justify-between p-4 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-default)]">
                        <div>
-                          <div className="font-semibold text-sm text-white">Auto-Reject High Risk</div>
-                          <div className="text-xs text-foreground/50 mt-1">Automatically rejects campaigns scoring 90%+ risk.</div>
+                          <div className="font-semibold text-sm text-[var(--text-primary)]">Auto-Reject High Risk</div>
+                          <div className="text-xs text-[var(--text-secondary)] mt-1">Automatically rejects campaigns scoring 90%+ risk.</div>
                        </div>
                        <button 
                           onClick={traverseAiToggle}
@@ -295,7 +295,7 @@ export default function CampaignReviewQueue() {
                     </div>
                  </div>
 
-                 <button onClick={() => setAiModalOpen(false)} className="w-full py-3 bg-white text-black hover:bg-gray-200 font-bold rounded-xl transition-colors">
+                 <button onClick={() => setAiModalOpen(false)} className="w-full py-3 bg-[var(--text-primary)] text-[var(--bg-base)] hover:bg-[var(--text-secondary)] font-bold rounded-xl transition-colors">
                     Done
                  </button>
               </div>

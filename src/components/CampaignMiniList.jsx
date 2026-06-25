@@ -41,7 +41,7 @@ export default function CampaignMiniList({ campaigns = [] }) {
       case "PENDING":
         return "bg-amber-500/10 text-amber-400 border border-amber-500/20";
       case "DRAFT":
-        return "bg-white/5 text-white/40 border border-white/10";
+        return "bg-[var(--bg-elevated)] text-[var(--text-tertiary)] border border-[var(--border-default)]";
       default:
         return "bg-purple-500/10 text-[#9D7CFF] border border-[#7C5CFF]/20";
     }
@@ -49,18 +49,18 @@ export default function CampaignMiniList({ campaigns = [] }) {
 
   return (
     <div className="w-full mt-10" data-testid="campaign-mini-list">
-      <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
+      <div className="flex justify-between items-center mb-6 border-b border-[var(--border-default)] pb-4">
         <div className="flex items-center gap-2">
           <Sparkles size={16} className="text-[#9D7CFF] animate-pulse" />
-          <h3 className="text-sm font-black text-white uppercase tracking-wider">
+          <h3 className="text-sm font-black text-[var(--text-primary)] uppercase tracking-wider">
             Active Campaign Briefs
           </h3>
-          <span className="text-xs text-white/40 font-medium hidden sm:inline">(Grid covering whole page with 5 boxes)</span>
+          <span className="text-xs text-[var(--text-tertiary)] font-medium hidden sm:inline">(Grid covering whole page with 5 boxes)</span>
         </div>
         <div className="flex items-center gap-3">
           <button 
             onClick={() => navigate("/brand/campaigns/create")}
-            className="p-2 px-4 rounded-xl bg-[#7C5CFF] hover:bg-[#6b4aff] text-white hover:scale-[1.02] text-xs font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+            className="p-2 px-4 rounded-xl bg-[#7C5CFF] hover:bg-[#6b4aff] text-[var(--text-primary)] hover:scale-[1.02] text-xs font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
           >
             <Plus size={14} strokeWidth={3} /> Post Briefing
           </button>
@@ -80,7 +80,7 @@ export default function CampaignMiniList({ campaigns = [] }) {
             <div 
               key={camp.campaign_id || idx} 
               onClick={() => navigate(`/brand/campaigns`)}
-              className="group flex flex-col justify-between bg-[#131224]/70 hover:bg-[#15142a] border border-white/5 hover:border-[#7C5CFF]/40 rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-1 relative overflow-hidden min-h-[300px] hover:shadow-[0_12px_36px_-12px_rgba(124,92,255,0.2)] cursor-pointer"
+              className="group flex flex-col justify-between bg-[var(--bg-card)]/70 hover:bg-[#15142a] border border-[var(--border-default)] hover:border-[#7C5CFF]/40 rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-1 relative overflow-hidden min-h-[300px] hover:shadow-[0_12px_36px_-12px_rgba(124,92,255,0.2)] cursor-pointer"
             >
               {/* Background radial glow on hover */}
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#7C5CFF]/5 to-transparent rounded-full filter blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -97,7 +97,7 @@ export default function CampaignMiniList({ campaigns = [] }) {
                 </div>
 
                 {/* Title */}
-                <h4 className="text-sm font-bold text-white tracking-tight leading-snug group-hover:text-[#a98eff] transition-colors mb-4 line-clamp-2 min-h-[40px] flex items-start gap-2">
+                <h4 className="text-sm font-bold text-[var(--text-primary)] tracking-tight leading-snug group-hover:text-[#a98eff] transition-colors mb-4 line-clamp-2 min-h-[40px] flex items-start gap-2">
                   {camp.title}
                   {isLive && (
                     <span className="flex h-1.5 w-1.5 relative mt-1.5">
@@ -108,7 +108,7 @@ export default function CampaignMiniList({ campaigns = [] }) {
                 </h4>
 
                 {/* Budget Range Box */}
-                <div className="bg-white/[0.02] border border-white/5 rounded-xl p-3 mb-4">
+                <div className="bg-white/[0.02] border border-[var(--border-default)] rounded-xl p-3 mb-4">
                   <div className="text-[8px] uppercase tracking-widest text-[#9CA3AF] font-bold mb-0.5">Budget Bracket</div>
                   <div className="text-sm font-black text-[#D9F111] font-mono">
                     ₹{camp.budget_min.toLocaleString("en-IN")} – ₹{camp.budget_max.toLocaleString("en-IN")}
@@ -117,18 +117,18 @@ export default function CampaignMiniList({ campaigns = [] }) {
               </div>
 
               {/* Bottom statistics */}
-              <div className="mt-auto pt-3 border-t border-white/5 flex flex-col gap-2">
-                <div className="flex justify-between text-[10px] text-white/50">
+              <div className="mt-auto pt-3 border-t border-[var(--border-default)] flex flex-col gap-2">
+                <div className="flex justify-between text-[10px] text-[var(--text-secondary)]">
                   <span className="flex items-center gap-1 font-medium"><Users2 size={11} className="text-[#a98eff]" /> Applicants</span>
-                  <span className="text-white font-bold">{camp.applicantsLength}</span>
+                  <span className="text-[var(--text-primary)] font-bold">{camp.applicantsLength}</span>
                 </div>
-                <div className="flex justify-between text-[10px] text-white/50">
+                <div className="flex justify-between text-[10px] text-[var(--text-secondary)]">
                   <span className="flex items-center gap-1 font-medium"><ShieldCheck size={11} className="text-emerald-400" /> Deals Done</span>
-                  <span className="text-white font-bold">{camp.dealsLength}</span>
+                  <span className="text-[var(--text-primary)] font-bold">{camp.dealsLength}</span>
                 </div>
-                <div className="flex justify-between text-[9px] text-white/40 mt-1 uppercase font-mono">
+                <div className="flex justify-between text-[9px] text-[var(--text-tertiary)] mt-1 uppercase font-mono">
                   <span>Deadline:</span>
-                  <span className="text-white/60 font-bold">{camp.deadline}</span>
+                  <span className="text-[var(--text-secondary)] font-bold">{camp.deadline}</span>
                 </div>
               </div>
             </div>

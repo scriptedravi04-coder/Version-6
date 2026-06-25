@@ -86,8 +86,12 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
   useEffect(() => {
     if (isOpen && user) {
       fetchKycStatus();
-      // If approved or pending, directly skip welcome screen to show status dashboard page inside
-      setHasStarted(false);
+      // If user is already verified from Auth Context, we can instantly jump to status screen
+      if (user.verified) {
+        setHasStarted(true);
+      } else {
+        setHasStarted(false);
+      }
     }
   }, [isOpen, user]);
 
@@ -96,10 +100,11 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
   const isApproved = kycObj?.status === "approved" || user?.verified;
   const isPending = kycObj?.status === "pending";
 
-  // When opening status checks we auto-advance hasStarted so they see the status panels instantly
-  if ((isApproved || isPending) && !hasStarted && !kycLoading) {
-    setHasStarted(true);
-  }
+  useEffect(() => {
+    if ((isApproved || isPending) && !hasStarted && !kycLoading) {
+      setHasStarted(true);
+    }
+  }, [isApproved, isPending, hasStarted, kycLoading]);
 
   // Trigger a click on the hidden file input element
   const handleUploadClick = (type) => {
@@ -119,20 +124,24 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
       return;
     }
 
-    const newFile = {
-      name: file.name,
-      size: (file.size / (1024 * 1024)).toFixed(1) + " MB",
-      url: URL.createObjectURL(file)
-    };
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const newFile = {
+        name: file.name,
+        size: (file.size / (1024 * 1024)).toFixed(1) + " MB",
+        url: event.target.result
+      };
 
-    setUploadedFiles(prev => {
-      if (prev.some(f => f.name === file.name)) return prev;
-      return [...prev, newFile];
-    });
-    toast.success(`${file.name} attached successfully!`);
-    
-    // reset input so the same file can be selected again if removed
-    e.target.value = "";
+      setUploadedFiles(prev => {
+        if (prev.some(f => f.name === file.name)) return prev;
+        return [...prev, newFile];
+      });
+      toast.success(`${file.name} attached successfully!`);
+      
+      // reset input so the same file can be selected again if removed
+      e.target.value = "";
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleRemoveFile = (index) => {
@@ -434,30 +443,33 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
     <AnimatePresence>
       {isOpen && (
         <motion.div 
+          key="modal-backdrop"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-hidden"
+          className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-[var(--bg-base)]/70 backdrop-blur-md overflow-hidden"
         >
           
           {/* Background Click Shield */}
           <div className="absolute inset-0 z-0" onClick={onClose} />
 
-        {/* STATE 0: WELCOME CARD INDEX SCREEN (Beautiful white/frosted glassmorphic premium container) */}
-        {!hasStarted ? (
-          <motion.div 
+          <AnimatePresence mode="wait">
+          {/* STATE 0: WELCOME CARD INDEX SCREEN (Beautiful white/frosted glassmorphic premium container) */}
+          {!hasStarted ? (
+            <motion.div 
+              key="welcome-card"
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="bg-white/95 text-slate-800 w-full max-w-[460px] rounded-[32px] relative z-10 flex flex-col overflow-hidden border border-white/60 backdrop-blur-xl shadow-[0_24px_60px_rgba(124,92,255,0.18)]"
+            className="bg-[var(--bg-card)] text-[var(--text-primary)] w-full max-w-[460px] rounded-[32px] relative z-10 flex flex-col overflow-hidden border border-[var(--border-default)] backdrop-blur-xl shadow-[0_24px_60px_rgba(124,92,255,0.18)]"
           >
             {/* Top Close indicator */}
             <button 
               onClick={onClose}
               id="btn-close-modal-welcome"
-              className="absolute top-6 right-6 p-2 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-all duration-200"
+              className="absolute top-6 right-6 p-2 rounded-full text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all duration-200"
               title="Close popup"
             >
               <X size={20} />
@@ -515,10 +527,10 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
               </div>
 
               {/* Title centered */}
-              <h3 className="text-2xl font-black font-sans text-slate-900 tracking-tight mt-1">KYC Trust Verification</h3>
+              <h3 className="text-2xl font-black font-sans text-[var(--text-primary)] tracking-tight mt-1">KYC Trust Verification</h3>
               
               {/* Subtitle / desc */}
-              <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-[370px] mt-3">
+              <p className="text-sm font-medium text-[var(--text-secondary)] leading-relaxed max-w-[370px] mt-3">
                 To comply with regional payout laws, complete your instant financial credentials. <span className="font-extrabold text-[#3B82F6] whitespace-nowrap">Takes less than 5 minutes!</span>
               </p>
 
@@ -526,7 +538,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
               <button 
                 onClick={handleStartVerification}
                 id="btn-start-verification-welcome"
-                className="w-full mt-8 bg-[#3B82F6] hover:bg-blue-600 text-white py-3.5 px-6 rounded-2xl font-bold shadow-lg shadow-[#3B82F6]/25 hover:shadow-[#3B82F6]/35 transform hover:-translate-y-0.5 transition-all duration-200 text-sm tracking-wide"
+                className="w-full mt-8 bg-[#3B82F6] hover:bg-blue-600 text-[var(--text-primary)] py-3.5 px-6 rounded-2xl font-bold shadow-lg shadow-[#3B82F6]/25 hover:shadow-[#3B82F6]/35 transform hover:-translate-y-0.5 transition-all duration-200 text-sm tracking-wide"
               >
                 Start Verification
               </button>
@@ -535,7 +547,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
               <button 
                 onClick={onClose}
                 id="btn-skip-for-later-welcome"
-                className="text-sm font-bold text-slate-400 hover:text-[#3B82F6] transition-colors mt-4 block focus:outline-none"
+                className="text-sm font-bold text-[var(--text-tertiary)] hover:text-[#3B82F6] transition-colors mt-4 block focus:outline-none"
               >
                 Skip For Later
               </button>
@@ -546,21 +558,22 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
           
           /* STATE 1: HIGH FIDELITY MULTI-STEP FLOW WIZARD (Beautiful dark slate/violet theme matching the workspace) */
           <motion.div 
+            key="kyc-wizard"
             initial={{ opacity: 0, y: 30, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.98 }}
             transition={{ type: "spring", damping: 25, stiffness: 180 }}
-            className="bg-[#13131B] text-white w-full max-w-5xl h-screen sm:h-[85vh] sm:rounded-3xl shadow-3xl relative z-10 flex flex-col overflow-hidden border border-white/10 backdrop-blur-2xl shadow-[0_30px_70px_rgba(124,92,255,0.18)] text-slate-100"
+            className="bg-[var(--bg-card)] text-[var(--text-primary)] w-full max-w-5xl h-screen sm:h-[85vh] sm:rounded-3xl shadow-3xl relative z-10 flex flex-col overflow-hidden border border-[var(--border-default)] backdrop-blur-2xl shadow-[0_30px_70px_rgba(124,92,255,0.18)] "
           >
             
             {/* TOP BAR / NAVIGATION CONTROLS */}
-            <div className="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between bg-[#0e0e14]/50 backdrop-blur-md">
+            <div className="p-4 sm:p-5 border-b border-[var(--border-default)] flex items-center justify-between bg-[var(--bg-surface)]/50 backdrop-blur-md">
               <div className="flex items-center gap-3">
                 {!(isApproved || isPending) && (
                   <button 
                     onClick={() => setHasStarted(false)}
                     id="btn-back-to-step-intro"
-                    className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                    className="w-9 h-9 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-all"
                     title="Back to Intro"
                   >
                     <ArrowLeft size={16} />
@@ -568,7 +581,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                 )}
                 <div>
                   <span className="text-[10px] font-mono font-black uppercase tracking-widest text-[#7C5CFF]">Security Portal</span>
-                  <h4 className="text-sm font-black text-white mt-0.5 font-sans">Ybex Trust Verification</h4>
+                  <h4 className="text-sm font-black text-[var(--text-primary)] mt-0.5 font-sans">Ybex Trust Verification</h4>
                 </div>
               </div>
 
@@ -576,7 +589,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                 <button 
                   onClick={onClose}
                   id="btn-close-modal-steps"
-                  className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition-colors"
+                  className="p-1.5 rounded-lg text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)] transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -584,13 +597,13 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
             </div>
 
             {/* HORIZONTAL STEPPER WIZARD */}
-            <div className="flex-1 flex flex-col overflow-visible px-4 md:px-8 bg-transparent pb-6 mt-4">
+            <div className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden pt-4 px-4 md:px-8 bg-transparent pb-6">
               
               {/* Stepper Header */}
               {!(isApproved || isPending) && !kycLoading && (
                 <div className="flex items-center justify-between w-full max-w-2xl mx-auto mb-10 relative mt-4">
                   {/* Background connecting line */}
-                  <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/10 -translate-y-1/2 z-0 rounded-full" />
+                  <div className="absolute top-1/2 left-0 right-0 h-1 bg-[var(--bg-elevated)] -translate-y-1/2 z-0 rounded-full" />
                   {/* Active connecting line */}
                   <div 
                     className="absolute top-1/2 left-0 h-1 bg-[#3B82F6] -translate-y-1/2 z-0 rounded-full transition-all duration-500 ease-in-out shadow-[0_0_10px_#3B82F6]" 
@@ -611,17 +624,17 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                           onClick={() => setActiveStep(stepNum)}
                           className={`w-[42px] h-[42px] rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 relative ${
                             isActive 
-                              ? "bg-[#3B82F6] text-white shadow-[0_0_20px_#3B82F6] ring-4 ring-[#3B82F6]/30 scale-110" 
+                              ? "bg-[#3B82F6] text-[var(--text-primary)] shadow-[0_0_20px_#3B82F6] ring-4 ring-[#3B82F6]/30 scale-110" 
                               : isPassed
-                                ? "bg-[#3B82F6] text-white shadow-[0_0_10px_#3B82F6]"
-                                : "bg-[#1E1E28] text-white/40 ring-1 ring-white/10"
+                                ? "bg-[#3B82F6] text-[var(--text-primary)] shadow-[0_0_10px_#3B82F6]"
+                                : "bg-[var(--bg-elevated)] text-[var(--text-tertiary)] ring-1 ring-white/10"
                           }`}
                         >
                           {isPassed && !isActive ? <CheckCircle2 size={20} strokeWidth={3} /> : stepNum}
                         </button>
                         <div className="absolute top-[52px] w-32 text-center">
-                           <span className={`text-[10px] font-bold uppercase tracking-wider block ${isActive ? "text-white" : "text-white/40"}`}>Step {stepNum}</span>
-                           <span className={`text-xs font-medium block truncate mt-0.5 ${isActive ? "text-white/90" : "text-white/40"}`}>{st.title}</span>
+                           <span className={`text-[10px] font-bold uppercase tracking-wider block ${isActive ? "text-[var(--text-primary)]" : "text-[var(--text-tertiary)]"}`}>Step {stepNum}</span>
+                           <span className={`text-xs font-medium block truncate mt-0.5 ${isActive ? "text-[var(--text-primary)]/90" : "text-[var(--text-tertiary)]"}`}>{st.title}</span>
                         </div>
                       </div>
                     );
@@ -630,10 +643,10 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
               )}
 
               {/* CENTER PANEL: STEP CONTENT */}
-              <div className="flex-1 flex justify-center items-start overflow-y-auto w-full pt-12 md:pt-4 pb-12 mb-4 scrollbar-hide">
+              <div className="flex-1 flex justify-center items-start w-full pt-12 md:pt-4 pb-12 mb-4">
                 
                 {kycLoading ? (
-                  <div className="flex-1 flex flex-col items-center justify-center text-white/50 h-full">
+                  <div className="flex-1 flex flex-col items-center justify-center text-[var(--text-secondary)] h-full">
                     <Loader2 size={32} className="animate-spin text-[#3B82F6] mb-3" />
                     <p className="text-xs font-semibold">Connecting securely to APIs...</p>
                   </div>
@@ -648,17 +661,17 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                         {isApproved ? <CheckCircle2 size={44} /> : <Loader2 size={44} className="animate-spin" />}
                       </div>
                       {isApproved && (
-                        <span className="absolute -bottom-1 -right-1 p-1 rounded-full bg-[#3B82F6] text-white text-xs border-2 border-white">
+                        <span className="absolute -bottom-1 -right-1 p-1 rounded-full bg-[#3B82F6] text-[var(--text-primary)] text-xs border-2 border-white">
                           <CheckSquare size={14} />
                         </span>
                       )}
                     </div>
 
-                    <h3 className="text-xl font-black font-sans text-white mb-2">
+                    <h3 className="text-xl font-black font-sans text-[var(--text-primary)] mb-2">
                       {isApproved ? "Verification Complete!" : "Verification Pending!"}
                     </h3>
                     
-                    <p className="text-sm text-white/75 leading-relaxed max-w-[340px] mb-6 font-medium">
+                    <p className="text-sm text-[var(--text-primary)]/75 leading-relaxed max-w-[340px] mb-6 font-medium">
                       {isApproved 
                         ? "Your identity is matched and fully compliance-cleared for payouts."
                         : "We received your submission! Checks usually resolve within 24 hours."}
@@ -666,7 +679,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
 
                     <button 
                       onClick={onClose}
-                      className="w-full py-3.5 px-6 rounded-xl font-bold bg-[#3B82F6] hover:bg-blue-600 text-white shadow-lg transition-all text-sm tracking-wide"
+                      className="w-full py-3.5 px-6 rounded-xl font-bold bg-[#3B82F6] hover:bg-blue-600 text-[var(--text-primary)] shadow-lg transition-all text-sm tracking-wide"
                     >
                       Close Window
                     </button>
@@ -674,15 +687,15 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                 ) : (
                   
                   /* ACTIVE FORM WIZARD CARD */
-                   <div className="w-full max-w-[500px] bg-[#1a1a24]/80 backdrop-blur-3xl border border-white/5 rounded-3xl p-6 sm:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
-                    <div className="flex flex-col h-full space-y-6">
+                   <div className="w-full max-w-[500px] bg-[var(--bg-surface)]/80 backdrop-blur-3xl border border-[var(--border-default)] rounded-3xl p-6 sm:p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]">
+                    <div className="flex flex-col space-y-6">
                       
                       {/* Active Panel Header Information */}
                       <div className="pb-4">
-                        <h3 className="text-xl font-bold text-white mb-1">
+                        <h3 className="text-xl font-bold text-[var(--text-primary)] mb-1">
                           {stepsList[activeStep - 1]?.title}
                         </h3>
-                        <p className="text-xs text-white/50">{stepsList[activeStep - 1]?.desc}</p>
+                        <p className="text-xs text-[var(--text-secondary)]">{stepsList[activeStep - 1]?.desc}</p>
                       </div>
 
                       {/* Step 1: Identity Card details */}
@@ -699,32 +712,32 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                           {user?.role === "brand" ? (
                             <>
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">GSTIN Number (Mandatory)</label>
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">GSTIN Number (Mandatory)</label>
                                 <input 
                                   type="text"
                                   placeholder="27AAACN1234E1Z5"
                                   value={gstCert}
                                   id="input-brand-gstin"
                                   onChange={e => setGstCert(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono uppercase font-bold"
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono uppercase font-bold"
                                 />
                               </div>
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">Company PAN Card</label>
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">Company PAN Card</label>
                                 <input 
                                   type="text"
                                   placeholder="AAACB1234C"
                                   value={brandPan}
                                   id="input-brand-pan"
                                   onChange={e => setBrandPan(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono uppercase font-bold"
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono uppercase font-bold"
                                 />
                               </div>
                             </>
                           ) : (
                             <>
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">Identity Card Type</label>
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">Identity Card Type</label>
                                 <select 
                                   value={identityType}
                                   id="select-creator-id-type"
@@ -732,14 +745,14 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                     setIdentityType(e.target.value);
                                     setIdentityNum("");
                                   }}
-                                  className="w-full bg-[#13131B] border border-white/10 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-black"
+                                  className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-sans font-black"
                                 >
-                                  <option value="Aadhaar" className="bg-[#13131B] text-white font-bold">Aadhaar Card</option>
-                                  <option value="PAN" className="bg-[#13131B] text-white font-bold">PAN Card (Income Tax)</option>
+                                  <option value="Aadhaar" className="bg-[var(--bg-card)] text-[var(--text-primary)] font-bold">Aadhaar Card</option>
+                                  <option value="PAN" className="bg-[var(--bg-card)] text-[var(--text-primary)] font-bold">PAN Card (Income Tax)</option>
                                 </select>
                               </div>
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">
                                   {identityType === "Aadhaar" ? "Aadhaar Card Number" : "PAN Card Number"}
                                 </label>
                                 <input 
@@ -761,12 +774,12 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                       setIdentityNum(cleanAndTruncated);
                                     }
                                   }}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono uppercase font-bold"
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono uppercase font-bold"
                                 />
                               </div>
                             </>
                           )}
-                          <div className="text-[10px] text-white/60 leading-normal bg-white/[0.02] p-3.5 rounded-xl border border-white/5 flex gap-2 items-start font-medium">
+                          <div className="text-[10px] text-[var(--text-secondary)] leading-normal bg-white/[0.02] p-3.5 rounded-xl border border-[var(--border-default)] flex gap-2 items-start font-medium">
                             <Shield size={14} className="text-[#3B82F6] shrink-0 mt-0.5" />
                             <span>Identity numbers are stored in secure encrypted environments. We never lease, trade, or distribute structural card details.</span>
                           </div>
@@ -779,49 +792,49 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                           {user?.role === "brand" ? (
                             <div className="grid grid-cols-1 gap-4">
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">POC Full Name</label>
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">POC Full Name</label>
                                 <input 
                                   type="text"
                                   placeholder="Karan Johar"
                                   value={pocName}
                                   id="input-brand-poc-name"
                                   onChange={e => setPocName(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-bold"
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-sans font-bold"
                                 />
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">Corporate Position</label>
+                                  <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">Corporate Position</label>
                                   <input 
                                     type="text"
                                     placeholder="Marketing Lead"
                                     value={pocDesignation}
                                     id="input-brand-poc-pos"
                                     onChange={e => setPocDesignation(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-bold"
+                                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-sans font-bold"
                                   />
                                 </div>
                                 <div>
-                                  <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">Business Email</label>
+                                  <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">Business Email</label>
                                   <input 
                                     type="email"
                                     placeholder="karan@novabrand.com"
                                     value={pocEmail}
                                     id="input-brand-poc-email"
                                     onChange={e => setPocEmail(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-semibold"
+                                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-sans font-semibold"
                                   />
                                 </div>
                               </div>
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">Direct contact phone</label>
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">Direct contact phone</label>
                                 <input 
                                   type="text"
                                   placeholder="+91 98765 43210"
                                   value={pocPhone}
                                   id="input-brand-poc-phone"
                                   onChange={e => setPocPhone(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold"
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono font-bold"
                                 />
                               </div>
                             </div>
@@ -829,18 +842,18 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                             <div className="space-y-4">
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <label className="text-[11px] font-semibold text-white/60 mb-1 block uppercase tracking-wider">Bank Name</label>
+                                  <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1 block uppercase tracking-wider">Bank Name</label>
                                   <input 
                                     type="text"
                                     placeholder="HDFC, SBI, ICICI"
                                     value={bankName}
                                     id="input-creator-bank"
                                     onChange={e => setBankName(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-sans font-bold"
+                                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-sans font-bold"
                                   />
                                 </div>
                                 <div>
-                                  <label className="text-[11px] font-semibold text-white/60 mb-1 block uppercase tracking-wider">Account Number</label>
+                                  <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1 block uppercase tracking-wider">Account Number</label>
                                   <input 
                                     type="text"
                                     placeholder="e.g. 501002345678"
@@ -851,13 +864,13 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                       const cleaned = e.target.value.replace(/\D/g, "");
                                       setBankAccount(cleaned);
                                     }}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold"
+                                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono font-bold"
                                   />
                                 </div>
                               </div>
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                  <label className="text-[11px] font-semibold text-white/60 mb-1 block uppercase tracking-wider">Bank IFSC Code</label>
+                                  <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1 block uppercase tracking-wider">Bank IFSC Code</label>
                                   <input 
                                     type="text"
                                     placeholder="HDFC0001234"
@@ -868,11 +881,11 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                       const cleaned = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
                                       setBankIfsc(cleaned);
                                     }}
-                                    className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold uppercase"
+                                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono font-bold uppercase"
                                   />
                                 </div>
                                 <div>
-                                  <label className="text-[11px] font-semibold text-white/60 mb-1 block uppercase tracking-wider">UPI ID Address</label>
+                                  <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1 block uppercase tracking-wider">UPI ID Address</label>
                                   <input 
                                     type="text"
                                     placeholder="username@okaxis"
@@ -882,7 +895,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                                       const cleaned = e.target.value.replace(/[^a-zA-Z0-9@.\-_]/g, "");
                                       setUpiId(cleaned);
                                     }}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-white transition-all font-mono font-bold"
+                                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#7C5CFF] focus:ring-2 focus:ring-[#7C5CFF]/25 text-[var(--text-primary)] transition-all font-mono font-bold"
                                   />
                                 </div>
                               </div>
@@ -899,7 +912,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                       {activeStep === 3 && (
                         <div className="space-y-4">
                           <div className="flex items-center justify-between">
-                            <label className="text-[11px] font-semibold text-white/60 block uppercase tracking-wider">Supported Verification Form Copies</label>
+                            <label className="text-[11px] font-semibold text-[var(--text-secondary)] block uppercase tracking-wider">Supported Verification Form Copies</label>
                             <span className="text-[9px] font-mono font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full uppercase tracking-wider">Optional — Click Next to Skip</span>
                           </div>
                           
@@ -908,7 +921,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                               type="button"
                               onClick={() => handleUploadClick("id")}
                               id="btn-upload-file-id"
-                              className="p-4.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 text-xs font-bold text-white/70 hover:bg-[#3B82F6]/10 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none shadow-xs"
+                              className="p-4.5 rounded-xl border border-[var(--border-default)] hover:border-white/20 bg-[var(--bg-elevated)] text-xs font-bold text-[var(--text-secondary)] hover:bg-[#3B82F6]/10 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none shadow-xs"
                             >
                               <UploadCloud size={16} className="text-blue-400" /> Add {user?.role === "brand" ? "Company PAN Proof" : "Identity ID Card Copy"}
                             </button>
@@ -917,23 +930,23 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                               type="button"
                               onClick={() => handleUploadClick(user?.role === "brand" ? "gst" : "bank")}
                               id="btn-upload-file-bank"
-                              className="p-4.5 rounded-xl border border-white/10 hover:border-white/20 bg-white/5 text-xs font-bold text-white/70 hover:bg-[#3B82F6]/10 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none shadow-xs"
+                              className="p-4.5 rounded-xl border border-[var(--border-default)] hover:border-white/20 bg-[var(--bg-elevated)] text-xs font-bold text-[var(--text-secondary)] hover:bg-[#3B82F6]/10 transition-all duration-200 flex items-center justify-center gap-2 focus:outline-none shadow-xs"
                             >
                               <UploadCloud size={16} className="text-blue-400" /> Add {user?.role === "brand" ? "GST Registry Cert" : "Cancelled Cheque Photo"}
                             </button>
                           </div>
 
                           {uploadedFiles.length > 0 && (
-                            <div className="bg-white/[0.02] rounded-2xl p-4 border border-white/5 space-y-2 max-h-[140px] overflow-y-auto animate-in fade-in shadow-inner">
-                              <h5 className="text-[10px] font-bold text-white/40 uppercase">Uploaded Documents ({uploadedFiles.length})</h5>
+                            <div className="bg-white/[0.02] rounded-2xl p-4 border border-[var(--border-default)] space-y-2 max-h-[140px] overflow-y-auto animate-in fade-in shadow-inner">
+                              <h5 className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase">Uploaded Documents ({uploadedFiles.length})</h5>
                               {uploadedFiles.map((f, id) => (
-                                <div key={id} className="flex items-center justify-between text-xs px-3 py-2.5 bg-white/[0.04] rounded-xl border border-white/5 shadow-xs">
-                                  <span className="text-white font-bold truncate max-w-[240px]">{f.name}</span>
+                                <div key={id} className="flex items-center justify-between text-xs px-3 py-2.5 bg-white/[0.04] rounded-xl border border-[var(--border-default)] shadow-xs">
+                                  <span className="text-[var(--text-primary)] font-bold truncate max-w-[240px]">{f.name}</span>
                                   <button
                                     type="button"
                                     onClick={() => handleRemoveFile(id)}
                                     id={`btn-remove-file-${id}`}
-                                    className="text-white/40 hover:text-red-400 hover:bg-red-500/10 p-1 rounded-lg transition-all"
+                                    className="text-[var(--text-tertiary)] hover:text-red-400 hover:bg-red-500/10 p-1 rounded-lg transition-all"
                                   >
                                     <X size={14} />
                                   </button>
@@ -941,7 +954,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                               ))}
                             </div>
                           )}
-                          <p className="text-[10px] text-white/40 leading-relaxed font-semibold">
+                          <p className="text-[10px] text-[var(--text-tertiary)] leading-relaxed font-semibold">
                             Attachments must be high-resolution PDFs or JPEG/PNG images under 5MB. Low quality photographs are automatically rejected.
                           </p>
                         </div>
@@ -953,39 +966,39 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                           {user?.role === "brand" ? (
                             <>
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider font-mono">Official Corporate Site URL</label>
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider font-mono">Official Corporate Site URL</label>
                                 <input 
                                   type="text"
                                   placeholder="https://novabrand.com"
                                   value={brandSiteUrl}
                                   id="input-brand-site"
                                   onChange={e => setBrandSiteUrl(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold"
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono font-bold"
                                 />
                               </div>
                             </>
                           ) : (
                             <>
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">Primary Channel Username / Link</label>
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">Primary Channel Username / Link</label>
                                 <input 
                                   type="text"
                                   placeholder="e.g. @username or youtube.com/c/channel"
                                   value={socialHandle}
                                   id="input-creator-social"
                                   onChange={e => setSocialHandle(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold"
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono font-bold"
                                 />
                               </div>
                               <div>
-                                <label className="text-[11px] font-semibold text-white/60 mb-1.5 block uppercase tracking-wider">GSTIN Serial (Optional)</label>
+                                <label className="text-[11px] font-semibold text-[var(--text-secondary)] mb-1.5 block uppercase tracking-wider">GSTIN Serial (Optional)</label>
                                 <input 
                                   type="text"
                                   placeholder="Optional 15-digit GSTIN"
                                   value={gstin}
                                   id="input-creator-gstin"
                                   onChange={e => setGstin(e.target.value)}
-                                  className="w-full bg-white/5 border border-white/10 hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-white transition-all font-mono font-bold uppercase"
+                                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] hover:border-white/20 rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/25 text-[var(--text-primary)] transition-all font-mono font-bold uppercase"
                                 />
                               </div>
                             </>
@@ -1000,8 +1013,8 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                             <CheckCircle2 size={18} />
                             <span className="text-xs font-black uppercase tracking-wider font-mono">Legitimacy Confirmed</span>
                           </div>
-                          <h4 className="text-sm font-black text-white">Declaration & Agreement</h4>
-                          <p className="text-xs text-white/70 leading-relaxed font-bold">
+                          <h4 className="text-sm font-black text-[var(--text-primary)]">Declaration & Agreement</h4>
+                          <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-bold">
                             By triggering formal dispatch, you verify that all supplied values correspond to valid government identities owned by you or your legal organization. Forged files result in permanent profile lock.
                           </p>
                           
@@ -1025,7 +1038,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                         disabled={activeStep === 1 || kycSubmitting}
                         onClick={handlePrev}
                         id="btn-actions-prev-step"
-                        className="px-6 py-3.5 rounded-xl text-sm font-bold border border-white/10 bg-transparent hover:bg-white/5 text-white/70 transition-all disabled:opacity-0 disabled:pointer-events-none"
+                        className="px-6 py-3.5 rounded-xl text-sm font-bold border border-[var(--border-default)] bg-transparent hover:bg-[var(--bg-elevated)] text-[var(--text-secondary)] transition-all disabled:opacity-0 disabled:pointer-events-none"
                       >
                         Back
                       </button>
@@ -1035,7 +1048,7 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
                         onClick={handleNext}
                         disabled={kycSubmitting}
                         id="btn-actions-next-step"
-                        className="px-8 py-3.5 rounded-xl text-sm font-bold bg-[#3B82F6] hover:bg-blue-600 text-white transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transform hover:-translate-y-0.5 duration-200 flex items-center gap-1.5 w-full md:w-auto mt-2 md:mt-0 justify-center"
+                        className="px-8 py-3.5 rounded-xl text-sm font-bold bg-[#3B82F6] hover:bg-blue-600 text-[var(--text-primary)] transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transform hover:-translate-y-0.5 duration-200 flex items-center gap-1.5 w-full md:w-auto mt-2 md:mt-0 justify-center"
                       >
                         {kycSubmitting ? (
                           <>
@@ -1056,7 +1069,8 @@ export default function KycVerificationModal({ isOpen, onClose, onComplete }) {
             </div>
 
           </motion.div>
-        )}
+          )}
+          </AnimatePresence>
 
         <input 
           type="file" 

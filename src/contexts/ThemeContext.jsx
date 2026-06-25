@@ -3,22 +3,20 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("dark");
+  const theme = "light";
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove("light");
-    root.classList.add("dark");
-    localStorage.setItem("ybex-theme", "dark");
-  }, [theme]);
+    root.classList.add("light");
+    root.classList.remove("dark");
+  }, []);
 
   const toggleTheme = () => {
-    // Force the gorgeous dark themed UI across all screens
-    setTheme("dark");
+    // Disabled theme toggling
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

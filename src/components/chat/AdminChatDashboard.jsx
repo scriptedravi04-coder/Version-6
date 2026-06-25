@@ -38,20 +38,20 @@ export default function AdminChatDashboard() {
     }
   }
 
-  if (loading) return <div className="p-8 text-center text-white/50">Loading chat metrics...</div>;
+  if (loading) return <div className="p-8 text-center text-[var(--text-secondary)]">Loading chat metrics...</div>;
 
   return (
     <div className="space-y-6">
-      <div className="flex gap-4 border-b border-white/5 pb-4">
+      <div className="flex gap-4 border-b border-[var(--border-default)] pb-4">
         <button 
            onClick={() => setTab('flags')} 
-           className={`font-bold flex items-center gap-2 ${tab === 'flags' ? 'text-red-400' : 'text-white/50'}`}
+           className={`font-bold flex items-center gap-2 ${tab === 'flags' ? 'text-red-400' : 'text-[var(--text-secondary)]'}`}
         >
           <ShieldAlert size={18} /> Flagged Messages ({flagged.length})
         </button>
         <button 
            onClick={() => setTab('all')} 
-           className={`font-bold flex items-center gap-2 ${tab === 'all' ? 'text-white' : 'text-white/50'}`}
+           className={`font-bold flex items-center gap-2 ${tab === 'all' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}
         >
           <MessageSquare size={18} /> All Threads
         </button>
@@ -59,20 +59,20 @@ export default function AdminChatDashboard() {
 
       {tab === 'flags' && (
         <div className="space-y-4">
-          {flagged.length === 0 && <p className="text-white/50 bg-white/5 rounded-2xl p-8 text-center">No pending flagged messages.</p>}
+          {flagged.length === 0 && <p className="text-[var(--text-secondary)] bg-[var(--bg-elevated)] rounded-2xl p-8 text-center">No pending flagged messages.</p>}
           {flagged.map(f => (
-            <div key={f.id} className="bg-[#2a1313] border border-red-500/20 rounded-2xl p-5 flex flex-col gap-4">
+            <div key={f.id} className="bg-red-500/5 border border-red-500/20 rounded-2xl p-5 flex flex-col gap-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="bg-red-500/20 text-red-400 px-2.5 py-1 rounded-sm text-xs font-bold uppercase">{f.severity} RISK</span>
-                  <p className="text-white font-medium mt-2">{f.reason}</p>
+                  <span className="bg-red-500/10 text-red-600 px-2.5 py-1 rounded-sm text-xs font-bold uppercase">{f.severity} RISK</span>
+                  <p className="text-[var(--text-primary)] font-medium mt-2">{f.reason}</p>
                 </div>
-                <span className="text-xs text-white/40">{new Date(f.created_at).toLocaleString()}</span>
+                <span className="text-xs text-[var(--text-tertiary)]">{new Date(f.created_at).toLocaleString()}</span>
               </div>
               
-              <div className="bg-black/40 border border-white/5 rounded-xl p-4">
-                <span className="text-white/40 text-xs mb-1 block">Flagged Content:</span>
-                <p className="text-white/90 text-sm font-mono">&quot;{f.message?.content}&quot;</p>
+              <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4">
+                <span className="text-[var(--text-tertiary)] text-xs mb-1 block">Flagged Content:</span>
+                <p className="text-[var(--text-primary)]/90 text-sm font-mono">&quot;{f.message?.content}&quot;</p>
               </div>
 
               <div className="flex gap-3 mt-2">
@@ -82,7 +82,7 @@ export default function AdminChatDashboard() {
                 <button onClick={() => handleAction(f.id, 'SUSPEND')} className="flex-1 bg-red-500/20 text-red-500 hover:bg-red-500/30 py-2 rounded-xl text-sm font-bold transition-colors border border-red-500/30">
                   Suspend User
                 </button>
-                <button onClick={() => handleAction(f.id, 'DISMISS')} className="px-4 bg-white/5 hover:bg-white/10 text-white py-2 rounded-xl text-sm font-bold transition-colors border border-white/10">
+                <button onClick={() => handleAction(f.id, 'DISMISS')} className="px-4 bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] py-2 rounded-xl text-sm font-bold transition-colors border border-[var(--border-default)]">
                   Dismiss
                 </button>
               </div>
@@ -92,9 +92,9 @@ export default function AdminChatDashboard() {
       )}
 
       {tab === 'all' && (
-        <div className="overflow-hidden border border-white/10 rounded-2xl bg-white/5">
-          <table className="w-full text-left text-sm text-white/70">
-            <thead className="bg-white/5 text-white/50 text-xs uppercase font-bold">
+        <div className="overflow-hidden border border-[var(--border-default)] rounded-2xl bg-[var(--bg-elevated)]">
+          <table className="w-full text-left text-sm text-[var(--text-secondary)]">
+            <thead className="bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs uppercase font-bold">
               <tr>
                 <th className="p-4">Creator</th>
                 <th className="p-4">Brand</th>
@@ -103,17 +103,17 @@ export default function AdminChatDashboard() {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-[var(--border-default)]">
               {threads.map(t => (
-                <tr key={t.id} className="hover:bg-white/[0.02] transition-colors">
-                  <td className="p-4 font-medium text-white">{t.creator?.name || 'Unknown'}</td>
-                  <td className="p-4 font-medium text-white">{t.brand?.name || 'Unknown'}</td>
+                <tr key={t.id} className="hover:bg-[var(--bg-elevated)] transition-colors">
+                  <td className="p-4 font-medium text-[var(--text-primary)]">{t.creator?.name || 'Unknown'}</td>
+                  <td className="p-4 font-medium text-[var(--text-primary)]">{t.brand?.name || 'Unknown'}</td>
                   <td className="p-4">
-                    <span className="bg-white/10 px-2 py-1 rounded text-xs font-bold tracking-wide">{t.status}</span>
+                    <span className="bg-[var(--bg-elevated)] px-2 py-1 rounded text-xs font-bold tracking-wide">{t.status}</span>
                   </td>
                   <td className="p-4 text-center font-bold">₹{t.agreed_amount || 0}</td>
                   <td className="p-4 text-right">
-                    <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-white">
+                    <button className="p-2 bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] rounded-lg transition-colors text-[var(--text-primary)]">
                       <Eye size={16} />
                     </button>
                   </td>

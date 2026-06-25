@@ -70,10 +70,6 @@ export const geocodeCity = async (cityName) => {
   
   if (CITIES_DATA[name]) return CITIES_DATA[name];
 
-  const cacheKey = `geo_${name}`;
-  const cached = localStorage.getItem(cacheKey);
-  if (cached) return JSON.parse(cached);
-
   try {
     const res = await fetch(`https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(name)}&countrycodes=in&format=json&limit=1`);
     const data = await res.json();
@@ -82,7 +78,6 @@ export const geocodeCity = async (cityName) => {
         lat: parseFloat(data[0].lat),
         lng: parseFloat(data[0].lon),
       };
-      localStorage.setItem(cacheKey, JSON.stringify(result));
       return result;
     }
   } catch (e) {

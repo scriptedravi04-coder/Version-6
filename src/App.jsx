@@ -17,6 +17,14 @@ import Explore from "./pages/Explore";
 import CreatorProfile from "./pages/CreatorProfile";
 import Dashboard from "./pages/Dashboard";
 import Campaigns from "./pages/Campaigns";
+
+function ExploreWrapper() {
+  const { user } = useAuth();
+  if (user?.role === 'brand') {
+    return <Explore />;
+  }
+  return <Campaigns />;
+}
 import CampaignDetail from "./pages/CampaignDetail";
 import Collabs from "./pages/Collabs";
 import DealDetail from "./pages/DealDetail";
@@ -52,23 +60,23 @@ import CreatorUGCEarnings from "./pages/CreatorUGCEarnings";
 
 const BrandConstructionScene = () => (
   <div className="relative w-64 h-64 mx-auto my-6 select-none pointer-events-none drop-shadow-2xl">
-    <motion.div animate={{x: [-10, 10, -10]}} transition={{duration: 6, repeat: Infinity, ease: 'easeInOut'}} className="absolute top-4 right-8 text-white/10">
+    <motion.div animate={{x: [-10, 10, -10]}} transition={{duration: 6, repeat: Infinity, ease: 'easeInOut'}} className="absolute top-4 right-8 text-[var(--text-primary)]/10">
        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5s-2.015-4.5-4.5-4.5c-.179 0-.353.021-.522.062C16.48 7.618 14.417 6 12 6c-2.417 0-4.48 1.618-4.978 4.062a4.48 4.48 0 0 0-.522-.062C4.015 10 2 12.015 2 14.5S4.015 19 6.5 19h11z"/></svg>
     </motion.div>
-    <motion.div animate={{x: [15, -5, 15]}} transition={{duration: 5, repeat: Infinity, ease: 'easeInOut'}} className="absolute top-12 left-0 text-white/5">
+    <motion.div animate={{x: [15, -5, 15]}} transition={{duration: 5, repeat: Infinity, ease: 'easeInOut'}} className="absolute top-12 left-0 text-[var(--text-primary)]/5">
        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 19c2.485 0 4.5-2.015 4.5-4.5s-2.015-4.5-4.5-4.5c-.179 0-.353.021-.522.062C16.48 7.618 14.417 6 12 6c-2.417 0-4.48 1.618-4.978 4.062a4.48 4.48 0 0 0-.522-.062C4.015 10 2 12.015 2 14.5S4.015 19 6.5 19h11z"/></svg>
     </motion.div>
 
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-48 shadow-2xl z-10">
-      <div className="bg-[#1A1B26] p-2 rounded-t-xl border-x-4 border-t-4 border-[#24283B] relative overflow-hidden h-28">
-         <div className="absolute inset-0 bg-[#000000] rounded m-1 border border-white/5"></div>
+      <div className="bg-[var(--bg-card)] p-2 rounded-t-xl border-x-4 border-t-4 border-[#24283B] relative overflow-hidden h-28">
+         <div className="absolute inset-0 bg-black rounded m-1 border border-[var(--border-default)]"></div>
       </div>
       <div className="bg-[#24283B] h-4 w-52 -ml-2 rounded-b-xl relative shadow-xl">
          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-[#414868] rounded-b-lg"></div>
       </div>
     </div>
 
-    <motion.div className="absolute top-16 right-4 text-foreground/20 z-0" animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}>
+    <motion.div className="absolute top-16 right-4 text-[var(--text-primary)]/20 z-0" animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}>
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
     </motion.div>
 
@@ -76,14 +84,14 @@ const BrandConstructionScene = () => (
       {[1,2,3,4].map(i => <div key={i} className="w-3 h-3 border-2 border-amber-600/50 rounded-sm"></div>)}
     </div>
 
-    <div className="absolute bottom-[10.5rem] left-8 w-10 h-10 bg-[#1A1B26] rounded-t-lg rounded-bl-sm border-2 border-amber-500 z-20 overflow-hidden shadow-lg">
-       <div className="w-full h-1/2 bg-blue-400/20 backdrop-blur border-b border-white/10"></div>
+    <div className="absolute bottom-[10.5rem] left-8 w-10 h-10 bg-[var(--bg-card)] rounded-t-lg rounded-bl-sm border-2 border-amber-500 z-20 overflow-hidden shadow-lg">
+       <div className="w-full h-1/2 bg-blue-400/20 backdrop-blur border-b border-[var(--border-default)]"></div>
     </div>
 
     <motion.div className="absolute bottom-[11rem] left-10 w-44 h-5 bg-amber-500 border-y-4 border-amber-600 origin-left z-10 rounded-r-md shadow-lg" animate={{ rotate: [-2, 2, -2] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
       <motion.div className="absolute top-2 left-28 w-1 h-20 bg-foreground/30 flex flex-col items-center justify-end origin-top" animate={{ y: [-5, 5, -5] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
         <div className="w-5 h-3 bg-slate-600 rounded-t-sm shadow shadow-black border border-white/20"></div>
-        <div className="w-16 h-16 bg-gradient-to-br from-[#7AA2F7] to-[#3b82f6] rounded-xl shadow-xl shadow-[#7AA2F7]/40 border-2 border-[#a7c5fb] p-2 flex items-center justify-center text-white relative">
+        <div className="w-16 h-16 bg-gradient-to-br from-[#7AA2F7] to-[#3b82f6] rounded-xl shadow-xl shadow-[#7AA2F7]/40 border-2 border-[#a7c5fb] p-2 flex items-center justify-center text-[var(--text-primary)] relative">
            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.5 7c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm-5 5L7 12.5 5 15v4h14v-1.5l-4.5-5.5-5 6z"/></svg>
         </div>
       </motion.div>
@@ -113,7 +121,7 @@ const CreatorUpgradeScene = () => (
      <motion.div animate={{y: [20, 150], opacity: [0, 1, 0]}} transition={{duration: 0.6, repeat: Infinity, ease: 'linear'}} className="absolute top-10 left-16 w-1 h-8 bg-purple-400/30 rounded-full" />
 
      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-full flex items-center justify-center">
-        <div className="w-24 h-24 rounded-full bg-[#1A1B26]/80 backdrop-blur border border-white/5 flex items-center justify-center shadow-2xl">
+        <div className="w-24 h-24 rounded-full bg-[var(--bg-card)]/80 backdrop-blur border border-[var(--border-default)] flex items-center justify-center shadow-2xl">
            <svg className="w-8 h-8 text-blue-500/30" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 2v20 M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
         </div>
      </div>
@@ -124,8 +132,8 @@ const CreatorUpgradeScene = () => (
 
      <motion.div className="absolute top-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center" animate={{ y: [-5, 5, -5] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
         <div className="relative w-14 h-24 bg-gradient-to-b from-white to-slate-200 rounded-t-full shadow-[0_10px_20px_rgba(0,0,0,0.5)] border border-slate-300 overflow-hidden flex flex-col items-center pt-4">
-           <div className="w-6 h-6 bg-[#1A1B26] rounded-full border-4 border-blue-500 relative flex items-center justify-center">
-             <div className="w-1.5 h-1.5 bg-white/50 rounded-full absolute top-0.5 left-0.5"></div>
+           <div className="w-6 h-6 bg-[var(--bg-card)] rounded-full border-4 border-blue-500 relative flex items-center justify-center">
+             <div className="w-1.5 h-1.5 bg-[var(--bg-elevated)]0 rounded-full absolute top-0.5 left-0.5"></div>
            </div>
            <div className="absolute bottom-0 w-full h-8 bg-slate-300 border-t border-slate-400 opacity-50"></div>
         </div>
@@ -145,7 +153,7 @@ const CreatorUpgradeScene = () => (
 
 function ProtectedRoute({ children, requireOnboarded = false }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-foreground/60">Loading...</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-[var(--text-primary)]/60">Loading...</div>;
   if (!user) return <Navigate to="/login" replace />;
   if (requireOnboarded && !user.onboarded && !user.onboarding_completed) return <Navigate to="/onboarding" replace />;
   return children;
@@ -177,7 +185,7 @@ function AnimatedRoutes() {
         <Route path="/login" element={<Layout><Page><Login /></Page></Layout>} />
         <Route path="/signup" element={<Layout><Page><Signup /></Page></Layout>} />
         <Route path="/onboarding" element={<ProtectedRoute><Layout><Page><Onboarding /></Page></Layout></ProtectedRoute>} />
-        <Route path="/explore" element={<Layout><Page><Explore /></Page></Layout>} />
+        <Route path="/explore" element={<Layout><Page><ExploreWrapper /></Page></Layout>} />
         <Route path="/creator/:id" element={<Layout><Page><CreatorProfile /></Page></Layout>} />
         <Route path="/dashboard" element={<ProtectedRoute requireOnboarded><Layout><Page><Dashboard /></Page></Layout></ProtectedRoute>} />
         <Route path="/campaigns" element={<Layout><Page><Campaigns /></Page></Layout>} />
@@ -244,7 +252,7 @@ export default function App() {
               <MaintenanceWrapper maintenance={maintenance}>
                 <AnimatedRoutes />
               </MaintenanceWrapper>
-              <Toaster position="top-right" theme="dark" richColors />
+              <Toaster position="top-right" theme="light" richColors />
             </LoadingProvider>
           </AuthProvider>
         </ThemeProvider>
@@ -270,14 +278,14 @@ function MaintenanceWrapper({ children, maintenance }) {
 
   if (isCreatorMaintenance) {
      return (
-       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center overflow-hidden relative">
+       <div className="min-h-screen bg-[var(--bg-base)] flex flex-col items-center justify-center p-6 text-center overflow-hidden relative">
           <div className="absolute inset-0 bg-blue-500/5 animate-pulse" style={{ animationDuration: '4s' }}></div>
           <div className="relative z-10 max-w-lg mx-auto flex flex-col items-center">
              <CreatorUpgradeScene />
-             <h1 className="font-display text-4xl lg:text-5xl font-bold mb-4 text-white">
+             <h1 className="font-display text-4xl lg:text-5xl font-bold mb-4 text-[var(--text-primary)]">
                App <span className="text-blue-400">Upgrade</span>
              </h1>
-             <p className="text-foreground/60 text-lg mb-8">
+             <p className="text-[var(--text-primary)]/60 text-lg mb-8">
                We're adding some cool new features. We'll be back online in a few hours!
              </p>
              <div className="flex flex-col items-center gap-4 mt-4">
@@ -285,10 +293,10 @@ function MaintenanceWrapper({ children, maintenance }) {
                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Scheduled Tune-Up
                 </div>
                 <div className="flex items-center gap-4 mt-2">
-                   <a href="mailto:support@ybex.io" className="text-xs text-foreground/60 hover:text-white transition-colors flex items-center gap-2 border border-foreground/10 px-4 py-2 rounded-full hover:bg-foreground/5 bg-black/40">
+                   <a href="mailto:support@ybex.io" className="text-xs text-[var(--text-primary)]/60 hover:text-[var(--text-primary)] transition-colors flex items-center gap-2 border border-[var(--border-default)] px-4 py-2 rounded-full hover:bg-foreground/5 bg-[var(--bg-elevated)]">
                       ✉️ Email Support
                    </a>
-                   <a href="tel:+18001234567" className="text-xs text-foreground/60 hover:text-white transition-colors flex items-center gap-2 border border-foreground/10 px-4 py-2 rounded-full hover:bg-foreground/5 bg-black/40">
+                   <a href="tel:+18001234567" className="text-xs text-[var(--text-primary)]/60 hover:text-[var(--text-primary)] transition-colors flex items-center gap-2 border border-[var(--border-default)] px-4 py-2 rounded-full hover:bg-foreground/5 bg-[var(--bg-elevated)]">
                       📞 Call Team
                    </a>
                 </div>
@@ -310,14 +318,14 @@ function MaintenanceWrapper({ children, maintenance }) {
 
   if (isBrandMaintenance) {
      return (
-       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center overflow-hidden relative">
+       <div className="min-h-screen bg-[var(--bg-base)] flex flex-col items-center justify-center p-6 text-center overflow-hidden relative">
           <div className="absolute inset-0 bg-amber-500/5 animate-pulse" style={{ animationDuration: '3s' }}></div>
           <div className="relative z-10 max-w-lg mx-auto flex flex-col items-center">
              <BrandConstructionScene />
-             <h1 className="font-display text-4xl lg:text-5xl font-bold mb-4 text-white">
+             <h1 className="font-display text-4xl lg:text-5xl font-bold mb-4 text-[var(--text-primary)]">
                Quick <span className="text-amber-500">Update</span>
              </h1>
-             <p className="text-foreground/60 text-lg mb-8">
+             <p className="text-[var(--text-primary)]/60 text-lg mb-8">
                We are making the platform better for you. Back online shortly!
              </p>
              <div className="flex flex-col items-center gap-4 mt-4">
@@ -325,10 +333,10 @@ function MaintenanceWrapper({ children, maintenance }) {
                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> Offline for Upgrades
                 </div>
                 <div className="flex items-center gap-4 mt-2">
-                   <a href="mailto:support@ybex.io" className="text-xs text-foreground/60 hover:text-white transition-colors flex items-center gap-2 border border-foreground/10 px-4 py-2 rounded-full hover:bg-foreground/5 bg-black/40">
+                   <a href="mailto:support@ybex.io" className="text-xs text-[var(--text-primary)]/60 hover:text-[var(--text-primary)] transition-colors flex items-center gap-2 border border-[var(--border-default)] px-4 py-2 rounded-full hover:bg-foreground/5 bg-[var(--bg-elevated)]">
                       ✉️ Email Support
                    </a>
-                   <a href="tel:+18001234567" className="text-xs text-foreground/60 hover:text-white transition-colors flex items-center gap-2 border border-foreground/10 px-4 py-2 rounded-full hover:bg-foreground/5 bg-black/40">
+                   <a href="tel:+18001234567" className="text-xs text-[var(--text-primary)]/60 hover:text-[var(--text-primary)] transition-colors flex items-center gap-2 border border-[var(--border-default)] px-4 py-2 rounded-full hover:bg-foreground/5 bg-[var(--bg-elevated)]">
                       📞 Call Team
                    </a>
                 </div>

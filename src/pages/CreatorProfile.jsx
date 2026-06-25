@@ -79,8 +79,8 @@ export default function CreatorProfile() {
     return (
       <div className="max-w-[1200px] mx-auto px-6 py-24 text-center">
         <h2 className="text-2xl font-bold mb-2">Creator not found</h2>
-        <p className="text-white/50 mb-6">This creator profile may be private or deleted.</p>
-        <Link to="/explore" className="bg-[#7C3AED] px-6 py-2 rounded-xl font-bold">Go to Explore</Link>
+        <p className="text-[var(--text-secondary)] mb-6">This creator profile may be private or deleted.</p>
+        <Link to="/explore" className="bg-[var(--violet)] px-6 py-2 rounded-xl font-bold">Go to Explore</Link>
       </div>
     );
   }
@@ -209,11 +209,11 @@ export default function CreatorProfile() {
   ];
 
   return (
-    <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-[#09090e]" data-testid="creator-profile">
+    <div className="w-full max-w-none px-4 sm:px-6 lg:px-8 py-8 md:py-12 bg-[var(--bg-base)]" data-testid="creator-profile">
       
       {/* Back button */}
       <div className="max-w-7xl mx-auto mb-6 flex items-center justify-between">
-        <button onClick={() => navigate('/explore')} className="text-sm font-semibold text-white/50 hover:text-white flex items-center gap-1.5 transition-colors">
+        <button onClick={() => navigate('/explore')} className="text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1.5 transition-colors">
           <ArrowLeft size={16} /> Back to Directory
         </button>
         
@@ -223,7 +223,7 @@ export default function CreatorProfile() {
             className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
               isSaved 
                 ? 'bg-[#D9F111] text-black border-[#D9F111]' 
-                : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
+                : 'bg-[var(--bg-elevated)] text-[var(--text-primary)] border-[var(--border-default)] hover:bg-[var(--bg-elevated)]'
             }`}
           >
             <Bookmark size={14} fill={isSaved ? "currentColor" : "none"} />
@@ -238,17 +238,17 @@ export default function CreatorProfile() {
         <div className="lg:col-span-4 flex flex-col gap-6">
           
           {/* Main profile Identity Card */}
-          <div className="bg-[#131224]/60 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 flex flex-col items-center text-center relative overflow-hidden group">
+          <div className="bg-[var(--bg-card)]/60 backdrop-blur-xl border border-[var(--border-default)] rounded-3xl p-6 md:p-8 flex flex-col items-center text-center relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-b from-[#7C5CFF]/10 to-transparent opacity-100 transition-opacity duration-700 pointer-events-none" />
             
             <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full mb-6 p-1 bg-gradient-to-tr from-[#7C5CFF] via-[#D9F111] to-[#7C5CFF] animate-spin-slow">
-              <div className="w-full h-full rounded-full bg-[#131224] overflow-hidden border-2 border-[#131224] flex items-center justify-center">
+              <div className="w-full h-full rounded-full bg-[var(--bg-card)] overflow-hidden border-2 border-[#131224] flex items-center justify-center">
                 <img src={c.photo || c.picture} alt={c.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               </div>
             </div>
 
             <div className="flex items-center justify-center gap-2 mb-1">
-              <h1 className="font-display font-extrabold text-2xl md:text-3xl text-white tracking-tight">{c.name}</h1>
+              <h1 className="font-display font-extrabold text-2xl md:text-3xl text-[var(--text-primary)] tracking-tight">{c.name}</h1>
               {c.verified || c.kyc_status === 'APPROVED' || true && (
                 <CheckCircle2 className="text-[#10B981]" size={22} fill="rgba(16, 185, 129, 0.15)" />
               )}
@@ -259,14 +259,14 @@ export default function CreatorProfile() {
             </p>
 
             {c.is_agency_managed && (
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#7C5CFF] bg-[#7C5CFF]/15 px-2.5 py-1 rounded-md border border-[#7C5CFF]/25 mb-4 max-w-xs truncate">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#7C5CFF] bg-[var(--violet)]/15 px-2.5 py-1 rounded-md border border-[var(--violet)]/20 mb-4 max-w-xs truncate">
                 Managed by {c.agency_name || "Agency"}
               </span>
             )}
 
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-white/60 font-medium mb-6">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-[var(--text-secondary)] font-medium mb-6">
               <span className="flex items-center gap-1.5">
-                <MapPin size={14} className="text-white/40" /> {c.city || "Delhi"}, {c.state || "IN"}
+                <MapPin size={14} className="text-[var(--text-tertiary)]" /> {c.city || "Delhi"}, {c.state || "IN"}
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
               <span>{(c.languages && c.languages[0]) || "Hindi"}</span>
@@ -276,13 +276,13 @@ export default function CreatorProfile() {
             <div className="grid grid-cols-2 gap-3 w-full">
               <button 
                 onClick={() => setCollabOpen(true)} 
-                className="w-full py-3 bg-[#7C5CFF] hover:bg-[#6D42FF] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_4px_20px_rgba(124,92,255,0.3)]"
+                className="w-full py-3 bg-[var(--violet)] hover:bg-[var(--violet-hover)] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-[0_4px_20px_rgba(124,92,255,0.3)]"
               >
                 <Briefcase size={14} /> Invite Deal
               </button>
               <button 
                 onClick={() => user ? navigate(`/chat/${c.user_id}`) : toast.error("Please login to send messages")}
-                className="w-full py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors border border-white/10"
+                className="w-full py-3 bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors border border-[var(--border-default)]"
               >
                 <MessageSquare size={14} /> DM Inbox
               </button>
@@ -290,50 +290,50 @@ export default function CreatorProfile() {
           </div>
 
           {/* Social Channels metrics breakdown */}
-          <div className="bg-[#131224]/60 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
-            <h3 className="text-[11px] font-bold uppercase tracking-widest text-white/40 mb-4">Verified Sync Channels</h3>
+          <div className="bg-[var(--bg-card)]/60 backdrop-blur-xl border border-[var(--border-default)] rounded-3xl p-6">
+            <h3 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] mb-4">Verified Sync Channels</h3>
             <div className="space-y-3">
-              <a href={`https://instagram.com/${c.instagram}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 group">
+              <a href={`https://instagram.com/${c.instagram}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] transition-colors border border-[var(--border-default)] group">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 flex items-center justify-center text-white">
+                  <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 flex items-center justify-center text-[var(--text-primary)]">
                     <Instagram size={18} />
                   </div>
                   <div>
-                    <div className="font-semibold text-xs text-white/90 group-hover:underline">@{c.instagram || c.name.toLowerCase().replace(' ','_')}</div>
+                    <div className="font-semibold text-xs text-[var(--text-primary)]/90 group-hover:underline">@{c.instagram || c.name.toLowerCase().replace(' ','_')}</div>
                     <div className="text-[11px] text-[#ef4444] font-medium">{formatNum(c.followers_instagram || 84000)} followers</div>
                   </div>
                 </div>
-                <ChevronRight size={14} className="text-white/30 group-hover:text-white" />
+                <ChevronRight size={14} className="text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]" />
               </a>
 
               {c.youtube && (
-                <a href={`https://youtube.com/@${c.youtube}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 group">
+                <a href={`https://youtube.com/@${c.youtube}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-xl bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] transition-colors border border-[var(--border-default)] group">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-red-600 flex items-center justify-center text-white">
+                    <div className="w-9 h-9 rounded-lg bg-red-600 flex items-center justify-center text-[var(--text-primary)]">
                       <Youtube size={18} />
                     </div>
                     <div>
-                      <div className="font-semibold text-xs text-white/90 group-hover:underline">{c.youtube || c.name}</div>
-                      <div className="text-[11px] text-white/50">{formatNum(c.followers_youtube || 25000)} subscribers</div>
+                      <div className="font-semibold text-xs text-[var(--text-primary)]/90 group-hover:underline">{c.youtube || c.name}</div>
+                      <div className="text-[11px] text-[var(--text-secondary)]">{formatNum(c.followers_youtube || 25000)} subscribers</div>
                     </div>
                   </div>
-                  <ChevronRight size={14} className="text-white/30 group-hover:text-white" />
+                  <ChevronRight size={14} className="text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]" />
                 </a>
               )}
             </div>
           </div>
 
           {/* Starting rate cards */}
-          <div className="bg-[#131224]/60 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
+          <div className="bg-[var(--bg-card)]/60 backdrop-blur-xl border border-[var(--border-default)] rounded-3xl p-6">
              <div className="flex items-center justify-between mb-4">
-               <h3 className="text-[11px] font-bold uppercase tracking-widest text-white/40">Benchmarked Rates</h3>
+               <h3 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)]">Benchmarked Rates</h3>
                <span className="text-[9px] font-black uppercase tracking-widest bg-[#D9F111]/10 text-[#D9F111] px-2.5 py-0.5 rounded-md border border-[#D9F111]/20">Est. Only</span>
              </div>
              <div className="space-y-3">
                 {Object.entries(c.rate_card || { 'Instagram Reel': 18000, 'Instagram Story': 8000, 'YouTube Integration': 32000 }).map(([k, v]) => (
-                  <div key={k} className="flex items-center justify-between border-b border-white/5 pb-2 last:border-none last:pb-0">
-                    <span className="text-xs text-white/70">{k}</span>
-                    <span className="font-display font-bold text-sm text-white">₹{v?.toLocaleString("en-IN") || "-"}</span>
+                  <div key={k} className="flex items-center justify-between border-b border-[var(--border-default)] pb-2 last:border-none last:pb-0">
+                    <span className="text-xs text-[var(--text-secondary)]">{k}</span>
+                    <span className="font-display font-bold text-sm text-[var(--text-primary)]">₹{v?.toLocaleString("en-IN") || "-"}</span>
                   </div>
                 ))}
              </div>
@@ -346,37 +346,37 @@ export default function CreatorProfile() {
           
           {/* Quick Stats Summary Grid Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-[#131224]/60 border border-white/10 rounded-2xl p-4">
-              <span className="block text-[10px] uppercase font-bold text-white/40 tracking-wider mb-1">Combined Reach</span>
-              <span className="text-2xl font-black font-display text-white">{formatNum(totalFollowers)}</span>
+            <div className="bg-[var(--bg-card)]/60 border border-[var(--border-default)] rounded-2xl p-4">
+              <span className="block text-[10px] uppercase font-bold text-[var(--text-tertiary)] tracking-wider mb-1">Combined Reach</span>
+              <span className="text-2xl font-black font-display text-[var(--text-primary)]">{formatNum(totalFollowers)}</span>
             </div>
-            <div className="bg-[#131224]/60 border border-white/10 rounded-2xl p-4">
+            <div className="bg-[var(--bg-card)]/60 border border-[var(--border-default)] rounded-2xl p-4">
               <span className="block text-[10px] uppercase font-bold text-[#D9F111] tracking-wider mb-1">Engagement</span>
               <span className="text-2xl font-black font-display text-[#D9F111]">{c.engagement_rate || 4.2}%</span>
             </div>
-            <div className="bg-[#131224]/60 border border-white/10 rounded-2xl p-4">
+            <div className="bg-[var(--bg-card)]/60 border border-[var(--border-default)] rounded-2xl p-4">
               <span className="block text-[10px] uppercase font-bold text-[#7C5CFF] tracking-wider mb-1">Avg Views</span>
               <span className="text-2xl font-black font-display text-[#7C5CFF]">{formatNum(c.avg_views_30d || 45000)}</span>
             </div>
-            <div className="bg-[#131224]/60 border border-white/10 rounded-2xl p-4">
-              <span className="block text-[10px] uppercase font-bold text-white/40 tracking-wider mb-1">Score rank</span>
-              <span className="text-2xl font-black font-display text-white">{c.performance_score || 94}</span>
+            <div className="bg-[var(--bg-card)]/60 border border-[var(--border-default)] rounded-2xl p-4">
+              <span className="block text-[10px] uppercase font-bold text-[var(--text-tertiary)] tracking-wider mb-1">Score rank</span>
+              <span className="text-2xl font-black font-display text-[var(--text-primary)]">{c.performance_score || 94}</span>
             </div>
           </div>
 
           {/* Action sidebar widget row for Brands */}
           {user?.role === "brand" && (
-            <div className="bg-gradient-to-r from-[#7C5CFF]/15 to-[#D9F111]/5 border border-white/10 rounded-3xl p-5 flex flex-wrap items-center justify-between gap-4">
+            <div className="bg-gradient-to-r from-[#7C5CFF]/15 to-[#D9F111]/5 border border-[var(--border-default)] rounded-3xl p-5 flex flex-wrap items-center justify-between gap-4">
               <div className="flex-1 min-w-[200px]">
-                <h4 className="text-sm font-bold text-white flex items-center gap-1.5 mb-1">
+                <h4 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-1.5 mb-1">
                   Have a specific brief or looking for custom quotes? <Sparkles size={14} className="text-[#D9F111] animate-pulse" />
                 </h4>
-                <p className="text-xs text-white/60">Enquire for specialized, targeted D2C marketing deliverable quotas</p>
+                <p className="text-xs text-[var(--text-secondary)]">Enquire for specialized, targeted D2C marketing deliverable quotas</p>
               </div>
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => setCollabCostOpen(true)}
-                  className="bg-white/10 hover:bg-white/15 px-4.5 py-2.5 rounded-xl text-xs font-bold text-white border border-white/10 transition-colors flex items-center gap-1"
+                  className="bg-[var(--bg-elevated)] hover:bg-[var(--border-default)] px-4.5 py-2.5 rounded-xl text-xs font-bold text-[var(--text-primary)] border border-[var(--border-default)] transition-colors flex items-center gap-1"
                 >
                   <Clock size={12} /> Custom Rate Quote
                 </button>
@@ -391,15 +391,15 @@ export default function CreatorProfile() {
           )}
 
           {/* Tab Selection */}
-          <div className="flex border-b border-white/10">
+          <div className="flex border-b border-[var(--border-default)]">
             {["portfolio", "stats", "reviews"].map((t) => (
               <button
                 key={t}
                 onClick={() => setActiveTab(t)}
                 className={`py-3 px-6 text-sm font-bold capitalize border-b-2 transition-all ${
                   activeTab === t 
-                    ? 'border-[#7C5CFF] text-white' 
-                    : 'border-transparent text-white/40 hover:text-white/60'
+                    ? 'border-[#7C5CFF] text-[var(--text-primary)]' 
+                    : 'border-transparent text-[var(--text-tertiary)] hover:text-[var(--text-secondary)]'
                 }`}
               >
                 {t}
@@ -415,13 +415,13 @@ export default function CreatorProfile() {
                   {portfolioItems.map((item) => (
                     <div 
                       key={item.id} 
-                      className="bg-[#131224]/40 border border-white/10 rounded-2xl overflow-hidden relative group cursor-pointer"
+                      className="bg-[var(--bg-card)]/40 border border-[var(--border-default)] rounded-2xl overflow-hidden relative group cursor-pointer"
                       onClick={() => setPlayingItem(item)}
                     >
                       <div className="aspect-video w-full bg-slate-900 overflow-hidden relative">
                         <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                         <div className="absolute inset-0 bg-black/45 flex items-center justify-center group-hover:bg-black/25 transition-colors">
-                          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 group-hover:scale-110 transition-transform">
+                          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-[var(--text-primary)] border border-white/30 group-hover:scale-110 transition-transform">
                             <Play size={20} className="fill-current ml-0.5" />
                           </div>
                         </div>
@@ -429,11 +429,11 @@ export default function CreatorProfile() {
                       <div className="p-4 flex items-center justify-between">
                         <div>
                           <span className="text-[10px] text-[#7C5CFF] font-bold uppercase tracking-widest">{item.brand} collab</span>
-                          <h4 className="text-white font-bold text-xs mt-0.5">{item.title}</h4>
+                          <h4 className="text-[var(--text-primary)] font-bold text-xs mt-0.5">{item.title}</h4>
                         </div>
                         <div className="text-right">
                           <span className="block text-xs font-bold text-[#D9F111]">{formatNum(item.views)} views</span>
-                          <span className="text-[10px] text-white/40">{formatNum(item.likes)} likes</span>
+                          <span className="text-[10px] text-[var(--text-tertiary)]">{formatNum(item.likes)} likes</span>
                         </div>
                       </div>
                     </div>
@@ -443,13 +443,13 @@ export default function CreatorProfile() {
                 {playingItem && (
                   <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={() => setPlayingItem(null)} />
-                    <div className="bg-[#131224] border border-white/10 rounded-3xl overflow-hidden max-w-2xl w-full relative z-10 shadow-3xl">
-                      <div className="p-4 flex items-center justify-between border-b border-white/10">
+                    <div className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl overflow-hidden max-w-2xl w-full relative z-10 shadow-3xl">
+                      <div className="p-4 flex items-center justify-between border-b border-[var(--border-default)]">
                         <div>
                           <span className="text-xs text-[#7C5CFF] font-bold">{playingItem.brand} Campaign</span>
-                          <h3 className="text-md font-bold text-white">{playingItem.title}</h3>
+                          <h3 className="text-md font-bold text-[var(--text-primary)]">{playingItem.title}</h3>
                         </div>
-                        <button onClick={() => setPlayingItem(null)} className="p-1 text-white/60 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors">
+                        <button onClick={() => setPlayingItem(null)} className="p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] rounded-full transition-colors">
                           <X size={16} />
                         </button>
                       </div>
@@ -476,7 +476,7 @@ export default function CreatorProfile() {
                     <AlertCircle className="text-amber-400 flex-shrink-0 mt-0.5" size={18} />
                     <div>
                       <h4 className="text-xs font-black text-amber-300 uppercase tracking-widest">Rate-per-view Benchmark Review</h4>
-                      <p className="text-xs text-white/70 mt-1 max-w-2xl leading-relaxed">
+                      <p className="text-xs text-[var(--text-secondary)] mt-1 max-w-2xl leading-relaxed">
                         This creator's rate per verified average view is estimated around <strong className="text-[#D9F111]">₹{viewChargeRate.toFixed(2)} / view</strong> which is slightly higher than market average benchmarks (₹0.30/view). We suggest negotiating deliverable volumes, brand content usage rights duration, or introducing performance milestone escrow rules.
                       </p>
                     </div>
@@ -485,8 +485,8 @@ export default function CreatorProfile() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Demographics Age Chart */}
-                  <div className="bg-[#131224]/50 border border-white/5 rounded-2xl p-6">
-                    <h3 className="text-[11px] font-bold uppercase tracking-widest text-white/40 mb-6 flex items-center gap-2">
+                  <div className="bg-[var(--bg-card)]/50 border border-[var(--border-default)] rounded-2xl p-6">
+                    <h3 className="text-[11px] font-bold uppercase tracking-widest text-[var(--text-tertiary)] mb-6 flex items-center gap-2">
                       <Users size={14} className="text-[#7C5CFF]" /> Audience Age Bracket (%)
                     </h3>
                     <div className="h-44">
@@ -506,7 +506,7 @@ export default function CreatorProfile() {
                   </div>
 
                   {/* Channel Reach Pie Breakdown */}
-                  <div className="bg-[#131224]/50 border border-white/5 rounded-2xl p-6 flex flex-col justify-between">
+                  <div className="bg-[var(--bg-card)]/50 border border-[var(--border-default)] rounded-2xl p-6 flex flex-col justify-between">
                     <div>
                       <h3 className="text-[11px] font-bold uppercase tracking-widest text-[#D9F111]/80 mb-4 flex items-center gap-2">
                         <PieChart size={14} /> Channel Distribution
@@ -515,30 +515,30 @@ export default function CreatorProfile() {
                         <div className="space-y-3 flex-1">
                           {platformData.map((d) => (
                             <div key={d.name} className="flex items-center justify-between">
-                              <span className="text-xs text-white/60 flex items-center gap-1.5 font-medium">
+                              <span className="text-xs text-[var(--text-secondary)] flex items-center gap-1.5 font-medium">
                                 <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: d.color }} />
                                 {d.name}
                               </span>
-                              <span className="text-xs text-white font-bold">{formatNum(d.value)} ({Math.round(d.value / totalFollowers * 100)}%)</span>
+                              <span className="text-xs text-[var(--text-primary)] font-bold">{formatNum(d.value)} ({Math.round(d.value / totalFollowers * 100)}%)</span>
                             </div>
                           ))}
                         </div>
                       </div>
                     </div>
-                    <div className="border-t border-white/5 pt-4 text-[11px] text-white/40">
+                    <div className="border-t border-[var(--border-default)] pt-4 text-[11px] text-[var(--text-tertiary)]">
                       Total Verified Active Reach Base: <strong>{totalFollowers.toLocaleString()}</strong>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-[#131224]/30 border border-white/5 rounded-2xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div className="flex justify-between p-3 bg-white/5 rounded-xl border border-white/5">
-                    <span className="text-white/50">Deal completion rate:</span>
-                    <strong className="text-white font-bold">98.2% (Excellent)</strong>
+                <div className="bg-[var(--bg-card)]/30 border border-[var(--border-default)] rounded-2xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div className="flex justify-between p-3 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-default)]">
+                    <span className="text-[var(--text-secondary)]">Deal completion rate:</span>
+                    <strong className="text-[var(--text-primary)] font-bold">98.2% (Excellent)</strong>
                   </div>
-                  <div className="flex justify-between p-3 bg-white/5 rounded-xl border border-white/5">
-                    <span className="text-white/50">Average brand turnaround:</span>
-                    <strong className="text-white font-bold">3 - 4 days</strong>
+                  <div className="flex justify-between p-3 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-default)]">
+                    <span className="text-[var(--text-secondary)]">Average brand turnaround:</span>
+                    <strong className="text-[var(--text-primary)] font-bold">3 - 4 days</strong>
                   </div>
                 </div>
 
@@ -548,20 +548,20 @@ export default function CreatorProfile() {
             {activeTab === "reviews" && (
               <div className="space-y-4">
                 {reviews.map((rev) => (
-                  <div key={rev.id} className="bg-[#131224]/40 border border-white/5 rounded-2xl p-5 md:p-6 text-left">
+                  <div key={rev.id} className="bg-[var(--bg-card)]/40 border border-[var(--border-default)] rounded-2xl p-5 md:p-6 text-left">
                     <div className="flex items-center justify-between gap-2 mb-3">
                       <div>
-                        <span className="text-xs font-bold text-white uppercase">{rev.brand_name}</span>
+                        <span className="text-xs font-bold text-[var(--text-primary)] uppercase">{rev.brand_name}</span>
                         <div className="flex items-center gap-1 text-[#D9F111] mt-0.5">
                           {[...Array(rev.rating)].map((_, i) => (
                             <Star key={i} size={11} className="fill-current" />
                           ))}
-                          <span className="text-[10px] text-white/40 ml-1">· verified deal contract</span>
+                          <span className="text-[10px] text-[var(--text-tertiary)] ml-1">· verified deal contract</span>
                         </div>
                       </div>
-                      <span className="text-[10px] text-white/30">{rev.date}</span>
+                      <span className="text-[10px] text-[var(--text-tertiary)]">{rev.date}</span>
                     </div>
-                    <p className="text-xs text-white/70 leading-relaxed font-normal">{rev.comment}</p>
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-normal">{rev.comment}</p>
                   </div>
                 ))}
               </div>
@@ -570,8 +570,8 @@ export default function CreatorProfile() {
 
           {/* Similar profiles recommended widget */}
           {similarCreators.length > 0 && (
-            <div className="mt-8 border-t border-white/10 pt-8">
-              <h3 className="text-md font-display font-extrabold text-white mb-6 flex items-center gap-2">
+            <div className="mt-8 border-t border-[var(--border-default)] pt-8">
+              <h3 className="text-md font-display font-extrabold text-[var(--text-primary)] mb-6 flex items-center gap-2">
                 Discover Similar Creators <Sparkles size={16} className="text-[#7C5CFF]" />
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -579,7 +579,7 @@ export default function CreatorProfile() {
                   <div 
                     key={item.user_id}
                     onClick={() => navigate(`/creator/${item.user_id}`)}
-                    className="bg-[#131224]/40 border border-white/5 hover:border-white/20 p-4 rounded-2xl flex flex-col items-center text-center cursor-pointer transition-all duration-300 group"
+                    className="bg-[var(--bg-card)]/40 border border-[var(--border-default)] hover:border-white/20 p-4 rounded-2xl flex flex-col items-center text-center cursor-pointer transition-all duration-300 group"
                   >
                     <img 
                       src={item.photo || item.picture} 
@@ -587,9 +587,9 @@ export default function CreatorProfile() {
                       className="w-14 h-14 rounded-full object-cover mb-3 ring-1 ring-[#7C5CFF]/30 group-hover:ring-[#D9F111] transition-all"
                       referrerPolicy="no-referrer"
                     />
-                    <h4 className="text-white text-xs font-bold truncate max-w-full mb-0.5 group-hover:text-[#D9F111]">{item.name}</h4>
+                    <h4 className="text-[var(--text-primary)] text-xs font-bold truncate max-w-full mb-0.5 group-hover:text-[#D9F111]">{item.name}</h4>
                     <span className="text-[10px] text-[#D9F111]/80 font-semibold">{item.category}</span>
-                    <span className="text-[9px] text-white/40 mt-1 font-mono">{formatNum(item.followers_instagram || 50000)} followers</span>
+                    <span className="text-[9px] text-[var(--text-tertiary)] mt-1 font-mono">{formatNum(item.followers_instagram || 50000)} followers</span>
                   </div>
                 ))}
               </div>
@@ -611,52 +611,52 @@ export default function CreatorProfile() {
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 15 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-[#131224] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full relative z-10 shadow-3xl text-left" 
+              className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-6 md:p-8 max-w-md w-full relative z-10 shadow-3xl text-left" 
             >
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-display font-black text-2xl text-white">Secure Campaign Deal</h2>
-                <button onClick={() => setCollabOpen(false)} className="text-white/40 hover:text-white p-1 bg-white/5 rounded-full">
+                <h2 className="font-display font-black text-2xl text-[var(--text-primary)]">Secure Campaign Deal</h2>
+                <button onClick={() => setCollabOpen(false)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] p-1 bg-[var(--bg-elevated)] rounded-full">
                   <X size={14} />
                 </button>
               </div>
-              <p className="text-white/50 text-xs mb-6">Send an direct brand partnership invitation quote to {c.name}.</p>
+              <p className="text-[var(--text-secondary)] text-xs mb-6">Send an direct brand partnership invitation quote to {c.name}.</p>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-white/50 uppercase tracking-wider mb-2">Deliverable</label>
+                  <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-2">Deliverable</label>
                   <select 
                     value={collab.deliverable} 
                     onChange={(e) => setCollab({ ...collab, deliverable: e.target.value })} 
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C5CFF] text-xs font-medium appearance-none"
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] text-xs font-medium appearance-none"
                   >
-                    <option value="Instagram Reel" className="bg-[#131224]">Instagram Reel</option>
-                    <option value="Instagram Story" className="bg-[#131224]">Instagram Story</option>
-                    <option value="YouTube Integration" className="bg-[#131224]">YouTube Integration</option>
+                    <option value="Instagram Reel" className="bg-[var(--bg-card)]">Instagram Reel</option>
+                    <option value="Instagram Story" className="bg-[var(--bg-card)]">Instagram Story</option>
+                    <option value="YouTube Integration" className="bg-[var(--bg-card)]">YouTube Integration</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-white/50 uppercase tracking-wider mb-2">Your Proposed Budget Offer (₹)</label>
+                  <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-2">Your Proposed Budget Offer (₹)</label>
                   <input 
                     type="number" 
                     value={collab.proposed_amount || ''} 
                     onChange={(e) => setCollab({ ...collab, proposed_amount: parseInt(e.target.value || "0") })} 
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C5CFF] text-xs font-bold tracking-wider" 
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] text-xs font-bold tracking-wider" 
                     placeholder="e.g. 15000"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-white/50 uppercase tracking-wider mb-2">Deliverable Context details</label>
+                  <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-2">Deliverable Context details</label>
                   <textarea 
                     rows={4} 
                     value={collab.message} 
                     onChange={(e) => setCollab({ ...collab, message: e.target.value })} 
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C5CFF] text-xs font-medium resize-none" 
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] text-xs font-medium resize-none" 
                     placeholder="Describe specific products, guidelines and content timeline expectations..."
                   />
                 </div>
                 <div className="flex gap-3 pt-2">
-                  <button onClick={() => setCollabOpen(false)} className="py-3 px-5 rounded-xl text-xs font-bold bg-white/5 hover:bg-white/10 text-white transition-colors">Cancel</button>
-                  <button onClick={sendCollabInvitation} className="flex-1 py-3 px-5 rounded-xl text-xs font-bold bg-[#7C5CFF] hover:bg-[#6D42FF] text-white transition-all shadow-md">Invite Creator</button>
+                  <button onClick={() => setCollabOpen(false)} className="py-3 px-5 rounded-xl text-xs font-bold bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] transition-colors">Cancel</button>
+                  <button onClick={sendCollabInvitation} className="flex-1 py-3 px-5 rounded-xl text-xs font-bold bg-[var(--violet)] hover:bg-[var(--violet-hover)] text-white transition-all shadow-md">Invite Creator</button>
                 </div>
               </div>
             </motion.div>
@@ -674,42 +674,42 @@ export default function CreatorProfile() {
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 15 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-[#131224] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full relative z-10 shadow-3xl text-left" 
+              className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-6 md:p-8 max-w-md w-full relative z-10 shadow-3xl text-left" 
             >
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-display font-black text-2xl text-white">Request Direct Cost</h2>
-                <button onClick={() => setCollabCostOpen(false)} className="text-white/40 hover:text-white p-1 bg-white/5 rounded-full">
+                <h2 className="font-display font-black text-2xl text-[var(--text-primary)]">Request Direct Cost</h2>
+                <button onClick={() => setCollabCostOpen(false)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] p-1 bg-[var(--bg-elevated)] rounded-full">
                   <X size={14} />
                 </button>
               </div>
-              <p className="text-white/50 text-xs mb-6">Creator will quote custom charges for this deliverable based on your requirements.</p>
+              <p className="text-[var(--text-secondary)] text-xs mb-6">Creator will quote custom charges for this deliverable based on your requirements.</p>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-white/50 uppercase tracking-wider mb-2">Select Target Deliverable</label>
+                  <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-2">Select Target Deliverable</label>
                   <select 
                     value={costRequest.deliverable_type} 
                     onChange={(e) => setCostRequest({ ...costRequest, deliverable_type: e.target.value })} 
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C5CFF] text-xs font-medium appearance-none"
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] text-xs font-medium appearance-none"
                   >
-                    <option value="Instagram Reel" className="bg-[#131224]">Instagram Reel (UGC/Collab)</option>
-                    <option value="Instagram Story" className="bg-[#131224]">Instagram Story (with link sticker)</option>
-                    <option value="YouTube Dedicated Video" className="bg-[#131224]">YouTube Dedicated Review Video</option>
+                    <option value="Instagram Reel" className="bg-[var(--bg-card)]">Instagram Reel (UGC/Collab)</option>
+                    <option value="Instagram Story" className="bg-[var(--bg-card)]">Instagram Story (with link sticker)</option>
+                    <option value="YouTube Dedicated Video" className="bg-[var(--bg-card)]">YouTube Dedicated Review Video</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-white/50 uppercase tracking-wider mb-2">Message to Creator</label>
+                  <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-2">Message to Creator</label>
                   <textarea 
                     rows={4} 
                     value={costRequest.brand_message} 
                     onChange={(e) => setCostRequest({ ...costRequest, brand_message: e.target.value })} 
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C5CFF] text-xs font-medium resize-none" 
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] text-xs font-medium resize-none" 
                     placeholder="State briefly what niche content deliverables you plan to assign so the creator quotes accurately..."
                   />
                 </div>
                 <div className="flex gap-3 pt-2">
-                  <button onClick={() => setCollabCostOpen(false)} className="py-3 px-5 rounded-xl text-xs font-bold bg-white/5 hover:bg-white/10 text-white transition-colors">Cancel</button>
-                  <button onClick={handleRequestCollabCost} className="flex-1 py-3 px-5 rounded-xl text-xs font-bold bg-[#7C5CFF] hover:bg-[#6D42FF] text-white transition-all shadow-md">Request Quote</button>
+                  <button onClick={() => setCollabCostOpen(false)} className="py-3 px-5 rounded-xl text-xs font-bold bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] transition-colors">Cancel</button>
+                  <button onClick={handleRequestCollabCost} className="flex-1 py-3 px-5 rounded-xl text-xs font-bold bg-[var(--violet)] hover:bg-[var(--violet-hover)] text-white transition-all shadow-md">Request Quote</button>
                 </div>
               </div>
             </motion.div>
@@ -727,39 +727,39 @@ export default function CreatorProfile() {
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 15 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-[#131224] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full relative z-10 shadow-3xl text-left" 
+              className="bg-[var(--bg-card)] border border-[var(--border-default)] rounded-3xl p-6 md:p-8 max-w-md w-full relative z-10 shadow-3xl text-left" 
             >
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-display font-black text-2xl text-white">Send Campaign Brief</h2>
-                <button onClick={() => setSendBriefOpen(false)} className="text-white/40 hover:text-white p-1 bg-white/5 rounded-full">
+                <h2 className="font-display font-black text-2xl text-[var(--text-primary)]">Send Campaign Brief</h2>
+                <button onClick={() => setSendBriefOpen(false)} className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] p-1 bg-[var(--bg-elevated)] rounded-full">
                   <X size={14} />
                 </button>
               </div>
-              <p className="text-white/50 text-xs mb-6 font-normal">Express campaign requirements directly. Your briefs are synchronized instantly.</p>
+              <p className="text-[var(--text-secondary)] text-xs mb-6 font-normal">Express campaign requirements directly. Your briefs are synchronized instantly.</p>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-white/50 uppercase tracking-wider mb-2">Campaign Description & Deliverables</label>
+                  <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-2">Campaign Description & Deliverables</label>
                   <textarea 
                     rows={5} 
                     value={briefRequest.message} 
                     onChange={(e) => setBriefRequest({ ...briefRequest, message: e.target.value })} 
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C5CFF] text-xs font-medium resize-none" 
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] text-xs font-medium resize-none" 
                     placeholder="State your guidelines, visual examples, campaign timeline, product ship links, etc..."
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-white/50 uppercase tracking-wider mb-2">Estimated Budget Bracket (₹)</label>
+                  <label className="block text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mb-2">Estimated Budget Bracket (₹)</label>
                   <input 
                     type="text" 
                     value={briefRequest.budget_range} 
                     onChange={(e) => setBriefRequest({ ...briefRequest, budget_range: e.target.value })} 
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C5CFF] text-xs font-bold" 
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] text-xs font-bold" 
                     placeholder="e.g. ₹15,000 - ₹25,000"
                   />
                 </div>
                 <div className="flex gap-3 pt-2">
-                  <button onClick={() => setSendBriefOpen(false)} className="py-3 px-5 rounded-xl text-xs font-bold bg-white/5 hover:bg-white/10 text-white transition-colors">Cancel</button>
+                  <button onClick={() => setSendBriefOpen(false)} className="py-3 px-5 rounded-xl text-xs font-bold bg-[var(--bg-elevated)] hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] transition-colors">Cancel</button>
                   <button onClick={handleSendBrief} className="flex-1 py-3 px-5 rounded-xl text-xs font-bold bg-[#D9F111] hover:bg-[#cbe010] text-black transition-all shadow-md">Send Brief</button>
                 </div>
               </div>

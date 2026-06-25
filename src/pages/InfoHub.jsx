@@ -30,28 +30,28 @@ export default function InfoHub() {
           heroImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
           body: (
             <div className="space-y-8">
-              <p className="text-foreground/70 text-lg leading-relaxed">
-                Founded in 2026, <strong className="text-foreground">Ybex Media</strong> (Datrux Systems Pvt. Limited) was structured to solve the single largest pain point in the Indian creator economy: <span className="text-[#D9F111] font-semibold">The lack of rate and performance transparency.</span>
+              <p className="text-[var(--text-secondary)] text-lg leading-relaxed">
+                Founded in 2026, <strong className="text-[var(--text-primary)]">Ybex Media</strong> (Datrux Systems Pvt. Limited) was structured to solve the single largest pain point in the Indian creator economy: <span className="text-[#D9F111] font-semibold">The lack of rate and performance transparency.</span>
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                <div className="p-6 rounded-2xl bg-foreground/5 border border-foreground/10">
-                  <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-[#9D7CFF]">
+                <div className="p-6 rounded-2xl bg-foreground/5 border border-[var(--border-default)]">
+                  <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-[var(--violet)]">
                     <Shield size={18} /> Zero Middlemen Markup
                   </h3>
-                  <p className="text-sm text-foreground/60 leading-relaxed">
+                  <p className="text-sm text-[var(--text-primary)]/60 leading-relaxed">
                     Most agencies charge 30-50% markups on top of creator rates. On Ybex, rate cards are public. You pay exactly what the creator quotes, secured in our neutral escrow locks.
                   </p>
                 </div>
-                <div className="p-6 rounded-2xl bg-foreground/5 border border-foreground/10">
+                <div className="p-6 rounded-2xl bg-foreground/5 border border-[var(--border-default)]">
                   <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-[#D9F111]">
                     <Target size={18} /> Objective ROI Focus
                   </h3>
-                  <p className="text-sm text-foreground/60 leading-relaxed">
+                  <p className="text-sm text-[var(--text-primary)]/60 leading-relaxed">
                     With our exclusive Performance Rank System (USP 04), creators earn scores after every delivery. The higher the score, the higher they rank, and the more top-tier campaigns they unlock.
                   </p>
                 </div>
               </div>
-              <div className="pt-6 border-t border-foreground/10">
+              <div className="pt-6 border-t border-[var(--border-default)]">
                 <h3 className="text-xl font-bold mb-4">Our Core Philosophy</h3>
                 <ul className="space-y-3">
                   {[
@@ -60,7 +60,7 @@ export default function InfoHub() {
                     "Empower Local Markets: Direct support for tier-2 and tier-3 cities across India.",
                     "Nurture Long-term Collabs: High-delivering creators receive automatic re-collaboration prompts."
                   ].map((item, idx) => (
-                    <li key={idx} className="flex gap-3 text-sm text-foreground/70">
+                    <li key={idx} className="flex gap-3 text-sm text-[var(--text-secondary)]">
                       <span className="text-[#D9F111] font-bold">✓</span>
                       <span>{item}</span>
                     </li>
@@ -79,7 +79,7 @@ export default function InfoHub() {
           badge: "WE'RE HIRING",
           body: (
             <div className="space-y-8">
-              <p className="text-foreground/70 text-base leading-relaxed">
+              <p className="text-[var(--text-secondary)] text-base leading-relaxed">
                 At Ybex Media, we are designing a product that empowers millions of creators to build real businesses, and thousands of brands to deploy ROI-driven campaigns with ease. Explore our active openings below.
               </p>
 
@@ -91,11 +91,11 @@ export default function InfoHub() {
                   { title: "Brand Key Account Manager", dept: "Sales & Growth", loc: "Delhi NCR / Hybrid", type: "Full-Time" },
                   { title: "Design & UX Intern", dept: "Product Design", loc: "Remote", type: "Internship (6 Mos)" }
                 ].map((job, idx) => (
-                  <div key={idx} className="p-5 rounded-2xl bg-foreground/5 border border-foreground/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-[#7C5CFF]/60 transition-all">
+                  <div key={idx} className="p-5 rounded-2xl bg-foreground/5 border border-[var(--border-default)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-[var(--violet)]/20 transition-all">
                     <div>
-                      <span className="text-[10px] uppercase tracking-widest text-[#9D7CFF] font-semibold">{job.dept}</span>
-                      <h3 className="text-base font-bold mt-1 text-foreground">{job.title}</h3>
-                      <div className="flex gap-3 text-xs text-foreground/40 mt-1">
+                      <span className="text-[10px] uppercase tracking-widest text-[var(--violet)] font-semibold">{job.dept}</span>
+                      <h3 className="text-base font-bold mt-1 text-[var(--text-primary)]">{job.title}</h3>
+                      <div className="flex gap-3 text-xs text-[var(--text-tertiary)] mt-1">
                         <span>{job.loc}</span>
                         <span>•</span>
                         <span>{job.type}</span>
@@ -103,7 +103,7 @@ export default function InfoHub() {
                     </div>
                     <button 
                       onClick={() => setCareerApplied(false)} 
-                      className="px-4 py-2 rounded-xl bg-[#7C5CFF] hover:bg-[#5B3EE0] text-xs font-bold text-white transition-all transform hover:scale-105"
+                      className="px-4 py-2 rounded-xl bg-[var(--violet)] hover:bg-[#5B3EE0] text-xs font-bold text-[var(--text-primary)] transition-all transform hover:scale-105"
                     >
                       Apply Now
                     </button>
@@ -112,51 +112,51 @@ export default function InfoHub() {
               </div>
 
               {/* Dynamic Careers Form */}
-              <div className="mt-12 p-6 md:p-8 rounded-3xl bg-card border border-foreground/10 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#7C5CFF]/10 blur-xl rounded-full pointer-events-none"></div>
+              <div className="mt-12 p-6 md:p-8 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-default)] relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--violet)]/10 blur-xl rounded-full pointer-events-none"></div>
                 
                 {careerApplied ? (
                   <div className="text-center py-6">
                     <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto text-xl mb-4">✓</div>
-                    <h4 className="text-lg font-bold text-foreground mb-2">Application Submitted!</h4>
-                    <p className="text-sm text-foreground/60">Thank you for applying. Our talent acquisition team will review your portfolio and reach out within 48 hours.</p>
+                    <h4 className="text-lg font-bold text-[var(--text-primary)] mb-2">Application Submitted!</h4>
+                    <p className="text-sm text-[var(--text-primary)]/60">Thank you for applying. Our talent acquisition team will review your portfolio and reach out within 48 hours.</p>
                     <button onClick={() => setCareerApplied(false)} className="mt-4 text-xs text-[#D9F111] hover:underline font-bold">Apply for another role</button>
                   </div>
                 ) : (
                   <form onSubmit={(e) => { e.preventDefault(); setCareerApplied(true); }} className="space-y-4">
-                    <h3 className="text-lg font-bold text-foreground mb-1">Quick Application Form</h3>
-                    <p className="text-xs text-foreground/55">Send us your credentials. We review every single submission.</p>
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">Quick Application Form</h3>
+                    <p className="text-xs text-[var(--text-primary)]/55">Send us your credentials. We review every single submission.</p>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs text-foreground/50 mb-1 font-medium">Your Name</label>
-                        <input type="text" required className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 h-11 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all" />
+                        <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Your Name</label>
+                        <input type="text" required className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-4 h-11 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all" />
                       </div>
                       <div>
-                        <label className="block text-xs text-foreground/50 mb-1 font-medium">Email Address</label>
-                        <input type="email" required className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 h-11 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all" />
+                        <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Email Address</label>
+                        <input type="email" required className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-4 h-11 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs text-foreground/50 mb-1 font-medium">Desired Position</label>
-                        <select className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 h-11 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all">
-                          <option value="eng" className="bg-card">Senior React/Node Engineer</option>
-                          <option value="relations" className="bg-card">Creator Acquisition Specialist</option>
-                          <option value="sales" className="bg-card">Brand Key Account Manager</option>
-                          <option value="design" className="bg-card">Design & UX Intern</option>
+                        <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Desired Position</label>
+                        <select className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-4 h-11 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all">
+                          <option value="eng" className="bg-[var(--bg-card)]">Senior React/Node Engineer</option>
+                          <option value="relations" className="bg-[var(--bg-card)]">Creator Acquisition Specialist</option>
+                          <option value="sales" className="bg-[var(--bg-card)]">Brand Key Account Manager</option>
+                          <option value="design" className="bg-[var(--bg-card)]">Design & UX Intern</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs text-foreground/50 mb-1 font-medium">Portfolio / LinkedIn Link</label>
-                        <input type="url" required placeholder="https://" className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 h-11 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all" />
+                        <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Portfolio / LinkedIn Link</label>
+                        <input type="url" required placeholder="https://" className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl px-4 h-11 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all" />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs text-foreground/50 mb-1 font-medium">Why Ybex? (Brief Cover Note)</label>
-                      <textarea required rows={3} placeholder="Tell us why you wanted to join Ybex Media..." className="w-full bg-foreground/5 border border-foreground/10 rounded-xl p-4 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all resize-none"></textarea>
+                      <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Why Ybex? (Brief Cover Note)</label>
+                      <textarea required rows={3} placeholder="Tell us why you wanted to join Ybex Media..." className="w-full bg-foreground/5 border border-[var(--border-default)] rounded-xl p-4 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all resize-none"></textarea>
                     </div>
 
                     <button type="submit" className="w-full h-11 rounded-xl bg-foreground text-background font-semibold text-xs hover:bg-[#D9F111] transition-all flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(255,255,255,0.05)] hover:shadow-[0_4px_15px_rgba(217,241,17,0.2)]">
@@ -208,7 +208,7 @@ export default function InfoHub() {
                     read: "6 Min Read"
                   }
                 ].map((post, idx) => (
-                  <div key={idx} className="group rounded-3xl border border-foreground/5 bg-foreground/[0.02] overflow-hidden hover:border-[#7C5CFF]/30 transition-all flex flex-col h-full">
+                  <div key={idx} className="group rounded-3xl border border-foreground/5 bg-foreground/[0.02] overflow-hidden hover:border-[var(--violet)]/20 transition-all flex flex-col h-full">
                     <div className="h-48 overflow-hidden relative">
                       <img src={post.img} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
                       <div className="absolute top-4 left-4 bg-black/75 backdrop-blur-md text-[#D9F111] text-[9px] font-black tracking-widest px-2.5 py-1 rounded-lg uppercase">
@@ -217,11 +217,11 @@ export default function InfoHub() {
                     </div>
                     <div className="p-6 flex-1 flex flex-col justify-between">
                       <div>
-                        <span className="text-[10px] text-foreground/40 font-mono">{post.date}</span>
-                        <h3 className="text-base font-bold mt-1 text-white leading-snug group-hover:text-[#D9F111] transition-colors">{post.title}</h3>
-                        <p className="text-xs text-foreground/55 mt-3 leading-relaxed">{post.desc}</p>
+                        <span className="text-[10px] text-[var(--text-tertiary)] font-mono">{post.date}</span>
+                        <h3 className="text-base font-bold mt-1 text-[var(--text-primary)] leading-snug group-hover:text-[#D9F111] transition-colors">{post.title}</h3>
+                        <p className="text-xs text-[var(--text-primary)]/55 mt-3 leading-relaxed">{post.desc}</p>
                       </div>
-                      <div className="mt-5 flex items-center gap-1.5 text-xs text-[#9D7CFF] font-bold group-hover:text-foreground transition-colors cursor-pointer">
+                      <div className="mt-5 flex items-center gap-1.5 text-xs text-[var(--violet)] font-bold group-hover:text-[var(--text-primary)] transition-colors cursor-pointer">
                         Read Full Article <ArrowRight size={12} />
                       </div>
                     </div>
@@ -239,25 +239,25 @@ export default function InfoHub() {
           subtitle: "Please read these terms carefully before utilizing the Ybex Media professional network and Escrow Escrow mechanisms.",
           badge: "LEGAL & SECURITY",
           body: (
-            <div className="space-y-6 text-sm text-foreground/70 leading-relaxed font-normal">
-              <p className="text-xs font-mono text-foreground/40">Last updated: June 15, 2026</p>
+            <div className="space-y-6 text-sm text-[var(--text-secondary)] leading-relaxed font-normal">
+              <p className="text-xs font-mono text-[var(--text-tertiary)]">Last updated: June 15, 2026</p>
               
-              <h3 className="text-lg font-bold text-foreground mt-6">1. Scope of Agreement</h3>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mt-6">1. Scope of Agreement</h3>
               <p>
                 These Terms of Service govern the relationship between users (Brands, Influencers, Agencies, or Celebrities) and Datrux Systems Pvt. Limited ("Company", "Ybex", "Ybex Media") regarding the use of the Ybex platform, directory interfaces, messaging consoles, and escrows.
               </p>
 
-              <h3 className="text-lg font-bold text-foreground mt-6">2. Rate Card Compliance</h3>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mt-6">2. Rate Card Compliance</h3>
               <p>
                 Creators verify that prices published on their rate cards are accurate representations of their fees. Submitting arbitrary or fraudulent rates undermines the open market ecosystem. Brands understand and accept escrow deposit commitments prior to assigning collaboration briefs.
               </p>
 
-              <h3 className="text-lg font-bold text-foreground mt-6">3. Escrow Lock System</h3>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mt-6">3. Escrow Lock System</h3>
               <p>
                 Once a campaign partnership is agreed upon, the Brand deposits the negotiated fee into the Ybex Escrow system. These funds remain locked temporarily. Upon verification of appropriate deliverables (Reels, Stories, YouTube videos) satisfying the parameters of the brief, the funds are released to the Creator, minus platform service fees.
               </p>
 
-              <h3 className="text-lg font-bold text-foreground mt-6">4. Resolution of Disputes</h3>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mt-6">4. Resolution of Disputes</h3>
               <p>
                 In the event of partial execution or unsatisfactory deliverables not conforming to the agreed-upon marketing brief, Ybex Mediators act as neutral arbiters inside the chat space. All decisions regarding partial or complete refund releases are final.
               </p>
@@ -280,38 +280,38 @@ export default function InfoHub() {
                 {formSubmitted ? (
                   <div className="text-center py-10">
                     <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto text-2xl mb-4">🤝</div>
-                    <h3 className="text-xl font-bold text-foreground mb-2">Message Received!</h3>
-                    <p className="text-sm text-foreground/60">One of our campaign strategists will reach out to you via Email/WhatsApp within the next 2-3 business hours.</p>
+                    <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">Message Received!</h3>
+                    <p className="text-sm text-[var(--text-primary)]/60">One of our campaign strategists will reach out to you via Email/WhatsApp within the next 2-3 business hours.</p>
                     <button 
                       onClick={() => setFormSubmitted(false)} 
-                      className="mt-6 px-5 py-2 hover:bg-foreground/10 text-xs text-foreground border border-foreground/10 rounded-xl transition-all"
+                      className="mt-6 px-5 py-2 hover:bg-foreground/10 text-xs text-[var(--text-primary)] border border-[var(--border-default)] rounded-xl transition-all"
                     >
                       Send another message
                     </button>
                   </div>
                 ) : (
                   <form onSubmit={(e) => { e.preventDefault(); setFormSubmitted(true); }} className="space-y-4">
-                    <h3 className="text-lg font-bold text-foreground font-display">Drop us a line</h3>
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] font-display">Drop us a line</h3>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs text-foreground/50 mb-1 font-medium">Your Name</label>
-                        <input type="text" required className="w-full bg-card border border-foreground/10 rounded-xl px-4 h-11 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all" />
+                        <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Your Name</label>
+                        <input type="text" required className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl px-4 h-11 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all" />
                       </div>
                       <div>
-                        <label className="block text-xs text-foreground/50 mb-1 font-medium">Your Email</label>
-                        <input type="email" required className="w-full bg-card border border-foreground/10 rounded-xl px-4 h-11 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all" />
+                        <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Your Email</label>
+                        <input type="email" required className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl px-4 h-11 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs text-foreground/50 mb-1 font-medium">Company / Brand Name</label>
-                        <input type="text" required className="w-full bg-card border border-foreground/10 rounded-xl px-4 h-11 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all" />
+                        <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Company / Brand Name</label>
+                        <input type="text" required className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl px-4 h-11 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all" />
                       </div>
                       <div>
-                        <label className="block text-xs text-foreground/50 mb-1 font-medium">Campaign Budget (INR)</label>
-                        <select className="w-full bg-card border border-foreground/10 rounded-xl px-4 h-11 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all">
+                        <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Campaign Budget (INR)</label>
+                        <select className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl px-4 h-11 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all">
                           <option value="1">Under ₹50,000</option>
                           <option value="2">₹50,000 - ₹2,00,000</option>
                           <option value="3">₹2,00,000 - ₹10,00,000</option>
@@ -321,8 +321,8 @@ export default function InfoHub() {
                     </div>
 
                     <div>
-                      <label className="block text-xs text-foreground/50 mb-1 font-medium">Campaign Goals / Details</label>
-                      <textarea required rows={4} placeholder="Describe what you plan to promote, required city-targets, or platform expectations..." className="w-full bg-card border border-foreground/10 rounded-xl p-4 text-xs text-foreground focus:outline-none focus:border-[#7C5CFF] transition-all resize-none"></textarea>
+                      <label className="block text-xs text-[var(--text-secondary)] mb-1 font-medium">Campaign Goals / Details</label>
+                      <textarea required rows={4} placeholder="Describe what you plan to promote, required city-targets, or platform expectations..." className="w-full bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl p-4 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#7C5CFF] transition-all resize-none"></textarea>
                     </div>
 
                     <button type="submit" className="w-full h-11 rounded-xl bg-[#D9F111] text-black font-bold text-xs hover:bg-[#D9F111]/90 shadow-[0_4px_15px_rgba(217,241,17,0.2)] transition-all flex items-center justify-center gap-2">
@@ -335,10 +335,10 @@ export default function InfoHub() {
               {/* Info Col */}
               <div className="lg:col-span-5 space-y-6">
                 <div className="p-6 rounded-2xl bg-foreground/[0.02] border border-foreground/5 flex gap-4">
-                  <span className="w-10 h-10 rounded-xl bg-[#7C5CFF]/10 flex items-center justify-center text-[#9D7CFF] shrink-0">📍</span>
+                  <span className="w-10 h-10 rounded-xl bg-[var(--violet)]/10 flex items-center justify-center text-[var(--violet)] shrink-0">📍</span>
                   <div>
-                    <h4 className="text-sm font-bold text-foreground mb-1">Corporate Headquarters</h4>
-                    <p className="text-xs text-foreground/50 leading-relaxed">
+                    <h4 className="text-sm font-bold text-[var(--text-primary)] mb-1">Corporate Headquarters</h4>
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
                       Datrux Systems Pvt. Limited<br />
                       5th Floor, Block 3, Tech Park Phase II,<br />
                       Ghatkopar West, Mumbai - 400086
@@ -349,10 +349,10 @@ export default function InfoHub() {
                 <div className="p-6 rounded-2xl bg-foreground/[0.02] border border-foreground/5 flex gap-4">
                   <span className="w-10 h-10 rounded-xl bg-[#D9F111]/10 flex items-center justify-center text-[#D9F111] shrink-0">✉</span>
                   <div>
-                    <h4 className="text-sm font-bold text-foreground mb-1">Electronic Support</h4>
-                    <p className="text-xs text-foreground/50 leading-relaxed">
-                      General Queries: <a href="mailto:info@ybexmedia.com" className="text-foreground hover:underline">info@ybexmedia.com</a><br />
-                      Media & Escrow disputes: <a href="mailto:dispute@ybexmedia.com" className="text-foreground hover:underline">dispute@ybexmedia.com</a>
+                    <h4 className="text-sm font-bold text-[var(--text-primary)] mb-1">Electronic Support</h4>
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                      General Queries: <a href="mailto:info@ybexmedia.com" className="text-[var(--text-primary)] hover:underline">info@ybexmedia.com</a><br />
+                      Media & Escrow disputes: <a href="mailto:dispute@ybexmedia.com" className="text-[var(--text-primary)] hover:underline">dispute@ybexmedia.com</a>
                     </p>
                   </div>
                 </div>
@@ -360,9 +360,9 @@ export default function InfoHub() {
                 <div className="p-6 rounded-2xl bg-foreground/[0.02] border border-foreground/5 flex gap-4">
                   <span className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">📞</span>
                   <div>
-                    <h4 className="text-sm font-bold text-foreground mb-1">Direct Communication</h4>
-                    <p className="text-xs text-foreground/50 leading-relaxed">
-                      WhatsApp Support: <strong className="text-foreground font-mono font-medium">+91 98845 XXXXX</strong><br />
+                    <h4 className="text-sm font-bold text-[var(--text-primary)] mb-1">Direct Communication</h4>
+                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                      WhatsApp Support: <strong className="text-[var(--text-primary)] font-mono font-medium">+91 98845 XXXXX</strong><br />
                       Monday to Saturday · 10 AM to 7 PM IST
                     </p>
                   </div>
@@ -387,12 +387,12 @@ export default function InfoHub() {
           heroImage: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1200&q=80",
           body: (
             <div className="space-y-8">
-              <p className="text-foreground/70 text-base leading-relaxed">
-                Ybex Media provides industry-grade infrastructure to automate planning, tracking, and execution for <strong className="text-foreground">{serviceName}</strong> campaigns. We secure rate agreements, monitor engagement analytics, and release payments strictly after verified proof of delivery.
+              <p className="text-[var(--text-secondary)] text-base leading-relaxed">
+                Ybex Media provides industry-grade infrastructure to automate planning, tracking, and execution for <strong className="text-[var(--text-primary)]">{serviceName}</strong> campaigns. We secure rate agreements, monitor engagement analytics, and release payments strictly after verified proof of delivery.
               </p>
 
-              <div className="p-6 md:p-8 rounded-3xl bg-card border border-foreground/10 mt-10">
-                <h3 className="text-lg font-bold text-foreground mb-4">What's Included in This Service</h3>
+              <div className="p-6 md:p-8 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-default)] mt-10">
+                <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4">What's Included in This Service</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     "Verified Data Integration: Access raw creator reach logs directly from Meta & Google integration nodes.",
@@ -402,7 +402,7 @@ export default function InfoHub() {
                     "24-Hour Moderation: Support staff available directly inside your collaborative workspace chats.",
                     "Detailed ROI Dashboard: Track total impressions, Cost Per Click (CPC), and true consumer conversions."
                   ].map((inc, i) => (
-                    <div key={i} className="flex gap-2.5 items-start text-xs text-foreground/70 leading-relaxed">
+                    <div key={i} className="flex gap-2.5 items-start text-xs text-[var(--text-secondary)] leading-relaxed">
                       <span className="text-[#D9F111] font-bold mt-0.5 shrink-0">✓</span>
                       <span>{inc}</span>
                     </div>
@@ -411,17 +411,17 @@ export default function InfoHub() {
               </div>
 
               {/* Dynamic Call to Action inside current page */}
-              <div className="p-8 rounded-3xl bg-gradient-to-br from-[#7C5CFF]/15 to-transparent border border-[#7C5CFF]/30 text-center relative overflow-hidden mt-12">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-[#7C5CFF]/15 blur-3xl rounded-full pointer-events-none"></div>
-                <span className="inline-flex gap-1.5 items-center text-[10px] uppercase bg-[#7C5CFF]/20 text-[#B19CFF] px-2.5 py-1 rounded-full font-black tracking-widest mb-4">Ybex Direct Onboarding</span>
+              <div className="p-8 rounded-3xl bg-gradient-to-br from-[#7C5CFF]/15 to-transparent border border-[var(--violet)]/20 text-center relative overflow-hidden mt-12">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-[var(--violet)]/15 blur-3xl rounded-full pointer-events-none"></div>
+                <span className="inline-flex gap-1.5 items-center text-[10px] uppercase bg-[var(--violet)]/20 text-[#B19CFF] px-2.5 py-1 rounded-full font-black tracking-widest mb-4">Ybex Direct Onboarding</span>
                 <h3 className="font-display text-2xl md:text-3xl font-bold mb-3">Launch Your Next Campaign Instantly</h3>
-                <p className="text-xs text-foreground/60 max-w-lg mx-auto mb-6">Create your brand account, search verified creator rosters, review transparent rate cards, and unlock maximum engagement now.</p>
+                <p className="text-xs text-[var(--text-primary)]/60 max-w-lg mx-auto mb-6">Create your brand account, search verified creator rosters, review transparent rate cards, and unlock maximum engagement now.</p>
                 
                 <div className="flex flex-wrap gap-3 justify-center">
                   <Link to="/signup?role=brand" className="px-5 py-2.5 bg-[#D9F111] hover:bg-[#D9F111]/95 text-black font-semibold rounded-xl text-xs transform hover:scale-105 transition-all outline-none">
                     Start Campaign Brief
                   </Link>
-                  <Link to="/explore" className="px-5 py-2.5 bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 text-foreground rounded-xl text-xs font-semibold hover:scale-105 transition-all">
+                  <Link to="/explore" className="px-5 py-2.5 bg-foreground/5 hover:bg-foreground/10 border border-[var(--border-default)] text-[var(--text-primary)] rounded-xl text-xs font-semibold hover:scale-105 transition-all">
                     Explore Roster Rates
                   </Link>
                 </div>
@@ -435,19 +435,19 @@ export default function InfoHub() {
   const content = getContent();
 
   return (
-    <div className="text-foreground min-h-screen relative overflow-hidden bg-background pb-24 font-sans leading-relaxed">
+    <div className="text-[var(--text-primary)] min-h-screen relative overflow-hidden bg-[var(--bg-base)] pb-24 font-sans leading-relaxed">
       {/* Background Gradients */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full bg-[#7C5CFF]/10 blur-[130px]"></div>
-        <div className="absolute top-80 left-1/4 w-[300px] h-[300px] rounded-full bg-[#7C5CFF]/5 blur-[100px]"></div>
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full bg-[var(--violet)]/10 blur-[130px]"></div>
+        <div className="absolute top-80 left-1/4 w-[300px] h-[300px] rounded-full bg-[var(--violet)]/5 blur-[100px]"></div>
       </div>
 
       <div className="relative max-w-4xl mx-auto px-6 pt-12 md:pt-16">
         {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-xs text-foreground/40 mb-6 font-medium">
-          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+        <div className="flex items-center gap-2 text-xs text-[var(--text-tertiary)] mb-6 font-medium">
+          <Link to="/" className="hover:text-[var(--text-primary)] transition-colors">Home</Link>
           <ChevronRight size={12} />
-          <span className="text-foreground/80">{content.title}</span>
+          <span className="text-[var(--text-primary)]/80">{content.title}</span>
         </div>
 
         {/* Dynamic Badge */}
@@ -457,8 +457,8 @@ export default function InfoHub() {
           transition={{ duration: 0.4 }}
           className="inline-block"
         >
-          <span className="inline-flex gap-1.5 items-center text-[10px] uppercase tracking-widest font-black bg-[#7C5CFF]/15 border border-[#7C5CFF]/30 text-[#B19CFF] px-3 py-1 rounded-full mb-4">
-            <Sparkles size={11} className="text-[#9D7CFF]"/> {content.badge}
+          <span className="inline-flex gap-1.5 items-center text-[10px] uppercase tracking-widest font-black bg-[var(--violet)]/15 border border-[var(--violet)]/20 text-[#B19CFF] px-3 py-1 rounded-full mb-4">
+            <Sparkles size={11} className="text-[var(--violet)]"/> {content.badge}
           </span>
         </motion.div>
 
@@ -467,7 +467,7 @@ export default function InfoHub() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-4 leading-tight"
+          className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[var(--text-primary)] mb-4 leading-tight"
         >
           {content.title}
         </motion.h1>
@@ -477,7 +477,7 @@ export default function InfoHub() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="text-base sm:text-lg text-foreground/60 mb-12 font-medium leading-relaxed max-w-2xl"
+          className="text-base sm:text-lg text-[var(--text-primary)]/60 mb-12 font-medium leading-relaxed max-w-2xl"
         >
           {content.subtitle}
         </motion.p>
@@ -488,7 +488,7 @@ export default function InfoHub() {
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full h-64 sm:h-80 md:h-96 rounded-3xl overflow-hidden border border-foreground/10 mb-12"
+            className="w-full h-64 sm:h-80 md:h-96 rounded-3xl overflow-hidden border border-[var(--border-default)] mb-12"
           >
             <img src={content.heroImage} alt="" className="w-full h-full object-cover" />
           </motion.div>
@@ -506,12 +506,12 @@ export default function InfoHub() {
       </div>
 
       {/* Embedded Simple Footer for marketing secondary pages */}
-      <div className="max-w-4xl mx-auto px-6 mt-24 border-t border-foreground/5 pt-8 text-[10px] tracking-wider text-foreground/30 font-medium flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="max-w-4xl mx-auto px-6 mt-24 border-t border-foreground/5 pt-8 text-[10px] tracking-wider text-[var(--text-primary)]/30 font-medium flex flex-col sm:flex-row items-center justify-between gap-4">
         <span>© 2026 Datrux Systems Pvt. Limited. All rights reserved.</span>
         <div className="flex items-center gap-4">
-          <Link to="/" className="hover:text-foreground transition-all">Back to Home</Link>
+          <Link to="/" className="hover:text-[var(--text-primary)] transition-all">Back to Home</Link>
           <span>·</span>
-          <a href="https://ybexmedia.com" target="_blank" rel="noopener noreferrer" className="hover:text-white font-bold text-[#D9F111]">YBEXMEDIA.COM</a>
+          <a href="https://ybexmedia.com" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--text-primary)] font-bold text-[#D9F111]">YBEXMEDIA.COM</a>
         </div>
       </div>
     </div>

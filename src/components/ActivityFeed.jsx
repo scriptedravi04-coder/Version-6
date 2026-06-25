@@ -1,34 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function ActivityFeed() {
-  const activities = [
-    {
-      id: 1,
-      message: "Ravi Kumar applied to \"Summer Glow\" series",
-      time: "2h ago",
-      status: "pending" // yellow
-    },
-    {
-      id: 2,
-      message: "Content approved for \"Tech Review\" video campaign",
-      time: "5h ago",
-      status: "approved" // green
-    },
-    {
-      id: 3,
-      message: "Deal signed and contract mapped with @priya_fitness",
-      time: "1d ago",
-      status: "in_progress" // blue
-    },
-    {
-      id: 4,
-      message: "New applicant registered on \"Food & Travel Collab\"",
-      time: "1d ago",
-      status: "pending" // yellow
-    }
-  ];
-
+export default function ActivityFeed({ activities = [] }) {
   const getDotColorClass = (status) => {
     switch (status) {
       case "approved":
@@ -47,10 +20,10 @@ export default function ActivityFeed() {
   };
 
   return (
-    <div className="bg-[#131224]/90 border border-white/5 p-6 rounded-xl shadow-sm text-left h-full flex flex-col justify-between">
+    <div className="bg-[var(--bg-card)]/90 border border-[var(--border-default)] p-6 rounded-xl shadow-sm text-left h-full flex flex-col justify-between">
       <div>
-        <div className="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
-          <h3 className="text-[11px] font-bold text-white/50 uppercase tracking-widest">
+        <div className="flex justify-between items-center mb-5 border-b border-[var(--border-default)] pb-3">
+          <h3 className="text-[11px] font-bold text-[var(--text-secondary)] uppercase tracking-widest">
             Recent Activity
           </h3>
           <span className="text-[10px] font-mono font-medium text-[#9D7CFF] uppercase tracking-wider animate-pulse flex items-center gap-1">
@@ -60,21 +33,25 @@ export default function ActivityFeed() {
         </div>
 
         <div className="space-y-4">
-          {activities.map((act) => (
-            <div key={act.id} className="flex items-start gap-3.5 group py-1">
-              <span className={`w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 shadow-lg ${getDotColorClass(act.status)}`} />
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-white/95 group-hover:text-white transition-colors leading-relaxed">
-                  {act.message}
-                </p>
-                <span className="text-[10px] text-white/40 block mt-0.5">{act.time}</span>
+          {activities.length === 0 ? (
+            <div className="text-sm text-[var(--text-tertiary)] text-center py-4">No recent activity</div>
+          ) : (
+            activities.map((act) => (
+              <div key={act.id} className="flex items-start gap-3.5 group py-1">
+                <span className={`w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 shadow-lg ${getDotColorClass(act.status)}`} />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-[var(--text-primary)]/95 group-hover:text-[var(--text-primary)] transition-colors leading-relaxed">
+                    {act.message}
+                  </p>
+                  <span className="text-[10px] text-[var(--text-tertiary)] block mt-0.5">{act.time}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 
-      <div className="pt-5 border-t border-white/5 mt-6 flex justify-end">
+      <div className="pt-5 border-t border-[var(--border-default)] mt-6 flex justify-end">
         <Link 
           to="/brand/campaigns" 
           className="text-xs font-bold text-[#9D7CFF] hover:text-[#7C5CFF] transition-all flex items-center gap-1 hover:underline"

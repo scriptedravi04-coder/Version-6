@@ -37,7 +37,7 @@ const CreatorCountdown = ({ internalDeadline }) => {
     <motion.div
       animate={isUrgent ? { scale: [1, 1.03, 1] } : {}}
       transition={{ repeat: Infinity, duration: 1 }}
-      className={`flex gap-3 justify-center py-4 bg-white/5 rounded-xl border border-white/10 ${isUrgent ? 'text-[#ef4444]' : 'text-emerald-400'}`}
+      className={`flex gap-3 justify-center py-4 bg-[var(--bg-elevated)] rounded-xl border border-[var(--border-default)] ${isUrgent ? 'text-[#ef4444]' : 'text-emerald-400'}`}
     >
       {[
         { val: timeLeft.h, label: 'HRS' },
@@ -48,7 +48,7 @@ const CreatorCountdown = ({ internalDeadline }) => {
           <span className="font-mono text-3xl font-bold bg-black/30 w-full text-center py-1 rounded-md">
             {String(val).padStart(2, '0')}
           </span>
-          <span className="text-[10px] text-gray-500 mt-1 uppercase font-bold tracking-widest">{label}</span>
+          <span className="text-[10px] text-[var(--text-secondary)] mt-1 uppercase font-bold tracking-widest">{label}</span>
         </div>
       ))}
     </motion.div>

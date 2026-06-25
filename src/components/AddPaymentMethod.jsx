@@ -38,22 +38,22 @@ export default function AddPaymentMethod({ onAdded, onCancel }) {
   return (
     <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-2xl p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-white">Add Payment Method</h3>
+        <h3 className="text-xl font-bold text-[var(--text-primary)]">Add Payment Method</h3>
         {onCancel && (
-          <button onClick={onCancel} className="text-white/50 hover:text-white text-sm">Cancel</button>
+          <button onClick={onCancel} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm">Cancel</button>
         )}
       </div>
 
-      <div className="flex items-center gap-2 mb-6 p-1 bg-[#1A1A2E] rounded-xl">
+      <div className="flex items-center gap-2 mb-6 p-1 bg-[var(--bg-elevated)] rounded-xl">
         <button
           onClick={() => setMethodType('UPI')}
-          className={`flex-1 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${methodType === 'UPI' ? 'bg-[#7C3AED] text-white shadow-lg' : 'text-white/50 hover:text-white hover:bg-white/5'}`}
+          className={`flex-1 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${methodType === 'UPI' ? 'bg-[#7C3AED] text-[var(--text-primary)] shadow-lg' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'}`}
         >
           <Smartphone size={16} /> UPI
         </button>
         <button
           onClick={() => setMethodType('BANK')}
-          className={`flex-1 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${methodType === 'BANK' ? 'bg-[#7C3AED] text-white shadow-lg' : 'text-white/50 hover:text-white hover:bg-white/5'}`}
+          className={`flex-1 py-2.5 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all ${methodType === 'BANK' ? 'bg-[#7C3AED] text-[var(--text-primary)] shadow-lg' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]'}`}
         >
           <Building2 size={16} /> Bank Account
         </button>
@@ -70,14 +70,14 @@ export default function AddPaymentMethod({ onAdded, onCancel }) {
               className="space-y-4"
             >
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">UPI ID</label>
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">UPI ID</label>
                 <input
                   type="text"
                   required
                   placeholder="name@upi"
                   value={upiId}
                   onChange={(e) => setUpiId(e.target.value)}
-                  className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C3AED]"
+                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C3AED]"
                 />
               </div>
             </motion.div>
@@ -90,45 +90,45 @@ export default function AddPaymentMethod({ onAdded, onCancel }) {
               className="space-y-4"
             >
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">Account Number</label>
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Account Number</label>
                 <input
                   type="text"
                   required
                   value={bankDetails.account_no}
                   onChange={(e) => setBankDetails({...bankDetails, account_no: e.target.value})}
-                  className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C3AED]"
+                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C3AED]"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-white/70 mb-2">IFSC Code</label>
+                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">IFSC Code</label>
                   <input
                     type="text"
                     required
                     value={bankDetails.ifsc}
                     onChange={(e) => setBankDetails({...bankDetails, ifsc: e.target.value})}
-                    className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C3AED]"
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C3AED]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-white/70 mb-2">Bank Name</label>
+                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Bank Name</label>
                   <input
                     type="text"
                     required
                     value={bankDetails.bank_name}
                     onChange={(e) => setBankDetails({...bankDetails, bank_name: e.target.value})}
-                    className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C3AED]"
+                    className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C3AED]"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/70 mb-2">Account Holder Name</label>
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Account Holder Name</label>
                 <input
                   type="text"
                   required
                   value={bankDetails.holder_name}
                   onChange={(e) => setBankDetails({...bankDetails, holder_name: e.target.value})}
-                  className="w-full bg-[#1A1A2E] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#7C3AED]"
+                  className="w-full bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl px-4 py-3 text-[var(--text-primary)] focus:outline-none focus:border-[#7C3AED]"
                 />
               </div>
             </motion.div>
@@ -147,7 +147,7 @@ export default function AddPaymentMethod({ onAdded, onCancel }) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-bold py-3.5 rounded-xl transition-colors mt-4 flex items-center justify-center gap-2"
+          className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] text-[var(--text-primary)] font-bold py-3.5 rounded-xl transition-colors mt-4 flex items-center justify-center gap-2"
         >
           {loading ? 'Submitting...' : 'Submit for Verification'} 
         </button>

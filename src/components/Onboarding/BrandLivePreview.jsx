@@ -9,9 +9,9 @@ const DoodleArrowTooltip = ({ step, role }) => {
         <path d="M10 90 Q 30 20 90 20" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeDasharray="5,5" fill="none" />
         <path d="M75 10 L 95 20 L 80 35" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       </svg>
-      <div className="bg-[#12121A] border border-[#3B82F6]/30 p-3 rounded-xl max-w-[200px] shadow-2xl relative translate-y-12">
+      <div className="bg-[var(--bg-card)] border border-[#3B82F6]/30 p-3 rounded-xl max-w-[200px] shadow-2xl relative translate-y-12">
         <p className="text-[#3B82F6] font-semibold text-sm mb-1 uppercase tracking-tight">Strategy</p>
-        <p className="text-white/80 text-xs">
+        <p className="text-[var(--text-primary)]/80 text-xs">
           {step === 1 ? "A clear logo gets 3x more creator applications." : 
            step === 2 ? "Detailed backgrounds help match the right creator." : 
            "Clear budgets help align the best creators instantly."}
@@ -30,8 +30,8 @@ const BrandStepContextText = ({ step }) => {
   const current = texts[step] || texts[1];
   return (
     <div className="mt-6 text-center transform hover:scale-105 transition-transform">
-      <p className="text-white font-semibold text-sm">{current.title}</p>
-      <p className="text-gray-500 text-xs mt-1">{current.sub}</p>
+      <p className="text-[var(--text-primary)] font-semibold text-sm">{current.title}</p>
+      <p className="text-[var(--text-secondary)] text-xs mt-1">{current.sub}</p>
     </div>
   );
 };
@@ -43,24 +43,24 @@ export default function BrandLivePreview({ formData, currentStep }) {
       <div className="relative w-full max-w-[340px] sm:w-[320px]">
         <DoodleArrowTooltip step={currentStep} role="brand" />
 
-        <div className="bg-[#1a1a2e] rounded-[1.5rem] overflow-hidden border border-white/10 w-full shadow-2xl transition-all duration-300 transform group hover:border-[#3B82F6]/30">
+        <div className="bg-[var(--bg-elevated)] rounded-[1.5rem] overflow-hidden border border-[var(--border-default)] w-full shadow-2xl transition-all duration-300 transform group hover:border-[#3B82F6]/30">
           
           {/* Brand Cover */}
           <div className="h-32 bg-gradient-to-br from-[#1E3A8A] to-[#0F172A] relative z-0 flex items-center justify-center overflow-hidden">
              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
              {formData.logoUrl ? (
-               <img src={formData.logoUrl} className="h-20 w-20 object-contain rounded-2xl bg-white/5 p-2 backdrop-blur-md shadow-2xl border border-white/10 z-10" alt="Brand Logo" />
+               <img src={formData.logoUrl} className="h-20 w-20 object-contain rounded-2xl bg-[var(--bg-elevated)] p-2 backdrop-blur-md shadow-2xl border border-[var(--border-default)] z-10" alt="Brand Logo" />
              ) : (
-               <div className="h-20 w-20 rounded-2xl bg-white/5 border border-white/10 p-2 backdrop-blur-md flex items-center justify-center text-3xl shadow-2xl z-10">
+               <div className="h-20 w-20 rounded-2xl bg-[var(--bg-elevated)] border border-[var(--border-default)] p-2 backdrop-blur-md flex items-center justify-center text-3xl shadow-2xl z-10">
                  <Building2 className="text-blue-400 opacity-50" size={32} />
                </div>
              )}
           </div>
 
-          <div className="p-5 relative z-10 bg-[#1a1a2e]">
+          <div className="p-5 relative z-10 bg-[var(--bg-elevated)]">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-white font-display font-bold text-lg leading-tight">
+                <h3 className="text-[var(--text-primary)] font-display font-bold text-lg leading-tight">
                   {formData.companyName || 'Brand Name'}
                 </h3>
                 <p className="text-blue-400 text-xs font-semibold mt-1">
@@ -76,14 +76,14 @@ export default function BrandLivePreview({ formData, currentStep }) {
             </div>
 
             {formData.description && (
-              <p className="text-gray-400 text-[13px] mt-3 line-clamp-2 leading-relaxed bg-white/5 p-3 rounded-xl border border-white/5">
+              <p className="text-[var(--text-tertiary)] text-[13px] mt-3 line-clamp-2 leading-relaxed bg-[var(--bg-elevated)] p-3 rounded-xl border border-[var(--border-default)]">
                 {formData.description}
               </p>
             )}
 
-            <div className="flex items-center gap-3 mt-4 pt-4 border-t border-white/10">
-              <div className="text-[11px] text-gray-500 uppercase font-black tracking-wider bg-white/5 px-2 py-1 rounded">
-                Team: <span className="text-white/80 font-bold ml-1">{formData.teamSize || '—'}</span>
+            <div className="flex items-center gap-3 mt-4 pt-4 border-t border-[var(--border-default)]">
+              <div className="text-[11px] text-[var(--text-secondary)] uppercase font-black tracking-wider bg-[var(--bg-elevated)] px-2 py-1 rounded">
+                Team: <span className="text-[var(--text-primary)]/80 font-bold ml-1">{formData.teamSize || '—'}</span>
               </div>
               {formData.websiteUrl && (
                 <div className="text-[11px] text-blue-400 truncate max-w-[120px] ml-auto underline decoration-blue-500/30 underline-offset-4">
@@ -92,7 +92,7 @@ export default function BrandLivePreview({ formData, currentStep }) {
               )}
             </div>
 
-            <button className="mt-5 w-full bg-[#3B82F6] hover:bg-blue-600 text-white text-sm py-3 rounded-xl font-bold shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all transform hover:-translate-y-0.5">
+            <button className="mt-5 w-full bg-[#3B82F6] hover:bg-blue-600 text-[var(--text-primary)] text-sm py-3 rounded-xl font-bold shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all transform hover:-translate-y-0.5">
               Contact Brand
             </button>
           </div>

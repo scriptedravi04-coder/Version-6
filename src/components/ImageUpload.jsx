@@ -38,11 +38,11 @@ export default function ImageUpload({ value, onChange, label = "Upload", testId 
     <div data-testid={testId}>
       {value ? (
         <div className="relative inline-block">
-          <img src={value} alt="" className="w-24 h-24 rounded-xl object-cover border border-foreground/10"/>
-          <button type="button" onClick={()=>onChange("")} className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-foreground flex items-center justify-center hover:bg-red-600" data-testid={`${testId}-remove`}><X size={12}/></button>
+          <img src={value} alt="" className="w-24 h-24 rounded-xl object-cover border border-[var(--border-default)]"/>
+          <button type="button" onClick={()=>onChange("")} className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-[var(--text-primary)] flex items-center justify-center hover:bg-red-600" data-testid={`${testId}-remove`}><X size={12}/></button>
         </div>
       ) : (
-        <button type="button" onClick={()=>inputRef.current?.click()} disabled={uploading} className="w-24 h-24 rounded-xl border-2 border-dashed border-foreground/15 hover:border-[#7C5CFF] flex flex-col items-center justify-center text-foreground/50 text-xs gap-1 transition-colors" data-testid={`${testId}-pick`}>
+        <button type="button" onClick={()=>inputRef.current?.click()} disabled={uploading} className="w-24 h-24 rounded-xl border-2 border-dashed border-foreground/15 hover:border-[#7C5CFF] flex flex-col items-center justify-center text-[var(--text-secondary)] text-xs gap-1 transition-colors" data-testid={`${testId}-pick`}>
           {uploading ? <Loader2 size={20} className="animate-spin"/> : <><Upload size={18}/> {label}</>}
         </button>
       )}
